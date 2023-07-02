@@ -1,0 +1,35 @@
+.mbsc-ios .mbsc-form-grid .mbsc-textfield-wrapper {
+    margin: 0.75em 1em;
+}
+
+
+#form-add-cruise{
+    width: 75%;
+    background-color: rgb(215, 241, 255);
+    border-radius: 20px;
+}
+
+#add-cruise-head{
+    color:#0064ff;
+    font-weight: bold;
+    padding-top: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+#add-cruise-submit{
+margin-top: 20px;
+margin-bottom: 20px;
+
+}
+/* #cruise-add-check{
+border-radius: 5px;
+border-color: aqua;
+
+
+} */
+/* 
+#category-cruise-add{
+width: 75%;
+height: 60px;
+} */
+

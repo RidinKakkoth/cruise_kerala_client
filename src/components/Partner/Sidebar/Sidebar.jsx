@@ -17,8 +17,8 @@ function Sidebar() {
 
    
 
-     
         <div className={sidebarVisible?'sidebar-partner':"sidebar-hidden"}>
+
           <ul className='sidebar-partner-list'>
             {/* <li className='partner-avatar'><img src="" alt="dfhjkhnd" /></li> */}
             { sidebarVisible? <li className="toggle-icon-right">  <CloseIcon onClick={toggleSidebar} />   </li>: <li className="toggle-icon-left"> <MenuIcon onClick={toggleSidebar} />  </li>
