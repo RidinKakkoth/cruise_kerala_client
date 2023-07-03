@@ -1,0 +1,38 @@
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 100px; */
+    margin-left: 100PX;
+    
+    
+    box-shadow: color( red green blue);
+}  
+
+.profile-card-partner-account{
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+ 
+    
+}
+
+.partner-profile-card-acc-data{
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-bottom: 40px;
+    gap: 20px;
+ 
+}
+
+.partner-acc-info{
+    font-weight: 500;
+    color: #353b76;
+}
+
+.partner-info input{
+    
+
+}

@@ -2,72 +2,64 @@ import React, { useState } from 'react';
 import {useLocation} from 'react-router-dom'
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import ModeIcon from '@mui/icons-material/Mode';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import GppMaybeIcon from '@mui/icons-material/GppMaybe';
-import UpdateIcon from '@mui/icons-material/Update';
-import SendIcon from '@mui/icons-material/Send';
-import Stack from '@mui/material/Stack';
+// import Button from '@mui/material/Button';
+
+
+import 'primeicons/primeicons.css';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.css';
+
+
+
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+
 import './PartnerProfile.css';
 
 
-// const PartnerProfile = ({ name, email, companyName, phone }) => {
+
 const PartnerProfile = () => {
     const location=useLocation()
     const {name,email,phone,companyName,isApproved}=location.state //takeing data from partner table when navigating 
 
-//   const [editing, setEditing] = useState(false);
-//   const [editedName, setEditedName] = useState();
-//   const [editedEmail, setEditedEmail] = useState();
-//   const [editedCompanyName, setEditedCompanyName] = useState();
-//   const [editedPhone, setEditedPhone] = useState();
-
-  const [editing, setEditing] = useState(false);
-  const [editedName, setEditedName] = useState(name);
-  const [editedEmail, setEditedEmail] = useState(email);
-  const [editedCompanyName, setEditedCompanyName] = useState(companyName);
-  const [editedPhone, setEditedPhone] = useState(phone);
-  const [editedStatus, seteditedStatus] = useState();
 
 
 
+//=======================================================
 
-  const handleEdit = () => {
-    setEditing(true);
-  };
+const [displayBasic, setDisplayBasic] = useState(false);
+ const [position, setPosition] = useState('center');
 
-  const handleSave = () => {
-    // Perform save operation or update state in your application
-    // For this example, we'll just log the edited values
-    console.log('Edited Name:', editedName);
-    console.log('Edited Email:', editedEmail);
-    console.log('Edited Company Name:', editedCompanyName);
-    console.log('Edited Phone:', editedPhone);
-    console.log('Edited Phone:', editedStatus);
+    const dialogFuncMap = {
+        'displayBasic': setDisplayBasic,
+    }
+    const onClick = (name, position) => {
+        dialogFuncMap[`${name}`](true);
 
-    setEditing(false);
-  };
+        if (position) {
+            setPosition(position);
+        }
+    }
 
-  const handleCancel = () => {
-    setEditing(false);
-   // Reset the edited values to the original values
-    setEditedName(name);
-    setEditedEmail(email);
-    setEditedCompanyName(companyName);
-    setEditedPhone(phone);
-  };
+    const onHide = (name) => {
+        dialogFuncMap[`${name}`](false);
+    }
 
- const handleProof=(event)=>{
-    const file = event.target.files[0];
- }
- const handleProofSubmit=()=>{
+    const renderFooter = (name) => {
+        return (
+            <div>
+                <Button label="Reject" className="p-button-danger" onClick={() => onHide(name)} />
+                <Button  label="Accept" className="p-button-success"  onClick={() => onHide(name)} autoFocus />
+            </div>
+        );
+    }
 
- }
 
+
+//=======================================================
   return (
-    <div className="centered-container">
+    <div className="centered-container-partner-profile">
       <Card className="profile-card-partner">
         <CardMedia
           sx={{ height: 150, width: 150,marginLeft:10,marginTop:5 }}
@@ -77,107 +69,27 @@ const PartnerProfile = () => {
         <div className="partner-profile-card-data">
           <div className="partner-info">
 
-          <p>Name:{"          "}
-            {editing ? (
-              <input
-              style={{marginLeft:"50px"}}
-                type="text"
-                value={editedName}
-                onChange={(e) => setEditedName(e.target.value)}
-              />
-            ) : (
-              editedName
-            )}
-            </p>
-
-
-            <p>
-              Email:{"  "}
-              {editing ? (
-                <input
-                style={{marginLeft:"50px"}}
-                  type="text"
-                  value={editedEmail}
-                  onChange={(e) => setEditedEmail(e.target.value)}
-                />
-              ) : (
-                editedEmail
-              )}
-            </p>
-
-
-
-            <p>
-              Company:{"  "}
-              {editing ? (
-                <input
-                style={{marginLeft:"20px"}}
-                  type="text"
-                  value={editedCompanyName}
-                  onChange={(e) => setEditedCompanyName(e.target.value)}
-                />
-              ) : (
-                editedCompanyName
-              )}
-            </p>
-            
-            <p>
-              Phone:{"  "}
-              {editing ? (
-                <input
-                style={{marginLeft:"42px"}}
-                  type="text"
-                  value={editedPhone}
-                  onChange={(e) => setEditedPhone(e.target.value)}
-                />
-              ) : (
-                editedPhone
-              )}
-            </p>
-
-
-            <p>
-              Status:{}
-              {
-            
-                isApproved? <>
-                <VerifiedIcon  style={{color:"green", marginLeft:"20px"}}/> 
-                <p style={{marginTop:"10px"}}>Verified</p>
-                </> 
-                 :<>
-                  <GppMaybeIcon style={{color:"red",marginLeft:"20px"}}/>
-                  <p style={{marginTop:"10px",color:"red"}}>Upload Proof to Verify</p> 
-                  <div style={{display:'flex'}}>
-                   <input className='file' encType="multipart/form-data" onChange={handleProof} type="file" style={{width:"100px"}} />
-                    <p style={{marginLeft:"25px",textDecoration:"underline",color:"blue"}} onClick={handleProofSubmit}>Upload</p>
-                    
-                  </div>
-                    </> 
-                
-              }
-            </p>
-
+          <p>Name:{"  "} {name} </p>
+            <p>Email:{"  "} {email}</p>
+            <p>Company:{"  "} {companyName}</p>
+            <p> Phone:{"  "}{phone}</p>
 
           </div>
-          <div className="user-actions">
-            {editing ? (
-                 <Stack direction="row" spacing={2}>
-                     <Button variant="outlined" onClick={handleSave} startIcon={<UpdateIcon />}>
-                          Update
-                      </Button>
-                       <Button variant="contained" onClick={handleCancel} endIcon={<HighlightOffIcon />}>
-                          Cancel
-                        </Button>
-                  </Stack>
-            ) : (
-                <Stack direction="row" spacing={2}>
-                <Button variant="outlined" onClick={handleEdit} startIcon={<ModeIcon />}>
-                  Edit
-                </Button>
-              </Stack>
 
-            )}
-          </div>
+          <div className="dialog-demo">
+            <div className="card">
+             
+                <Button label="VIEW PROOF"  onClick={() => onClick('displayBasic')} />
+                <Dialog header="Header" visible={displayBasic} style={{ width: '50vw',height:"50vw" }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </Dialog>
+</div>
+        </div>
+
+          
         </div>
       </Card>
     </div>
