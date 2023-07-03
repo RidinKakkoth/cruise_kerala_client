@@ -1,14 +1,14 @@
 import React from 'react'
-import Dashboard from '../../components/Admin/AdminDashboard/Dashboard'
+import PartnerTable from '../../components/Admin/PartnerTable/PartnerTable'
 import Sidebar from '../../components/Shared/Sidebar/Sidebar'
 
-function AdminDashboard() {
+function PartnerData() {
   return (
     <div style={{display:"flex"}} >
       <Sidebar userType="admin"  />
-      <Dashboard/>
+      <PartnerTable/>
     </div>
   )
 }
 
-export default AdminDashboard
+export default PartnerData

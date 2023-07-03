@@ -1,0 +1,36 @@
+.search2 {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 16px;
+    padding-right: 70px;
+    margin-bottom: 25px;
+    align-items: center;
+  }
+  
+  .table-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-image: url("https://th.bing.com/th/id/R.ab726d91c6708ef54ecfa084a0062f13?rik=pdJ%2bzrZIhNQ4Ng&riu=http%3a%2f%2fwww.hdwallpaperspulse.com%2fwp-content%2fuploads%2f2018%2f06%2f12%2fcool-hd-Gradient-Wallpaper.png&ehk=X4eUdXVYlRDzlhRZqFc1lTk9%2frVPM7pF2E%2b24IJuo7s%3d&risl=&pid=ImgRaw&r=0");
+  }
+  
+  .table {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center; /* Add this to center the content within the table */
+  }
+  
+  .heading{
+    margin-left: 5rem;
+    font-weight: 700;
+    color: #0064ff;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   
+  }
+  
+      .font{
+        color: white;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+  

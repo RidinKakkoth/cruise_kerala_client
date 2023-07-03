@@ -1,10 +1,9 @@
 import React from 'react'
-import Sidebar from '../../components/Partner/Sidebar/Sidebar'
-
+import Sidebar from '../../components/Shared/Sidebar/Sidebar'
 function PartnerAccount() {
   return (
     <div style={{display:"flex"}} >
-      <Sidebar />
+      <Sidebar userType="partner"  />
     </div>
   )
 }

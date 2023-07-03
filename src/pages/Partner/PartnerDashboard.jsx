@@ -1,12 +1,11 @@
 import React from 'react'
 import Dashboard from '../../components/Partner/PartnerDashboard/Dashboard'
-import Sidebar from '../../components/Partner/Sidebar/Sidebar'
-
+import Sidebar from '../../components/Shared/Sidebar/Sidebar'
 
 function PartnerDashboard() {
   return (
     <div style={{display:"flex"}} >
-      <Sidebar />
+      <Sidebar userType="partner"  />
       <Dashboard/>
     </div>
   )

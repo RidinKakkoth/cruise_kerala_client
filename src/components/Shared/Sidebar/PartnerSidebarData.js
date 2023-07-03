@@ -6,7 +6,7 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import DiscountIcon from '@mui/icons-material/LocalOffer';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-export const SidebarData = [
+export const PartnerSidebarData = [
   {
     title: 'Dashboard',
     icon: <SpaceDashboardIcon />,
