@@ -20,6 +20,7 @@ function SignUp() {
 
     axios.post(`${partnerApi}partnerSignUp`,{email,password,phone,name,company},{withCredentials:true}).then((response)=>{
     
+      if(response)
         navigate('/partner')
 
     })

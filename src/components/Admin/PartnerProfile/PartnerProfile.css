@@ -1,0 +1,36 @@
+.centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    
+    box-shadow: color( red green blue);
+}  
+
+.profile-card-partner{
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+ 
+    
+}
+
+.partner-profile-card-data{
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-bottom: 40px;
+    gap: 20px;
+ 
+}
+
+.partner-info{
+    font-weight: 500;
+    color: #353b76;
+}
+
+.partner-info input{
+    
+
+}
