@@ -12,9 +12,10 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ModeIcon from '@mui/icons-material/Mode';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import GppMaybeIcon from '@mui/icons-material/GppMaybe';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import UpdateIcon from '@mui/icons-material/Update';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+
 
 
 
@@ -52,10 +53,11 @@ const [editedName, setEditedName] = useState("");
 const [editedEmail, setEditedEmail] = useState("");
 const [editedCompanyName, setEditedCompanyName] = useState('');
 const [editedPhone, setEditedPhone] = useState("");
-const [editedStatus, seteditedStatus] = useState();
+const [editedStatus, seteditedStatus] = useState("");
 const [profileImage, setprofileImage] = useState("");
 const [selectedFile, setSelectedFile] = useState(null);
 const[buttonHide,setButtonHide]=useState(true)
+const[proofbuttonHide,setproofButtonHide]=useState(false)
 
 const[open,setOpen]=useState(false)
 
@@ -87,7 +89,10 @@ const handleProof=(event)=>{
 
 }
 const handleProofSubmit=(e)=>{
+  setproofButtonHide(true)
 e.preventDefault()
+
+
 
 if(selectedFile){
 
@@ -178,7 +183,7 @@ partnerData?
   open? <CardMedia style={{borderStyle:"double",borderColor:"blue",borderWidth:"5px"}}
   sx={{ height: 150, width: 150,borderRadius:"50%",marginLeft:10,marginTop:1 }}
   component="img"
-  src={`${baseApi}profileImages/${profileImage}`}
+  src={`${baseApi}files/${profileImage}`}
 
   
   title="choose image"
@@ -242,21 +247,38 @@ partnerData?
               editedPhone
             )} </p>
 
-          <p> Status:{} {          
-              editedStatus===true? <>
-              <VerifiedIcon  style={{color:"green", marginLeft:"20px"}}/> 
-              <p style={{marginTop:"10px"}}>Verified</p>
-              </> 
-               :<>
-                <GppMaybeIcon style={{color:"red",marginLeft:"20px"}}/>
-                <p style={{marginTop:"10px",color:"red"}}>Upload Proof to Verify</p> 
-                <div style={{display:'flex'}}>
-                 <input className='file' encType="multipart/form-data" onChange={handleProof} type="file" style={{width:"200px"}} />
-                  <p style={{marginLeft:"25px",textDecoration:"underline",color:"blue",cursor:"pointer"}} onClick={handleProofSubmit}>Upload</p>
-                  
-                </div>
-                  </>       
-            }    </p>
+<p>
+  Status:{" "}
+  {editedStatus === "verified" ? (
+    <div>
+      <VerifiedIcon style={{ color: "green", marginLeft: "20px" }} />
+      <p style={{ marginTop: "10px",color:"green" }}>Verified</p>
+    </div>
+  ) : editedStatus === "upload proof" ? (
+    
+    proofbuttonHide?"":
+(    <div>
+      <GppMaybeIcon style={{ color: "red", marginLeft: "20px" }} />
+      <p style={{ marginTop: "10px", color: "red" }}>Upload Proof to Verify</p>
+      <div style={{ display: "flex" }}>
+
+        <input className="file" encType="multipart/form-data" onChange={handleProof} required type="file" style={{ width: "200px" }} /> 
+
+        <p style={{ marginLeft: "25px", textDecoration: "underline", color: "blue", cursor: "pointer" }} onClick={handleProofSubmit}>
+          Upload
+        </p>
+      </div>
+    </div>)
+
+  ) :editedStatus === "pending" ? (
+    <div>
+      <PendingActionsIcon style={{ color: "orange", marginLeft: "20px" }} />
+      <p style={{ marginTop: "10px",color:"orange" }}>Pending for approval</p>
+    </div>
+  ): editedStatus === "rejected" ?<div><p style={{ marginTop: "10px",color:"orange" }}>Rejected</p>  
+  {setproofButtonHide(false)} </div>   : null}
+</p>
+
 
 
         </div>
