@@ -1,19 +1,17 @@
-.centered-container {
+.centered-container{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    /* margin-top: 100px; */
-    margin-left: 100PX;
-    
+    /* justify-content: center; */
+    align-items: center;   
     
     box-shadow: color( red green blue);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }  
 
 .profile-card-partner-account{
     width: 450px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
  
     
 }
@@ -21,7 +19,7 @@
 .partner-profile-card-acc-data{
     display: flex;
     flex-direction: column;
-    margin-left: 30px;
+    margin-left: 50px;
     margin-bottom: 40px;
     gap: 20px;
  
@@ -32,7 +30,7 @@
     color: #353b76;
 }
 
-.partner-info input{
+.typo{
     
-
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }

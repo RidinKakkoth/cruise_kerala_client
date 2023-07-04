@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {useLocation} from 'react-router-dom'
 import "./Account.css"
-import { partnerApi } from '../../../store/Api';
+import { baseApi, partnerApi } from '../../../store/Api';
 import axios from 'axios';
 
 //material-ui-items
@@ -14,41 +14,53 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 import UpdateIcon from '@mui/icons-material/Update';
 import Stack from '@mui/material/Stack';
-
+import Typography from '@mui/material/Typography';
 
 
 
 
 function Account() {
 
+const inputRef=useRef()
+
 
   useEffect(() => {
 
     axios.get(`${partnerApi}getPartnerData`,{withCredentials:true}).then((res)=>{
-    console.log(res);
+
+      const partnerDetails=res.data.partnerData
+      const {name,email,phone,companyName,isApproved,image}=partnerDetails
+      setEditedName(name)
+      setEditedPhone(phone)
+      setEditedCompanyName(companyName)
+      setEditedEmail(email)
+      seteditedStatus(isApproved)
+      setPartnerData(partnerDetails)
+      setprofileImage(image)
+
+      setOpen(true)
+
+
     }).catch((error)=>{
-      console.log();
+      console.log(error.msg);
     })
     
     }, [])
-
-
-
-
-
-  const location=useLocation()
-  const {name,email,phone,companyName,isApproved}={}
-  // location.state //takeing data from partner table when navigating 
-
-
+const [partnerData,setPartnerData]=useState('')
 const [editing, setEditing] = useState(false);
-const [editedName, setEditedName] = useState(name);
-const [editedEmail, setEditedEmail] = useState(email);
-const [editedCompanyName, setEditedCompanyName] = useState(companyName);
-const [editedPhone, setEditedPhone] = useState(phone);
+const [editedName, setEditedName] = useState("");
+const [editedEmail, setEditedEmail] = useState("");
+const [editedCompanyName, setEditedCompanyName] = useState('');
+const [editedPhone, setEditedPhone] = useState("");
 const [editedStatus, seteditedStatus] = useState();
+const [profileImage, setprofileImage] = useState("");
+const [selectedFile, setSelectedFile] = useState(null);
+const[buttonHide,setButtonHide]=useState(true)
+
+const[open,setOpen]=useState(false)
 
 
+const [preview,setPreview]=useState("https://cdn-icons-png.flaticon.com/512/147/147142.png")
 
 
 const handleEdit = () => {
@@ -56,13 +68,6 @@ const handleEdit = () => {
 };
 
 const handleSave = () => {
-  // Perform save operation or update state in your application
-  // For this example, we'll just log the edited values
-  console.log('Edited Name:', editedName);
-  console.log('Edited Email:', editedEmail);
-  console.log('Edited Company Name:', editedCompanyName);
-  console.log('Edited Phone:', editedPhone);
-  console.log('Edited Phone:', editedStatus);
 
   setEditing(false);
 };
@@ -70,96 +75,175 @@ const handleSave = () => {
 const handleCancel = () => {
   setEditing(false);
  // Reset the edited values to the original values
-  setEditedName(name);
-  setEditedEmail(email);
-  setEditedCompanyName(companyName);
-  setEditedPhone(phone);
+  setEditedName(editedName);
+  setEditedEmail(editedEmail);
+  setEditedCompanyName(editedCompanyName);
+  setEditedPhone(editedPhone);
 };
 
 const handleProof=(event)=>{
   const file = event.target.files[0];
-}
-const handleProofSubmit=()=>{
+  setSelectedFile(file)
 
+}
+const handleProofSubmit=(e)=>{
+e.preventDefault()
+
+if(selectedFile){
+
+  const formData=new FormData()
+  formData.append('file',selectedFile)
+
+  axios.post(`${partnerApi}proof-upload`,formData,{
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  }).then((response)=>{
+
+    console.log("success");
+ 
+    
+  }).catch((error)=>{
+      console.log(error);
+  })
+
+
+}
+
+
+}
+
+const handleImageChange=(e)=>{
+  
+  setButtonHide(false)
+
+  const file = e.target.files[0];
+  
+
+  const imgUrl=URL.createObjectURL(file)
+
+    setprofileImage(file)
+    setPreview(imgUrl)
+    setOpen(false)
+}
+
+const handleImageClick=()=>{
+  inputRef.current.click()
+}
+
+const submitPicUpload=async(e)=>{
+    e.preventDefault()
+
+setButtonHide(true)
+    const formData=new FormData()
+    formData.append('image',profileImage)
+    
+        axios.post(`${partnerApi}partner-dp`,formData,{
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }).then((response)=>{
+          setprofileImage(response.data.url)
+          setOpen(true)
+       
+          
+        }).catch((error)=>{
+            console.log(error);
+        })
+      
+      
+
+}
+const cancelPicUpload=()=>{
+  setButtonHide(true)
+ 
 }
 
 return (
-  <div className="centered-container">
-    
-    <Card className="profile-card-account">
+<>
+
+
+{ 
+partnerData? 
+<div className="mbsc-col-12 mbsc-col-lg-6" style={{display:"flex",gap:"25PX"}}>
+<div className="centered-container">
+ 
+    <Card className="profile-card-partner-account">
     <h3 style={{marginLeft:"100px"}}>PROFILE</h3>
-      <CardMedia
-        sx={{ height: 150, width: 150,marginLeft:10,marginTop:1 }}
-        image="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
-        title="green iguana"
-      />
-      <div className="partner-profile-acc-data">
+<div  onClick={handleImageClick}>
+
+{
+  open? <CardMedia style={{borderStyle:"double",borderColor:"blue",borderWidth:"5px"}}
+  sx={{ height: 150, width: 150,borderRadius:"50%",marginLeft:10,marginTop:1 }}
+  component="img"
+  src={`${baseApi}profileImages/${profileImage}`}
+
+  
+  title="choose image"
+/>:<CardMedia
+  sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1 }}
+  component="img"
+
+  src={preview}
+
+  title="choose image"
+/>
+}
+
+ <input type='file' ref={inputRef} name='image'  encType="multipart/form-data" onChange={handleImageChange} alt="dp" style={{width:"100px",display:"none"}} />
+
+</div>
+        {buttonHide? "": <div> 
+          <button style={{width:"100px",marginLeft:"50px",borderRadius:"20px"}} className="btn btn-primary mt-3" onClick={submitPicUpload}>
+               Upload
+           </button> 
+           <button style={{width:"100px",marginLeft:"10px",borderRadius:"20px"}} className="btn btn-danger mt-3" onClick={cancelPicUpload}>
+               Cancel
+           </button>
+           </div>}
+
+      <div className="partner-profile-card-acc-data">
         <div className="partner-acc-info">
 
         <p>Name:{"          "}
           {editing ? (
-            <input
-            style={{marginLeft:"50px"}}
-              type="text"
-              value={editedName}
+            <input style={{marginLeft:"50px"}} type="text" value={editedName}
               onChange={(e) => setEditedName(e.target.value)}
             />
           ) : (
             editedName
-          )}
-          </p>
+          )}   </p>
 
 
-          <p>
-            Email:{"  "}
+          <p>  Email:{"  "}
             {editing ? (
-              <input
-              style={{marginLeft:"50px"}}
-                type="text"
-                value={editedEmail}
-                onChange={(e) => setEditedEmail(e.target.value)}
-              />
+              <input style={{marginLeft:"50px"}}type="text" value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}  />
             ) : (
               editedEmail
-            )}
-          </p>
+            )}  </p>
 
-
-
-          <p>
-            Company:{"  "}
+          <p>  Company:{"  "}
             {editing ? (
-              <input
-              style={{marginLeft:"20px"}}
-                type="text"
-                value={editedCompanyName}
+              <input style={{marginLeft:"20px"}} type="text" value={editedCompanyName}
                 onChange={(e) => setEditedCompanyName(e.target.value)}
               />
             ) : (
               editedCompanyName
-            )}
-          </p>
+            )} </p>
           
-          <p>
-            Phone:{"  "}
-            {editing ? (
-              <input
-              style={{marginLeft:"42px"}}
-                type="text"
-                value={editedPhone}
+          <p>  Phone:{"  "}
+            {editing ? (   <input style={{marginLeft:"42px"}}  type="text" value={editedPhone}
                 onChange={(e) => setEditedPhone(e.target.value)}
               />
             ) : (
               editedPhone
-            )}
-          </p>
+            )} </p>
 
-
-          <p>
-            Status:{}
-            {
-          
-              isApproved? <>
+          <p> Status:{} {          
+              editedStatus===true? <>
               <VerifiedIcon  style={{color:"green", marginLeft:"20px"}}/> 
               <p style={{marginTop:"10px"}}>Verified</p>
               </> 
@@ -167,14 +251,12 @@ return (
                 <GppMaybeIcon style={{color:"red",marginLeft:"20px"}}/>
                 <p style={{marginTop:"10px",color:"red"}}>Upload Proof to Verify</p> 
                 <div style={{display:'flex'}}>
-                 <input className='file' encType="multipart/form-data" onChange={handleProof} type="file" style={{width:"100px"}} />
-                  <p style={{marginLeft:"25px",textDecoration:"underline",color:"blue"}} onClick={handleProofSubmit}>Upload</p>
+                 <input className='file' encType="multipart/form-data" onChange={handleProof} type="file" style={{width:"200px"}} />
+                  <p style={{marginLeft:"25px",textDecoration:"underline",color:"blue",cursor:"pointer"}} onClick={handleProofSubmit}>Upload</p>
                   
                 </div>
-                  </> 
-              
-            }
-          </p>
+                  </>       
+            }    </p>
 
 
         </div>
@@ -200,6 +282,26 @@ return (
       </div>
     </Card>
   </div>
+  {/* <div>
+  <Card sx={{  width: "400px",height:"84%",marginTop:"60px" }}> 
+        <Typography  gutterBottom variant="h5" style={{textAlign:"center",fontWeight:"600"}} component="div">
+         <h3 className='typo'> PROOF</h3>
+        </Typography>
+
+      <CardMedia
+        sx={{ height: 140 }}
+        image=""
+      />
+    </Card>
+  </div> */}
+  </div>
+  
+: <div style={{display:"flex",marginLeft:"10rem",alignItems:"center"}}>
+  <img style={{width:"250px",height:"250px"}} src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif?20170503175831" alt="" />
+
+</div> }
+
+  </>
 );
 };
 
