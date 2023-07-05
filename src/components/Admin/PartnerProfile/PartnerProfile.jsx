@@ -1,99 +1,77 @@
 import React, { useState } from 'react';
-import {useLocation} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import VerifiedIcon from '@mui/icons-material/Verified';
-// import Button from '@mui/material/Button';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 
+import AttachFileIcon from '@mui/icons-material/AttachFile'
 
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
 
-
-
-import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-
 import './PartnerProfile.css';
+import { baseApi } from '../../../store/Api';
+import { Button } from '@mui/material';
 
 
 
 const PartnerProfile = () => {
     const location=useLocation()
-    const {name,email,phone,companyName,isApproved}=location.state //takeing data from partner table when navigating 
+    const {name,email,phone,companyName,isApproved,image,proof}=location.state //takeing data from partner table when navigating 
 
 
 
+   const handleDownload = () => {
 
-//=======================================================
+    const link = document.createElement('a');
+    link.href = `${baseApi}files/${proof}`;
 
-const [displayBasic, setDisplayBasic] = useState(false);
- const [position, setPosition] = useState('center');
+    // link.setAttribute('download', proof);
+    link.download = proof;
+  
+    
 
-    const dialogFuncMap = {
-        'displayBasic': setDisplayBasic,
-    }
-    const onClick = (name, position) => {
-        dialogFuncMap[`${name}`](true);
+    document.body.appendChild(link);
+    link.click();
 
-        if (position) {
-            setPosition(position);
-        }
-    }
+    document.body.removeChild(link);
+  };
 
-    const onHide = (name) => {
-        dialogFuncMap[`${name}`](false);
-    }
-
-    const renderFooter = (name) => {
-        return (
-            <div>
-                <Button label="Reject" className="p-button-danger" onClick={() => onHide(name)} />
-                <Button  label="Accept" className="p-button-success"  onClick={() => onHide(name)} autoFocus />
-            </div>
-        );
-    }
-
+ 
+ 
 
 
 //=======================================================
-  return (
-    <div className="centered-container-partner-profile">
-      <Card className="profile-card-partner">
-        <CardMedia
-          sx={{ height: 150, width: 150,marginLeft:10,marginTop:5 }}
-          image="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
-          title="green iguana"
-        />
-        <div className="partner-profile-card-data">
-          <div className="partner-info">
+return (
+  <div className="centered-container-partner-profile">
+    <Card className="profile-card-partner">
 
-          <p>Name:{"  "} {name} </p>
-            <p>Email:{"  "} {email}</p>
-            <p>Company:{"  "} {companyName}</p>
-            <p> Phone:{"  "}{phone}</p>
+    <h3 style={{marginLeft:"100px"}}>PROFILE</h3>
 
-          </div>
-
-          <div className="dialog-demo">
-            <div className="card">
-             
-                <Button label="VIEW PROOF"  onClick={() => onClick('displayBasic')} />
-                <Dialog header="Header" visible={displayBasic} style={{ width: '50vw',height:"50vw" }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                </Dialog>
-</div>
+      <img className='profile-pic-partner'        src={image ? `${baseApi}files/${image}` : "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"}
+ alt="profile pic" style={{height:"150px",width:"150px",borderRadius:"50%",objectFit: "cover"}} />
+      <div className="partner-profile-card-data">
+        <div className="partner-info">
+          <p>Name: {name}</p>
+          <p>Email: {email}</p>
+          <p>Company: {companyName}</p>
+          <p>Phone: {phone}</p>
+          <p>Status: {isApproved}</p>
+          <p >Proof: <span onClick={handleDownload} style={{color:"#f74e0c",cursor:"pointer"}}><AttachFileIcon/> {proof}</span></p>
+          <Button style={{marginRight:"10px"}} variant="outlined" startIcon={<VerifiedUserIcon style={{color:"green"}} />}>
+          Accept
+        </Button>
+        <Button variant="outlined" startIcon={<RemoveModeratorIcon style={{color:"red"}} />}>
+           Reject
+        </Button>
         </div>
+     
+      </div>
+    </Card>
+  </div>
+);
 
-          
-        </div>
-      </Card>
-    </div>
-  );
 };
 
 export default PartnerProfile;

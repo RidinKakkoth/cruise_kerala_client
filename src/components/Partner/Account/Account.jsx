@@ -180,21 +180,46 @@ partnerData?
 <div  onClick={handleImageClick}>
 
 {
-  open? <CardMedia style={{borderStyle:"double",borderColor:"blue",borderWidth:"5px"}}
-  sx={{ height: 150, width: 150,borderRadius:"50%",marginLeft:10,marginTop:1 }}
+  open? <div className="image-container">
+  <CardMedia
+  sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,borderStyle:"double",borderColor:"#00ff68",borderWidth:"5px" }}
+    className="image"
+    component="img"
+    src={`${baseApi}files/${profileImage}`}
+    title="choose image"
+  />
+  <div
+    className="hover-overlay"
+    onMouseEnter={(e) => {
+      e.currentTarget.style.opacity = 1;
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.opacity = 0;
+    }}
+  >
+    <span className="hover-text">Choose image</span>
+  </div>
+</div>
+:<div className="image-container">
+<CardMedia
+sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,borderStyle:"double",borderColor:"#00ff68",borderWidth:"5px" }}
+  className="image"
   component="img"
-  src={`${baseApi}files/${profileImage}`}
-
-  
-  title="choose image"
-/>:<CardMedia
-  sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1 }}
-  component="img"
-
   src={preview}
-
   title="choose image"
 />
+<div
+  className="hover-overlay"
+  onMouseEnter={(e) => {
+    e.currentTarget.style.opacity = 1;
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.opacity = 0;
+  }}
+>
+  <span className="hover-text">Choose image</span>
+</div>
+</div>
 }
 
  <input type='file' ref={inputRef} name='image'  encType="multipart/form-data" onChange={handleImageChange} alt="dp" style={{width:"100px",display:"none"}} />
