@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import {useNavigate} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import axios from 'axios'
 import { partnerApi } from '../../../store/Api'
 import './SignUp.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SignUp() {
     const [name,setName]=useState("")
@@ -10,7 +12,7 @@ function SignUp() {
     const [phone,setPhone]=useState("")
     const [company,setCompany]=useState("")
     const[password,setPassword]=useState("")
-    const[error,setError]=useState(null)
+    // const[error,setError]=useState(null)
     
     const navigate=useNavigate()
     
@@ -23,13 +25,15 @@ function SignUp() {
       if(response)
         navigate('/partner')
 
-    })
+    }).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
+    console.log(error.response.data.error);})
     
     }
     
     
       return (
         <div>
+          <ToastContainer autoClose={3000} />
           <div className="partner-login-body">
             <div className="partner-card">
               <h1 className="partner-login">Partner SignUp</h1>
@@ -101,8 +105,11 @@ function SignUp() {
                   </button>
                 </div>
               </form>
-    
-              <p>{error}</p>
+                    
+                    <div  style={{display:"flex",justifyContent:"center",fontWeight:"500"}}>
+                      <p >already partner?</p>
+                     <Link style={{textDecoration:"none",color:"blue"}} to={'/partner'}>login</Link>
+                    </div>
             </div>
           </div>
         </div>

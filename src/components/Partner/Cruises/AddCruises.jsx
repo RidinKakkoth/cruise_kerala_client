@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AddCruises.css'
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Input, Page, setOptions,Dropdown,Checkbox } from '@mobiscroll/react';
 import AppBreadCrumbs from '../../Shared/AppBreadCrumbs';
-import { ImageList } from '@mui/material';
+
 
 setOptions({
     theme: 'ios',
     themeVariant: 'light'
 });
 
+
+
+
 function AddCruises() {
+
+    const[selectedImages,setSelectedImages]=useState([])
+
+    const handleSelectImage=(event)=>{
+        const selectedFiles=event.target.files;
+        const selectedFilesArray=Array.from(selectedFiles)
+        const imagesArray=selectedFilesArray.map((file)=>{
+            return URL.createObjectURL(file)
+        })
+        setSelectedImages((previousImages)=>previousImages.concat(imagesArray))
+    }
     return (
         <Page >
             <AppBreadCrumbs/>
@@ -18,7 +33,7 @@ function AddCruises() {
                 <h3 id='add-cruise-head'>ADD NEW CRUISE</h3>
                 <div className="mbsc-row">
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="Cruise Name" inputStyle="box" labelStyle="floating" placeholder="Enter Cruise Name" required />
+                        <Input required label="Cruise Name" name="Name" inputStyle="box" labelStyle="floating" placeholder="Enter Cruise Name"  />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
 
@@ -34,89 +49,97 @@ function AddCruises() {
 
                     </div>
                     <div className="mbsc-col-12 mbsc-col-lg-6">
-                        <Input label="Description" inputStyle="box" labelStyle="floating" placeholder="Description" required/>
+                        <Input required label="Description" name="Description" inputStyle="box" labelStyle="floating" placeholder="Description" />
                     </div>
                 </div>
 
                 <div className="mbsc-row">
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="Boarding Point" inputStyle="box" labelStyle="floating" placeholder="Enter Boarding Point" />
+                        <Input required label="Boarding Point" name="BoardingPoint" inputStyle="box" labelStyle="floating" placeholder="Enter Boarding Point" />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="Town" inputStyle="box" labelStyle="floating" placeholder="Enter Town name" />
+                        <Input required label="Town" name="Town" inputStyle="box" labelStyle="floating" placeholder="Enter Town name" />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="District" inputStyle="box" labelStyle="floating" placeholder="Select your district" />
+                        <Input required label="District" name="District" inputStyle="box" labelStyle="floating" placeholder="Select your district" />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="Pin" inputStyle="box" labelStyle="floating" placeholder="What is your pin code" />
+                        <Input required label="Pin"  name="Pin" inputStyle="box" labelStyle="floating" placeholder="What is your pin code" />
                     </div>
                 </div>
                 <div className="mbsc-row">
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input type='number' label="No of Rooms" inputStyle="box" labelStyle="floating" placeholder="Enter No of Rooms" />
+                        <Input required type='number' name="Rooms" label="No of Rooms" inputStyle="box" labelStyle="floating" placeholder="Enter No of Rooms" />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="Base Rate per Night" inputStyle="box" labelStyle="floating" type='number' placeholder="Base Rate per Night" />
+                        <Input required label="Base Rate per Night" name="BasePrice" inputStyle="box" labelStyle="floating" type='number' placeholder="Base Rate per Night" />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="Rate per extra Guests" inputStyle="box" labelStyle="floating" type='number' placeholder="Rate per head for extra guests" />
+                        <Input required label="Rate per extra Guests" name="AddGuestPrice" inputStyle="box" labelStyle="floating" type='number' placeholder="Rate per head for extra guests" />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input label="No of Persons allowed" inputStyle="box" type='number' labelStyle="floating" placeholder="No of Persons allowed" />
+                        <Input required label="No of Persons allowed" name="MaxGuest" inputStyle="box" type='number' labelStyle="floating" placeholder="No of Persons allowed" />
                     </div>
                 </div>
+
+
+
 
                 <div className="mbsc-row">
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                    <Input inputStyle="underline" labelStyle="stacked" type="file" placeholder="Select file..." label="Upload images"></Input>                    </div>
+                    <Input inputStyle="underline" required multiple labelStyle="stacked" name="Images" onChange={handleSelectImage} type="file" placeholder="Select file..." label="Upload images"></Input>                    </div>
                 </div>
-                <ImageList sx={{ width: 500, height: 450 }} cols={2} rowHeight={164}>
-  {/* {itemData.map((item) => (
-    <ImageListItem key={item.img}>
-      <img
-        src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-        srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-        alt={item.title}
-        loading="lazy"
-      />
-    </ImageListItem>
-  ))} */}
-</ImageList>
+                <div className='images'>
+                        {selectedImages&&
+                        selectedImages.map((image,index)=>{
+                            return(
+                                <div key={image} className='image'>
+                                    <img style={{padding:0,margin:0}} src={image} height="200" alt="uploads" />
+                                    {/* <button onClick={()=>setSelectedImages(selectedImages.filter((e)=>e!==image))}></button> */}
+                                    <DeleteForeverIcon className='del-btn' style={{color:"red",cursor:"pointer"}} onClick={()=>setSelectedImages(selectedImages.filter((e)=>e!==image))} /> 
+                                    <p id='img-indx'>{index+1}</p>
+                                </div>
+                            )
+                        })
+                        }
+                </div>
 
-                <div className="mbsc-row"  style={{marginBottom:"30px"}}>
+
+
+
+                <div className="mbsc-row"  style={{marginBottom:"30px",marginTop:"30px"}}>
                     <div  className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                          <Checkbox  label="AC" color="primary" defaultChecked={true} />                   
+                          <Checkbox name="Description" label="AC" color="primary" defaultChecked={true} />                   
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                          <Checkbox label="FOOD" color="primary" defaultChecked={true} />                   
+                          <Checkbox name="Description" label="FOOD" color="primary" defaultChecked={true} />                   
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                          <Checkbox label="TV" color="primary" defaultChecked={true} />                   
+                          <Checkbox name="Description" label="TV" color="primary" defaultChecked={true} />                   
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                         <Checkbox label="PETS ALLOWED" color="primary" defaultChecked={true} />  
+                         <Checkbox name="Description" label="PETS ALLOWED" color="primary" defaultChecked={true} />  
                     </div>
                 </div>
 
                 <div className="mbsc-row" style={{marginBottom:"30px"}}>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                            <Checkbox label="PARTY HALL" color="primary" defaultChecked={true} />                              
+                            <Checkbox name="Description" label="PARTY HALL" color="primary" defaultChecked={true} />                              
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3" >
-                             <Checkbox   label="FISHING" color="primary" defaultChecked={true} />                                       
+                             <Checkbox name="Description"  label="FISHING" color="primary" defaultChecked={true} />                                       
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                             <Checkbox label="GAMES" color="primary" defaultChecked={true} />                                  
+                             <Checkbox name="Description" label="GAMES" color="primary" defaultChecked={true} />                                  
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                             <Checkbox label="WI-FI" color="primary" defaultChecked={true} />                   
+                             <Checkbox name="Description" label="WI-FI" color="primary" defaultChecked={true} />                   
                     </div>
                 </div>
 
                 <div className="mbsc-row">
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                    <Input inputStyle="underline" labelStyle="stacked" type="file" placeholder="Select file..." label="Upload Liscence doc"></Input>                    </div>
+                    <Input name="Description" inputStyle="underline" labelStyle="stacked" type="file" placeholder="Select file..." required label="Upload Liscence doc"></Input>                    </div>
                 </div>
 
 

@@ -4,7 +4,9 @@ import axios from 'axios'
 import { partnerApi } from '../../../store/Api'
 import { partnerAdd } from '../../../store/PartnerAuth'
 import './Login.css'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -14,7 +16,7 @@ const navigate=useNavigate()
 
 const [email,setEmail]=useState("")
 const[password,setPassword]=useState("")
-const[error,setError]=useState(null)
+// const[error,setError]=useState(null)
 
 
 const handleSubmit=(e)=>{
@@ -29,13 +31,15 @@ axios.post(`${partnerApi}partnerSignin`,{email,password},{withCredentials:true})
   navigate('/partner/dashboard')
  }
 
-})
+}).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
+console.log(error.response.data.error);})
 
 }
 
 
   return (
     <div>
+      <ToastContainer autoClose={3000} />
       <div className="partner-login-body">
         <div className="partner-card">
           <h1 className="partner-login">Partner LogIn</h1>
@@ -61,7 +65,7 @@ axios.post(`${partnerApi}partnerSignin`,{email,password},{withCredentials:true})
                   setPassword(e.target.value);
                 }}
                 name="password"
-                className="partner-form-control"
+                className="form-control"
               />
             </div>
 
@@ -72,7 +76,10 @@ axios.post(`${partnerApi}partnerSignin`,{email,password},{withCredentials:true})
             </div>
           </form>
 
-          <p>{error}</p>
+          <div  style={{display:"flex",justifyContent:"center",fontWeight:"500"}}>
+                      <p >become a partner?</p>
+                     <Link style={{textDecoration:"none",color:"blue"}} to={'/partner/signUp'}>Sign Up</Link>
+                    </div>
         </div>
       </div>
     </div>

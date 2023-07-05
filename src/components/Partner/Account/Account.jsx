@@ -177,6 +177,7 @@ partnerData?
  
     <Card className="profile-card-partner-account">
     <h3 style={{marginLeft:"100px"}}>PROFILE</h3>
+    {editedStatus === "verified" ?<   VerifiedIcon  style={{ color: '#00c600', fontSize: '2rem' ,marginTop:"50px",position:"absolute",marginLeft:"200px" }}/>:""}
 <div  onClick={handleImageClick}>
 
 {
@@ -275,10 +276,10 @@ sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,bord
 <p>
   Status:{" "}
   {editedStatus === "verified" ? (
-    <div>
-      <VerifiedIcon style={{ color: "green", marginLeft: "20px" }} />
+  
+     
       <p style={{ marginTop: "10px",color:"green" }}>Verified</p>
-    </div>
+  
   ) : editedStatus === "upload proof" ? (
     
     proofbuttonHide?"":

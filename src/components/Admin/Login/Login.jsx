@@ -5,6 +5,8 @@ import { adminAdd } from "../../../store/AdminAuth";
 import React, { useState } from "react";
 import { adminApi } from "../../../store/Api";
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -22,18 +24,24 @@ function Login() {
     axios.post(`${adminApi}adminSignin`,{email,password},{withCredentials:true}).then((response)=>{
       const result=response.data.adminLogin
 
+      if(response.data.message){
+        
+        toast.success(response.data.message,{position: "top-center"})
+      }
+
       if(result.status){
         
         dispatch(adminAdd({token:result.token}))
         navigate('/admin/dashboard')
       }
 
-    })
+    }).catch((error)=>toast.error(error.response.data.message,{position: "top-center"}) )};
 
-  };
+
 
   return (
     <div>
+      <ToastContainer autoClose={3000} />
       <div className="admin-login-body">
         <div className="admin-card">
           <h1 className="admin-login">Log In</h1>

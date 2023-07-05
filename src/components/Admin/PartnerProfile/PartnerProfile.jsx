@@ -61,7 +61,7 @@ return (
 
     <h3 style={{marginLeft:"100px"}}>PROFILE</h3>
 
-    <div><   VerifiedIcon  style={{ color: '#00c600', fontSize: '2rem' ,position:"absolute",marginLeft:"170px" }}/>
+    <div> {status==="verified"?<   VerifiedIcon  style={{ color: '#00c600', fontSize: '2rem' ,position:"absolute",marginLeft:"170px" }}/>:""}
     <img className='profile-pic-partner'        src={image ? `${baseApi}files/${image}` : "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"}
  alt="profile pic" style={{height:"150px",width:"150px",borderRadius:"50%",objectFit: "cover"}} />
     </div> 
