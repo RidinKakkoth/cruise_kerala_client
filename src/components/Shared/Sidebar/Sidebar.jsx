@@ -20,11 +20,11 @@ function Sidebar({ userType }) { // Include userType prop in function signature
         <ul className='sidebar-partner-list'>
           {sidebarVisible ? (
             <li className="toggle-icon-right">
-              <CloseIcon onClick={toggleSidebar} />
+              <CloseIcon style={{cursor:"pointer"}} onClick={toggleSidebar} />
             </li>
           ) : (
             <li className="toggle-icon-left">
-              <MenuIcon onClick={toggleSidebar} />
+              <MenuIcon style={{cursor:"pointer"}} onClick={toggleSidebar} />
             </li>
           )}
 

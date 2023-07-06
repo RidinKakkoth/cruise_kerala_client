@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {useLocation} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 import "./Account.css"
 import { baseApi, partnerApi } from '../../../store/Api';
 import axios from 'axios';
@@ -23,7 +23,7 @@ import Stack from '@mui/material/Stack';
 function Account() {
 
 const inputRef=useRef()
-
+const navigate=useNavigate()
 
   useEffect(() => {
 
@@ -38,8 +38,10 @@ const inputRef=useRef()
       seteditedStatus(isApproved)
       setPartnerData(partnerDetails)
       setprofileImage(image)
+if(image){
 
-      setOpen(true)
+  setOpen(true)
+}
 
 
     }).catch((error)=>{
@@ -106,6 +108,7 @@ if(selectedFile){
     withCredentials: true,
   }).then((response)=>{
 
+    navigate(0)
     console.log("success");
  
     
@@ -172,8 +175,8 @@ return (
 
 { 
 partnerData? 
-<div className="mbsc-col-12 mbsc-col-lg-6" style={{display:"flex",gap:"25PX"}}>
-<div className="centered-container">
+<div className="mbsc-col-12 mbsc-col-lg-6"  style={{display:"flex", justifyContent:"center", alignItems:"center",gap:"25PX",maxWidth:"75%"}}>
+<div className="centered-container" >
  
     <Card className="profile-card-partner-account">
     <h3 style={{marginLeft:"100px"}}>PROFILE</h3>
@@ -283,7 +286,8 @@ sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,bord
   ) : editedStatus === "upload proof" ? (
     
     proofbuttonHide?"":
-(    <div>
+(    
+<div>
       <GppMaybeIcon style={{ color: "red", marginLeft: "20px" }} />
       <p style={{ marginTop: "10px", color: "red" }}>Upload Proof to Verify</p>
       <div style={{ display: "flex" }}>
@@ -344,8 +348,8 @@ sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,bord
   </div> */}
   </div>
   
-: <div style={{display:"flex",marginLeft:"10rem",alignItems:"center"}}>
-  <img style={{width:"250px",height:"250px"}} src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif?20170503175831" alt="" />
+: <div style={{display:"flex",marginLeft:"30rem",justifyContent:"center",alignItems:"center"}}>
+  <img style={{width:"150px",height:"150px"}} src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif?20170503175831" alt="" />
 
 </div> }
 
