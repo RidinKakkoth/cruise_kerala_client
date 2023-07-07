@@ -5,6 +5,7 @@ import AdminDashboard from '../pages/AdminPage/AdminDashboard'
 import PartnerData from '../pages/AdminPage/PartnerData'
 import PartnerProfile from '../components/Admin/PartnerProfile/PartnerProfile'
 import PartnerRequestView from '../pages/AdminPage/PartnerRequestView'
+import CruiseDetail from '../pages/AdminPage/CruiseDetail'
 
 
 function AdminRoute() {
@@ -17,6 +18,7 @@ function AdminRoute() {
             <Route path='/partners' element={<PartnerData/>}/>
             <Route path='/partner-request' element={<PartnerRequestView/>}/>
             <Route path='/partner-profile' element={<PartnerProfile/>}/>
+            <Route path='/cruises' element={<CruiseDetail/>}/>
         </Routes>
 
     </>

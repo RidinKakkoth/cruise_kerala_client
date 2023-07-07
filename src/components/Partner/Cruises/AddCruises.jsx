@@ -6,7 +6,8 @@ import './AddCruises.css'
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Input, Page, setOptions,Dropdown,Checkbox } from '@mobiscroll/react';
-import AppBreadCrumbs from '../../Shared/AppBreadCrumbs';
+// import AppBreadCrumbs from '../../Shared/AppBreadCrumbs';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
 import axios from 'axios';
 import { partnerApi } from '../../../store/Api';
 import { useNavigate } from 'react-router-dom';
@@ -118,7 +119,11 @@ if(response.data.success){
 
     return (
         <Page >
-            <AppBreadCrumbs/>
+  
+     <Button onClick={()=>{navigate(-1)}} variant="contained" endIcon={<FastRewindIcon />}>
+        Back
+      </Button>
+   
             <div className="mbsc-grid mbsc-form-grid" id='form-add-cruise'>
                 <h3 id='add-cruise-head'>ADD NEW CRUISE</h3>
                 <form action=""  onSubmit={handleAddCruise} >

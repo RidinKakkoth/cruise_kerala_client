@@ -1,0 +1,65 @@
+.card {
+    width: 100%;
+    max-width: 100%;
+
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  
+  }
+ 
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .card-content {
+    padding: 16px;
+  }
+  
+  .hotel-name {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .hotel-details {
+    display: flex;
+  }
+  
+  .detail {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+  }
+  
+  .label {
+    font-weight: bold;
+    margin-right: 8px;
+    color: #555;
+  }
+  
+  .value {
+    color: #888;
+  }
+/* CruiseData.css */
+.cruise-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin-right: 100px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.cruise-container > div {
+  flex: 0 0 100%; /* Forces each card to take up the full width of the container */
+  /* margin-top: 20px; */
+  max-width: 600px;
+}
+
+#cruise-all-p{
+  margin-bottom: 0.2rem;
+}
+

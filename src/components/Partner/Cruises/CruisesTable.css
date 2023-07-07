@@ -23,3 +23,46 @@
     margin-top: 50px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
+#cruise-map-img{
+   
+    display: flex;
+    /* flex-direction: row; */
+
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height:200px;
+    
+}
+
+.cruie-map-img-div{
+    display: flex;
+    flex-direction: row;
+    
+}
+/* #posters{
+    
+    overflow-x: scroll;
+    overflow-y: hidden;
+} */
+
+/* #posters::-webkit-scrollbar{
+    
+    display: none;
+} */
+.cruise-map-img-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+  }
+  
+  .cruie-map-img-div {
+    flex-shrink: 0;
+  }
+  
+  #cruise-map-img {
+    max-width: 100%;
+    max-height: 100%;
+  }
