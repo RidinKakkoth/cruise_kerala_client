@@ -9,15 +9,21 @@ import Typography from '@mui/material/Typography';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import axios from 'axios';
 import { adminApi, baseApi, partnerApi } from '../../../store/Api';
+import PartnerProfile from '../PartnerProfile/PartnerProfile';
+import { useNavigate } from 'react-router-dom';
 
 function CruiseData() {
   const [cruiseDetails, setCruiseDetails] = useState([]);
+  const navigate=useNavigate()
 
 
   const handleProfile=(id)=>{
-        axios.get(`${adminApi}getPartnerData?id=${id}`,{withCredentials:true}).then((res)=>{
+        axios.get(`${adminApi}getPartnerProfileData?id=${id}`,{withCredentials:true}).then((res)=>{
+            const profileData = res.data.partnerData;
 
-        console.log(res.data,"dddddddddddddddddddddd");
+         
+
+            navigate('/admin/partner-profile', { state:  profileData  });
 
         }).catch((error)=>{console.log(error);})
   }
