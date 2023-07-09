@@ -8,11 +8,12 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 import SailingIcon from '@mui/icons-material/Sailing';
 import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 import LazyLoad from 'react-lazy-load';
 
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { TabView, TabPanel } from 'primereact/tabview';
 import axios from 'axios';
 import { baseApi, partnerApi } from '../../../store/Api';
@@ -55,7 +56,7 @@ const handleBlock = (id) => {
   console.log(id);
 
   axios.patch(`${partnerApi}blockCruise?id=${id}`,{withCredentials:true}).then((res)=>{
-
+    toast.success("Success",{position: "top-center"})
     setTrigger(!trigger)
 
 
@@ -65,6 +66,8 @@ const handleBlock = (id) => {
 
   return (
     <div>
+                <ToastContainer autoClose={1000} />
+
       <Button variant="contained" onClick={handleClick} style={{marginTop:"20px"}} endIcon={<SailingIcon />}>
         Add Cruise
       </Button>

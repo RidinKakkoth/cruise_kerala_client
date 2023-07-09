@@ -5,8 +5,14 @@ import CruiseData from '../../components/Admin/CruiseDatas/CruiseData'
 function CruiseRequest() {
   return (
     <div style={{display:"flex"}} >
-      <Sidebar userType="admin"  />
-      <CruiseData status={false}/>
+       {/* <div style ={{position:"fixed"}}>   */}
+       <div >  
+         <Sidebar userType="admin" />
+       </div>
+       {/* <div style={{marginLeft:"270px"}}> */}
+       <div >
+          <CruiseData status={false}/>
+       </div>
     </div>
   )
 }

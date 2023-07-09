@@ -5,15 +5,18 @@
   margin-top: auto;
   background-color: #0064ff;
   margin-right: 20px;
+  /* position: fixed; */
+  
 
 }
 .sidebar-hidden{
-  position: sticky; 
+
   width: 50px;
   height: 100vh;
   margin-top: auto;
   background-color: #0064ff;
   margin-right: 20px;
+  /* position: fixed; */
 }
 
 .toggle-icon-right{

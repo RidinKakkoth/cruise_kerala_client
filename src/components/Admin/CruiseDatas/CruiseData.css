@@ -8,6 +8,11 @@
     overflow: hidden;
   
   }
+
+  .cruise-page-container {
+    display: flex;
+  }
+  
  
   
   .card img {
@@ -46,9 +51,9 @@
   }
 /* CruiseData.css */
 .cruise-container {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
-  justify-content: left;
+  justify-content: left; */
   margin-right: 100px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }

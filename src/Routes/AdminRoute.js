@@ -7,6 +7,7 @@ import PartnerProfile from '../components/Admin/PartnerProfile/PartnerProfile'
 import PartnerRequestView from '../pages/AdminPage/PartnerRequestView'
 import CruiseDetail from '../pages/AdminPage/CruiseDetail'
 import CruiseRequest from '../pages/AdminPage/CruiseRequest'
+import CruiseSingle from '../pages/AdminPage/CruiseSingle'
 
 
 function AdminRoute() {
@@ -21,7 +22,7 @@ function AdminRoute() {
             <Route path='/partner-profile' element={<PartnerProfile/>}/>
             <Route path='/cruises' element={<CruiseDetail/>}/>
             <Route path='/cruise-request' element={<CruiseRequest/>}/>
-            {/* <Route path='/cruises-single' element={<CruiseRequest/>}/> */}
+            <Route path='/cruises-single' element={<CruiseSingle/>}/>
         </Routes>
 
     </>

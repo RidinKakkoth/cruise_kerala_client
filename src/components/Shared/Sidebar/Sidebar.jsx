@@ -15,7 +15,7 @@ function Sidebar({ userType }) { // Include userType prop in function signature
   };
 
   return (
-    <div>
+    
       <div className={sidebarVisible ? 'sidebar-partner' : 'sidebar-hidden'}>
         <ul className='sidebar-partner-list'>
           {sidebarVisible ? (
@@ -59,7 +59,7 @@ function Sidebar({ userType }) { // Include userType prop in function signature
           )}
         </ul>
       </div>
-    </div>
+
   )
 }
 
