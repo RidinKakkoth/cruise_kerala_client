@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as  Routes, Route } from 'react-router-dom'
 import PartnerLogin from '../pages/Partner/PartnerLogin'
 import PartnerDashboard from '../pages/Partner/PartnerDashboard'
 import PartnerSignUp from '../pages/Partner/PartnerSignUp'
