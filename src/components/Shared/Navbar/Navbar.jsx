@@ -36,7 +36,8 @@ function Navbar() {
   };
 
   return (
-    <AppBar style={{backgroundColor:"#1d2151"}} position="static">
+    <AppBar style={{
+      background: "linear-gradient(90deg, rgba(29,33,81,1) 25%, rgba(29,33,81,0) 50%, rgba(29,33,81,1) 75%)"}} position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
         <img

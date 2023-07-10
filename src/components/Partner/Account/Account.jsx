@@ -73,7 +73,17 @@ const handleEdit = () => {
 
 const handleSave = () => {
 
+  const updatedProfileData = {
+    name: editedName,
+    email: editedEmail,
+    companyName: editedCompanyName,
+    phone: editedPhone,
+  };
+
+axios.patch(`${partnerApi}update-profile`,updatedProfileData,{withCredentials:true}).then((res)=>{
+  
   setEditing(false);
+}).catch((error)=>{console.log(error);})
 };
 
 const handleCancel = () => {
