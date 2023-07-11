@@ -45,6 +45,11 @@ export const AdminSidebarData = [
     link: '/admin/partner-request',
   },
   {
+    title: 'Other Settings',
+    icon: <HowToRegIcon />,
+    link: '/admin/other',
+  },
+  {
     title: 'Logout',
     icon: <LogoutIcon />,
     link: '/admin/logout',

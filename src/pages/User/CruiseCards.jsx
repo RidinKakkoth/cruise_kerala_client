@@ -5,7 +5,7 @@ import Navbar from '../../components/Shared/Navbar/Navbar'
 function CruiseCards() {
   return (
     <div>
-        <Navbar/>
+    
       <Cruise/>
     </div>
   )

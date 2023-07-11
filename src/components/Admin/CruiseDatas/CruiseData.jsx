@@ -39,7 +39,8 @@ function CruiseData({ status }) {
       });
   };
 
-  const handleRequest = (result, id) => {
+  const handleRequest = (status, id) => {
+  
     Swal.fire({
       title: 'Are you sure?',
       text: 'You are approving cruise request',
@@ -49,10 +50,11 @@ function CruiseData({ status }) {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
+    
         axios
-          .patch(`${adminApi}cruise-approval?result=${result}&id=${id}`, { withCredentials: true })
+          .patch(`${adminApi}cruise-approval?result=${status}&id=${id}`, { withCredentials: true })
           .then((res) => {
-            // const resData = res.data.status;
+ 
             navigate(0);
           })
           .catch((error) => {

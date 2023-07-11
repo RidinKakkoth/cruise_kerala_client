@@ -9,6 +9,8 @@
     max-width: 1300px;
     width: 100%;
     margin: auto;
+    display: flex;
+    flex-direction: column;
   }
   body{
     background-color: #f5f5f5;
@@ -72,6 +74,7 @@
     margin-bottom: 20px;
     transition: 0.3s;
     border: 2px solid transparent;
+    transition: all 500ms ease;
   }
   
   @media (max-width: 991px) {
@@ -91,6 +94,7 @@
 
 .each-card:hover{
     border-color:#011742 ;
+    transform: scale(1.02);
 }
 
 
@@ -99,12 +103,16 @@
     width: 100%;
     margin: auto;
     display: flex;
+    
   }
   
   .category-filter {
     flex: 0 0 20%;
     max-width: 20%;
     padding-right: 20px;
+    margin-right: 20px;
+
+
   }
   
   .cruise-cards {
@@ -113,6 +121,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    /* justify-content: center; */
   }
   
   /* Rest of your existing CSS styles */
@@ -120,3 +129,26 @@
     margin-bottom: .2rem;
   }
 
+.searchbar{
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+  padding: 1.5rem 1rem;
+  margin-bottom: 15px;
+}
+
+.searchbar-icon{
+  color:rgba(0, 0, 0, 0.26);
+  margin-right: 2rem;
+}
+
+.searchbar input{
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  width: 100%;
+ 
+}
+.searchbar input::placeholder{
+  color:rgba(0, 0, 0, 0.26);
+}

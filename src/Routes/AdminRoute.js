@@ -8,6 +8,7 @@ import PartnerRequestView from '../pages/AdminPage/PartnerRequestView'
 import CruiseDetail from '../pages/AdminPage/CruiseDetail'
 import CruiseRequest from '../pages/AdminPage/CruiseRequest'
 import CruiseSingle from '../pages/AdminPage/CruiseSingle'
+import OtherManagements from '../pages/AdminPage/OtherManagements'
 
 
 function AdminRoute() {
@@ -23,6 +24,7 @@ function AdminRoute() {
             <Route path='/cruises' element={<CruiseDetail/>}/>
             <Route path='/cruise-request' element={<CruiseRequest/>}/>
             <Route path='/cruises-single' element={<CruiseSingle/>}/>
+            <Route path='/other' element={<OtherManagements/>}/>
         </Routes>
 
     </>
