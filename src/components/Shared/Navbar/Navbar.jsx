@@ -11,9 +11,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+// import AdbIcon from '@mui/icons-material/Adb';
+import { Link } from 'react-router-dom';
 
-const pages = ['Cruises', 'About'];
+const pages = [
+  { name: 'Cruises', path: '/cruises' },
+  { name: 'About', path: '/about' }
+];
 const settings = ['Profile', 'Account', 'Logout'];
 
 function Navbar() {
@@ -36,35 +40,38 @@ function Navbar() {
   };
 
   return (
-    <AppBar style={{
-      background: "linear-gradient(90deg, rgba(29,33,81,1) 25%, rgba(29,33,81,0) 50%, rgba(29,33,81,1) 75%)"}} position="fixed">
+    <AppBar
+      style={{
+        // background: "linear-gradient(90deg, rgba(29,33,81,1) 25%, rgba(29,33,81,0) 50%, rgba(29,33,81,1) 75%)"
+        background: "#011742"
+      }}
+      position="fixed"
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-        <img
+          <img
             src="https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png" // Replace with the URL or path to your image
             alt=""
             style={{ width: '30px', height: '30px', marginRight: '8px' }}
           />
 
           <Typography
-  variant="h6"
-  style={{ fontFamily: "'Bree Serif', serif" }}
-  noWrap
-  component="a"
-  href="/"
-  sx={{
-    mr: 2,
-    display: { xs: 'none', md: 'flex' },
-    fontWeight: 700,
-    letterSpacing: '.3rem',
-    color: 'inherit',
-    textDecoration: 'none',
-  }}
->
-  Cruise
-</Typography>
-
-
+            variant="h6"
+            style={{ fontFamily: "'Bree Serif', serif" }}
+            noWrap
+            component={Link}
+            to="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Cruise
+          </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -96,18 +103,20 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography    textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" component={Link} to={page.path}>
+                    {page.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href=""
+            component={Link}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -119,17 +128,19 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Cruise
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 style={{ fontFamily: "'Bree Serif', serif" }}
+                component={Link}
+                to={page.path}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -168,4 +179,5 @@ function Navbar() {
     </AppBar>
   );
 }
+
 export default Navbar;
