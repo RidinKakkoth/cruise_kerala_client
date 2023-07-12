@@ -19,10 +19,12 @@ import { adminApi, baseApi } from '../../../store/Api';
 import { Carousel } from 'react-responsive-carousel';
 import './Cruise.css';
 import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from 'react-router-dom';
 const drawerWidth = 240;
 
  function Cruise() {
   const [cards, setCards] = React.useState([]);
+  const navigate=useNavigate()
 
   const changeInput=()=>{}
   
@@ -33,6 +35,10 @@ const drawerWidth = 240;
       })
       .catch((error) => console.log(error));
   }, []);
+
+  const handleClick=(obj)=>{
+      navigate('/cruises/single-view',{state:obj})
+  }
 
   
   return (
@@ -94,7 +100,7 @@ const drawerWidth = 240;
                 <div className="cruise-cards">
             {cards && cards.length > 0 ? (
               cards.map((card, index) => (
-                <div key={index} className="each-card">
+                <div onClick={()=>{handleClick(card)}} key={index} className="each-card">
                   {/* <img className='img-cruise-card' src={`${baseApi}files/${card.Images[0]}`} alt="" /> */}
                   <Carousel  showThumbs={false} showArrows={false}>
                     {card.Images.map((image, index) => (
