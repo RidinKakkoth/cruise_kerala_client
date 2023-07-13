@@ -19,7 +19,7 @@ import { adminApi, baseApi } from '../../../store/Api';
 import { Carousel } from 'react-responsive-carousel';
 import './Cruise.css';
 import SearchIcon from '@mui/icons-material/Search';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const drawerWidth = 240;
 
  function Cruise() {
@@ -37,8 +37,9 @@ const drawerWidth = 240;
   }, []);
 
   const handleClick=(obj)=>{
-      navigate('/cruises/single-view',{state:obj})
-  }
+      // navigate('/cruises/single-view',{state:obj})
+      navigate('/cruises/'+obj._id)
+    }
 
   
   return (
@@ -97,9 +98,14 @@ const drawerWidth = 240;
           // value={value} 
           onChange={changeInput} />
         </div>
-                <div className="cruise-cards">
+
+        <div className="cruise-cards">
             {cards && cards.length > 0 ? (
               cards.map((card, index) => (
+
+
+
+
                 <div onClick={()=>{handleClick(card)}} key={index} className="each-card">
                   {/* <img className='img-cruise-card' src={`${baseApi}files/${card.Images[0]}`} alt="" /> */}
                   <Carousel  showThumbs={false} showArrows={false}>
@@ -115,6 +121,11 @@ const drawerWidth = 240;
                   <p style={{color:"black",fontWeight:'600',marginTop:"15px"}}>₹{card.baseRate} <span style={{color:"black",fontWeight:"400"}}>night</span> </p>
                   {/* <button className='card-btn'>Explore</button> */}
                 </div>
+                    
+                
+
+
+
               ))
             ) : (
               <p>No cruise cards available.</p>

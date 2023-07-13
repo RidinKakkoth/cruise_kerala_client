@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./CruiseSingle.css";
 
 import GridViewIcon from '@mui/icons-material/GridView';
@@ -28,15 +28,33 @@ import { baseApi } from "../../../store/Api";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import { Button } from "@mui/material";
+import axios from "axios";
 
 const greenTick = () => <CheckIcon style={{ color: "green" }} />;
 const redTick = () => <ClearIcon style={{ color: "red" }} />;
 
 function CruiseSingle() {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const data = location.state;
 
+  const {id}=useParams()
+
+  
+
+    const navigate = useNavigate();
+    // const location = useLocation();
+    // const data = location.state;
+
+    useEffect(()=>{
+      if(!id){
+        return
+      }
+      axios.get(`${baseApi}single-view/${id}`).then(res =>{
+        
+          setData(res.data.cruiseData)
+      })
+    },[id])
+
+
+    const[data,setData]=useState([])
     const [checkInDate, setCheckInDate] = useState("");
     const [checkOutDate, setCheckOutDate] = useState("");
     const [numOfNights, setNumOfNights] = useState(0);
@@ -64,7 +82,7 @@ function CruiseSingle() {
         else{
           setExtraGuest(0)
         }
-        // calculateTotalAmount(numOfNights,extraGuest);
+
       }
       
       const calculateNumOfNights = (checkIn, checkOut) => {
@@ -72,14 +90,14 @@ function CruiseSingle() {
             const startDate=new Date(checkIn)
             const endDate=new Date(checkOut)
 
-                // Calculate the difference in milliseconds
+
     const differenceInTime = endDate.getTime() - startDate.getTime();
 
-    // Calculate the number of nights
+
     const numOfNights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
     setNumOfNights(numOfNights);
-    // calculateTotalAmount(numOfNights,extraGuest);
+
         }
       };
 
@@ -94,18 +112,14 @@ function CruiseSingle() {
         return tomorrow.toISOString().split("T")[0];
       };
 
-useEffect(()=>{
-  // const calculateTotalAmount = (numOfNights,extraGuest) => {
-    const pricePerNight = data.baseRate;
-    const extraRate = data.extraRate;
-console.log(extraGuest,"eeeeeeeeeeeeee");
-    
- setTotalAmount((pricePerNight * numOfNights)+extraGuest*numOfNights*extraRate)
-    
-    // setTotalAmount(totalAmount);
-  // };
-},[extraGuest,numOfNights,checkInDate,checkOutDate,guest])
-      
+useEffect(() => {
+  const pricePerNight = data.baseRate;
+  const extraRate = data.extraRate;
+
+  if (numOfNights > 0 && extraGuest >= 0) {
+    setTotalAmount((pricePerNight * numOfNights) + extraGuest * numOfNights * extraRate);
+  }
+}, [extraGuest, numOfNights, checkInDate, checkOutDate, guest]);
 
 
 
@@ -131,6 +145,7 @@ console.log(extraGuest,"eeeeeeeeeeeeee");
 
 
   return (
+
     <div className="single-view-main container">
       <h3 className="cruise-head">{data.name}</h3>
       <div style={{ display: "flex" }}>
@@ -138,6 +153,9 @@ console.log(extraGuest,"eeeeeeeeeeeeee");
         <p style={{ fontWeight: "500", marginBottom: 20 }}>{data.boarding},{data.district}</p>
       </div>
       <div style={{ position: "relative" }}>
+
+      {data.Images && data.Images.length > 0 ? (  
+
         <div onClick={handleClick} className="img-div-single" style={{ display: "grid", gap: 4, cursor: "pointer" }}>
           <div>
             <img
@@ -171,6 +189,10 @@ console.log(extraGuest,"eeeeeeeeeeeeee");
           </div>
           
         </div>
+  ) : null}
+
+
+
       </div>
       <hr />
       <div className="chck-grid-single" style={{gap:100}} >
@@ -224,9 +246,9 @@ console.log(extraGuest,"eeeeeeeeeeeeee");
               </div>
             </div>
             <div className="py-3 px-4 " style={{ borderTop: "2px solid #dee2e6", paddingLeft: "1rem", paddingRight: "1rem" }}>
-              {/* <label>No of guests:</label> */}
+
               <Stepper label="Guest"  description="Extra guests" min={1} onChange={handleGuest} value={guest} defaultValue={1} max={data.maxGuest} />
-              {/* <input type="number" style={{textAlign:"center",fontWeight:"bold"}}  defaultValue={0} min={0} max={data.maxGuest} /> */}
+      
             </div>
           </div>
           <div>
@@ -245,6 +267,7 @@ console.log(extraGuest,"eeeeeeeeeeeeee");
       <hr />
       <h4>What this place offers</h4>
       <br />
+      {data.Facilities && data.Facilities.length > 0 ? (  
       <div className="chck-grid-single">
         <div className="chck-grid-single__facility">
           <p>
@@ -275,6 +298,8 @@ console.log(extraGuest,"eeeeeeeeeeeeee");
           </p>
         </div>
       </div>
+        ) : null}
+        
     </div>
   );
 }

@@ -29,7 +29,9 @@ useEffect(()=>{
       <Route path='/signup' element={<UserSignupPage />} />
       <Route path='/signin' element={<UserSigninPage />} />
       <Route path='/cruises' element={<CruiseCards />} />
-      <Route path='/cruises/single-view' element={<CruiseSingleView />} />
+      {/* <Route path='/cruises/single-view' element={<CruiseSingleView />} /> */}
+      <Route path='/cruises/:id' element={<CruiseSingleView />} />
+
       
       </Routes>
     </>
