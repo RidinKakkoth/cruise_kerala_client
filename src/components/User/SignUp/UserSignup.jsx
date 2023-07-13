@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
 import axios from 'axios'
-import { partnerApi } from '../../../store/Api'
-import './SignUp.css'
+import { baseApi } from '../../../store/Api'
+import './UserSignup.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function SignUp() {
+function UserSignup() {
     const [name,setName]=useState("")
     const [email,setEmail]=useState("")
     const [phone,setPhone]=useState("")
-    const [company,setCompany]=useState("")
     const[password,setPassword]=useState("")
-    // const[error,setError]=useState(null)
+
     
     const navigate=useNavigate()
     
@@ -20,10 +19,12 @@ function SignUp() {
     
     e.preventDefault()
 
-    axios.post(`${partnerApi}partnerSignUp`,{email,password,phone,name,company},{withCredentials:true}).then((response)=>{
+
+    axios.post(`${baseApi}userSignUp`,{email,password,phone,name},{withCredentials:true}).then((response)=>{
     
       if(response)
-        navigate('/partner')
+        // navigate('/signup')
+        console.log("hhhhhhhhhhhhhhhhhhh");
 
     }).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
     console.log(error.response.data.error);})
@@ -34,12 +35,12 @@ function SignUp() {
       return (
         <div>
           <ToastContainer autoClose={3000} />
-          <div className="partner-login-body">
-            <div className="partner-card">
-              <h1 className="partner-login">Partner SignUp</h1>
+          <div className="user-login-body">
+            <div className="user-card">
+              <h1 className="user-login">SIGNUP</h1>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label className="partner-label">Full Name</label>
+                  <label className="user-label">Full Name</label>
                   <input
                   required
                     type="text"
@@ -50,7 +51,7 @@ function SignUp() {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="partner-label">Email</label>
+                  <label className="user-label">Email</label>
                   <input
                   required
                     type="email"
@@ -62,53 +63,41 @@ function SignUp() {
                 </div>
     
                 <div className="form-group">
-                  <label className="partner-label">Phone</label>
+                  <label className="user-label">Phone</label>
                   <input
                   required
                     type="number"
                        onChange={(e) => {
                       setPhone(e.target.value);
                     }}
-                    className="partner-form-control"
+                    className="form-control"
                   />
                 </div>
 
-                <div className="form-group">
-                  <label className="partner-label">Company Name</label>
-                  <input
-                  required
-                    type="text"
-                    
-                    onChange={(e) => {
-                      setCompany(e.target.value);
-                    }}
-                    className="partner-form-control"
-                  />
-                </div>
 
                 <div className="form-group">
-                  <label className="partner-label">Password</label>
+                  <label className="user-label">Password</label>
                   <input
                   required
                     type="password"
                                   onChange={(e) => {
                       setPassword(e.target.value);
                     }}
-                    className="partner-form-control"
+                    className="form-control"
                   />
                 </div>
 
     
-                <div className="partner-btn-div">
-                  <button type="submit" className="partnerlogin-btn">
+                <div className="user-btn-div">
+                  <button type="submit" className="userlogin-btn">
                     SignUp
                   </button>
                 </div>
               </form>
                     
                     <div  style={{display:"flex",justifyContent:"center",fontWeight:"500"}}>
-                      <p >already partner?</p>
-                     <Link style={{textDecoration:"none",color:"blue"}} to={'/partner'}>login</Link>
+                      <p >already user?</p>
+                     <Link style={{textDecoration:"none",color:"blue"}} to={'/user'}>login</Link>
                     </div>
             </div>
           </div>
@@ -116,4 +105,4 @@ function SignUp() {
       )
 }
 
-export default SignUp
+export default UserSignup
