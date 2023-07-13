@@ -96,9 +96,11 @@ body{
   font-weight: 600;
   display: block;
 }
-
-.chck-grid-single input[type="date"],
-.chck-grid-single input[type="number"] {
+.chck-grid-single__icon{
+  margin-right: 20px;
+}
+.chck-grid-single input[type="date"]
+ {
   width: 100%;
   border-radius: 6px;
   border-color: #dee2e6;
