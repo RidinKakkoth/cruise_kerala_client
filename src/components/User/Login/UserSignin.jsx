@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
-import { partnerApi } from '../../../store/Api'
-import { partnerAdd } from '../../../store/PartnerAuth'
-import './Login.css'
+import { baseApi } from '../../../store/Api'
+import { userAdd } from '../../../store/UserAuth'
+import './UserSignin.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 
-function PartnerLogin() {
+function UserSignin() {
 const dispatch=useDispatch()
 const navigate=useNavigate()
 
@@ -22,13 +22,13 @@ const[password,setPassword]=useState("")
 const handleSubmit=(e)=>{
 
 e.preventDefault()
-axios.post(`${partnerApi}partnerSignin`,{email,password},{withCredentials:true}).then((response)=>{
+axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then((response)=>{
 
- const result=response.data.partnerLogin
+ const result=response.data.userLogin
 
  if(result.status){
-  dispatch(partnerAdd({token:result.token}))
-  navigate('/partner/dashboard')
+  dispatch(userAdd({token:result.token,userName:result.name}))
+  navigate('/')
  }
 
 }).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
@@ -40,14 +40,14 @@ console.log(error.response.data.error);})
   return (
     <div>
       <ToastContainer autoClose={3000} />
-      <div className="partner-login-body">
-        <div className="partner-card">
-          <h1 className="partner-login">Partner LogIn</h1>
+      <div className="user-login-body">
+        <div className="user-card">
+          <h1 className="user-login">user LogIn</h1>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="partner-label">Email</label>
+              <label className="user-label">Email</label>
               <input
-              required
+              // required
                 type="email"
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -57,9 +57,9 @@ console.log(error.response.data.error);})
             </div>
 
             <div className="form-group">
-              <label className="partner-label">Password</label>
+              <label className="user-label">Password</label>
               <input
-                required
+                // required
                 type='password'
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -69,16 +69,16 @@ console.log(error.response.data.error);})
               />
             </div>
 
-            <div className="partner-btn-div">
-              <button type="submit" className="partnerlogin-btn">
+            <div className="user-btn-div">
+              <button type="submit" className="userlogin-btn">
                 LogIn
               </button>
             </div>
           </form>
 
           <div  style={{display:"flex",justifyContent:"center",fontWeight:"500"}}>
-                      <p >become a partner?</p>
-                     <Link style={{textDecoration:"none",color:"blue"}} to={'/partner/signUp'}>Sign Up</Link>
+                      <p >become a user?</p>
+                     <Link style={{textDecoration:"none",color:"blue"}} to={'/signUp'}>Sign Up</Link>
                     </div>
         </div>
       </div>
@@ -86,4 +86,4 @@ console.log(error.response.data.error);})
   )
 }
 
-export default PartnerLogin
+export default UserSignin

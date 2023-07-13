@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import UserHome from '../pages/User/UserHome';
 import CruiseCards from '../pages/User/CruiseCards';
 import CruiseSingleView from '../pages/User/CruiseSingleView';
-
+import { useCookies } from 'react-cookie'
 import UserSignupPage from '../pages/User/UserSignupPage';
 import UserSigninPage from '../pages/User/UserSigninPage';
+import { useDispatch } from 'react-redux';
+import { userAdd } from '../store/UserAuth';
 
 function UserRoute() {
+
+const[cookies]=useCookies(['userCookie'])
+const dispatch=useDispatch()
+
+useEffect(()=>{
+  if(cookies.userCookie){
+    console.log(cookies.userCookie,"cccccccccccc");
+    dispatch(userAdd({userName:cookies.userCookie?.userName,token:cookies.userCookie?.token}))
+  }
+},[cookies,dispatch])
+
+
   return (
     <>
     <Routes> 

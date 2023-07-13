@@ -15,26 +15,31 @@ function UserSignup() {
     
     const navigate=useNavigate()
     
-    const handleSubmit=(e)=>{
+    const handleSubmit = (e) => {
+      e.preventDefault();
     
-    e.preventDefault()
-
-
-    axios.post(`${baseApi}userSignUp`,{email,password,phone,name},{withCredentials:true}).then((response)=>{
-    
-      if(response)
-        // navigate('/signup')
-        console.log("hhhhhhhhhhhhhhhhhhh");
-
-    }).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
-    console.log(error.response.data.error);})
-    
-    } 
-    
+      axios
+        .post(`${baseApi}userSignUp`, { email, password, phone, name }, { withCredentials: true })
+        .then(() => {
+          toast.success("Success", {
+            position: "top-center",
+            onClose: () => navigate("/signin")
+          });
+        })
+        .catch((error) => {
+          if (error.response && error.response.data && error.response.data.error) {
+            console.log(error.response.data.error);
+            toast.error(error.response.data.error, { position: "top-center" });
+          } else {
+            console.log(error);
+            toast.error("An error occurred", { position: "top-center" });
+          }
+        });
+    };
     
       return (
         <div>
-          <ToastContainer autoClose={3000} />
+          <ToastContainer autoClose={2000} />
           <div className="user-login-body">
             <div className="user-card">
               <h1 className="user-login">SIGNUP</h1>
@@ -42,7 +47,7 @@ function UserSignup() {
                 <div className="form-group">
                   <label className="user-label">Full Name</label>
                   <input
-                  required
+                  
                     type="text"
                     onChange={(e) => {
                         setName(e.target.value);
@@ -53,7 +58,7 @@ function UserSignup() {
                 <div className="form-group">
                   <label className="user-label">Email</label>
                   <input
-                  required
+                  
                     type="email"
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -65,7 +70,7 @@ function UserSignup() {
                 <div className="form-group">
                   <label className="user-label">Phone</label>
                   <input
-                  required
+                  
                     type="number"
                        onChange={(e) => {
                       setPhone(e.target.value);
@@ -78,7 +83,7 @@ function UserSignup() {
                 <div className="form-group">
                   <label className="user-label">Password</label>
                   <input
-                  required
+                  
                     type="password"
                                   onChange={(e) => {
                       setPassword(e.target.value);
@@ -97,7 +102,7 @@ function UserSignup() {
                     
                     <div  style={{display:"flex",justifyContent:"center",fontWeight:"500"}}>
                       <p >already user?</p>
-                     <Link style={{textDecoration:"none",color:"blue"}} to={'/user'}>login</Link>
+                     <Link style={{textDecoration:"none",color:"blue"}} to={'/signin'}>login</Link>
                     </div>
             </div>
           </div>

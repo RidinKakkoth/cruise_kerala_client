@@ -69,7 +69,7 @@ function SignUp() {
                        onChange={(e) => {
                       setPhone(e.target.value);
                     }}
-                    className="partner-form-control"
+                    className="form-control"
                   />
                 </div>
 
@@ -82,7 +82,7 @@ function SignUp() {
                     onChange={(e) => {
                       setCompany(e.target.value);
                     }}
-                    className="partner-form-control"
+                    className="form-control"
                   />
                 </div>
 
@@ -94,7 +94,7 @@ function SignUp() {
                                   onChange={(e) => {
                       setPassword(e.target.value);
                     }}
-                    className="partner-form-control"
+                    className="form-control"
                   />
                 </div>
 
