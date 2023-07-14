@@ -5,7 +5,7 @@
 }
 
 
-  .container{
+#conatiner-cruise{
     max-width: 1300px;
     width: 100%;
     margin: auto;
@@ -99,13 +99,13 @@
 }
 
 
-.container {
+/* .container {
     max-width: 1300px;
     width: 100%;
     margin: auto;
     display: flex;
     
-  }
+  } */
   
   .category-filter {
     flex: 0 0 20%;

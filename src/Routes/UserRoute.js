@@ -8,6 +8,7 @@ import UserSignupPage from '../pages/User/UserSignupPage';
 import UserSigninPage from '../pages/User/UserSigninPage';
 import { useDispatch } from 'react-redux';
 import { userAdd } from '../store/UserAuth';
+import CheckoutPage from '../pages/User/CheckoutPage';
 
 function UserRoute() {
 
@@ -16,7 +17,7 @@ const dispatch=useDispatch()
 
 useEffect(()=>{
   if(cookies.userCookie){
-    console.log(cookies.userCookie,"cccccccccccc");
+
     dispatch(userAdd({userName:cookies.userCookie?.userName,token:cookies.userCookie?.token}))
   }
 },[cookies,dispatch])
@@ -31,6 +32,7 @@ useEffect(()=>{
       <Route path='/cruises' element={<CruiseCards />} />
       {/* <Route path='/cruises/single-view' element={<CruiseSingleView />} /> */}
       <Route path='/cruises/:id' element={<CruiseSingleView />} />
+      <Route path='/checkout' element={<CheckoutPage />} />
 
       
       </Routes>

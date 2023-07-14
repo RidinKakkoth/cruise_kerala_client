@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,21 +13,28 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 // import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { userLogout } from '../../../store/UserAuth';
+import { useDispatch } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 const pages = [
   { name: 'Cruises', path: '/cruises' },
   { name: 'About', path: '/about' }
 ];
-const settings = ['Profile', 'Account', 'Logout'];
+const settings = ['Profile', 'Account'];
 
 
 function Navbar() {
-
-  const data = useSelector((state) => state.User);
-  const UserName=data.UserName
-
+  
+  
+    const data = useSelector((state) => state.User);
+    const UserName=data.userName
+    const dispatch=useDispatch()
+    const navigate=useNavigate()
+    
+    const[cookie,setCookie,removeCookie]=useCookies(['userCookie'])
 
 
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -46,6 +53,16 @@ function Navbar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+
+    removeCookie('userCookie')
+    localStorage.clear();
+
+    dispatch(userLogout())
+    navigate('/')
+    
   };
 
 
@@ -185,6 +202,10 @@ function Navbar() {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
+                {/* Logout MenuItem */}
+                <MenuItem onClick={handleLogout}>
+                  <Typography  textAlign="center">Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           ) : (

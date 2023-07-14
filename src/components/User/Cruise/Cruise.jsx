@@ -91,7 +91,7 @@ const drawerWidth = 240;
           
         </div>
 
-                <div className="container">
+                <div className="container" id='conatiner-cruise'>
                 <div className='searchbar'>
           <SearchIcon className='searchBar-icon'/>
           <input type="text" placeholder='Search for your dream cruise' 
@@ -128,7 +128,10 @@ const drawerWidth = 240;
 
               ))
             ) : (
-              <p>No cruise cards available.</p>
+              <div style={{display:"flex",marginLeft:"30rem",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
+  <img style={{width:"250px",height:"250px",alignItems:"center"}} src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+              <h5 style={{color:"#011742",fontWeight:"600"}}>loading....</h5>
+</div>
             )}
           </div>
                 </div>
