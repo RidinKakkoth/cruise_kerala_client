@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { baseApi } from "../../../store/Api";
 import { useSelector } from "react-redux";
@@ -8,15 +8,19 @@ import { useDispatch } from 'react-redux'
 import { userAdd } from '../../../store/UserAuth'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 
 function Checkout() {
   const [email,setEmail]=useState("")
   const[password,setPassword]=useState("")
-  const[error,setError]=useState("")
+
 
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state ? location.state.data : null;
+const{totalAmount,guest,checkOutDate,checkInDate,cruiseId}=data
 
   const user = useSelector((state) => state.User);
   const isSignIn = user.userToken;
@@ -51,6 +55,61 @@ axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then(
   }
 
 
+const initPayment=(recievedData)=>{
+  const options={
+    key:"rzp_test_drvVy05m61MDRI",
+    amount:recievedData.amount,
+    currency:recievedData.currency,
+    name:"Cruise",
+    image:"https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png",
+    description:"test transaction",
+    checkInDate,
+    checkOutDate,
+    guest,
+    order_id:recievedData.id,
+    handler:async(response)=>{
+      try {
+        await axios.post(`${baseApi}verify`,response,{withCredentials:true}).then((res)=>{
+            const bookedData=res.data.bookedData
+            localStorage.clear()
+            navigate('/confirmation',{state:{data,bookedData}}) // Navigate to confirmation
+          
+        }).catch(err=>console.log(err))
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    theme:{
+      color:"#3399cc",
+    }
+  }
+  const rzp1=new window.Razorpay(options)
+  rzp1.open()
+}
+
+
+
+
+
+
+const handlePayment=async()=>{
+
+      try {
+
+       axios.post(`${baseApi}orders`,{totalAmount,guest,checkOutDate,checkInDate,cruiseId},{withCredentials:true}).then((res)=>{
+          
+
+          initPayment(res.data.data)
+
+        }).catch(err=>console.log(err))
+      } catch (error) {
+        console.log(error);
+      }
+}
+
+
+
+
 
 
   return (
@@ -76,7 +135,7 @@ axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then(
         </div>
 
         <div>
-          <div className="flex-col  items-center border rounded-4    bg-white w-[75%] ">
+          <div className="flex-col  items-center border rounded-4    bg-white w-[65%] ">
             <div className="grid grid-cols-[2fr_3fr]">
               <div>
                 <img
@@ -94,9 +153,9 @@ axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then(
             <h4 className="ms-3 mt-4 ">Price details</h4>
             <hr />
 
-            <div className="ms-4">
+            <div className=" ">
               <div className="grid  grid-cols-2 w-[100%]">
-                <div>
+                <div className="ms-4">
                   <p className="font-medium text-lg mb-3 ">
                     {data.baseRate} ₹ x {data.numOfNights} nights
                   </p>
@@ -108,14 +167,8 @@ axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then(
                   <hr />
                   <p className="font-medium text-lg mt-4">Total(INR)</p>
 
-{
-    isSignIn?               (
-        <div className="ms-4">
-            <button className="border rounded-xl w-80 mt-5 mb-3  h-12 font-semibold text-white bg-[#011742] hover:bg-blue-950">Proceed to pay</button>
-        </div> ):""
-    
-}
                 </div>
+
 
                 <div className="mx-auto">
                   <p className="font-normal text-lg mx-auto mb-3">
@@ -131,7 +184,18 @@ axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then(
                   </p>
                 </div>
               </div>
+<hr />              
+              {
+    isSignIn?               (
+        <div className=" ">
+  
+            <button onClick={handlePayment}  className="border  rounded-xl w-[75%] mt-2 mb-3 ms-5 h-12 font-semibold text-white bg-[#011742] hover:bg-blue-950">Proceed to pay</button>
+        </div> ):""
+    
+}
+
             </div>
+            
           </div>
         </div>
       </div>

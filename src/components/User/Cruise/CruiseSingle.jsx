@@ -42,6 +42,7 @@ function CruiseSingle() {
 
     axios.get(`${baseApi}single-view/${id}`).then((res) => {
       setData(res.data.cruiseData);
+      
       localStorage.clear();
     });
   }, [id]);
@@ -84,6 +85,7 @@ function CruiseSingle() {
 
 
   const obj = {
+    cruiseId:data._id,
     checkInDate,
     checkOutDate,
     numOfNights,

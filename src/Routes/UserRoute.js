@@ -9,6 +9,8 @@ import UserSigninPage from '../pages/User/UserSigninPage';
 import { useDispatch } from 'react-redux';
 import { userAdd } from '../store/UserAuth';
 import CheckoutPage from '../pages/User/CheckoutPage';
+import AccountPage from '../pages/User/AccountPage';
+import ConfirmationPage from '../pages/User/ConfirmationPage';
 
 function UserRoute() {
 
@@ -33,6 +35,8 @@ useEffect(()=>{
       {/* <Route path='/cruises/single-view' element={<CruiseSingleView />} /> */}
       <Route path='/cruises/:id' element={<CruiseSingleView />} />
       <Route path='/checkout' element={<CheckoutPage />} />
+      <Route path='/account/:subpage?' element={<AccountPage />} />
+      <Route path='/confirmation' element={<ConfirmationPage />} />
 
       
       </Routes>

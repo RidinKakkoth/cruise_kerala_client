@@ -23,7 +23,7 @@ const pages = [
   { name: 'Cruises', path: '/cruises' },
   { name: 'About', path: '/about' }
 ];
-const settings = ['Profile', 'Account'];
+const settings = [{name:'Profile',path:"/profile" },{name:'Account',path:"/account"}];
 
 
 function Navbar() {
@@ -132,7 +132,7 @@ function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" component={Link} to={page.path}>
+                  <Typography textAlign="center" style={{textDecoration:"none"}} component={Link} to={page.path}>
                     {page.name}
                   </Typography>
                 </MenuItem>
@@ -197,11 +197,14 @@ function Navbar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+{settings.map((setting) => (
+  <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+    <Typography textAlign="center" style={{textDecoration:"none"}} component={Link} to={setting.path}>
+      {setting.name}
+    </Typography>
+  </MenuItem>
+))}
+
                 {/* Logout MenuItem */}
                 <MenuItem onClick={handleLogout}>
                   <Typography  textAlign="center">Logout</Typography>
