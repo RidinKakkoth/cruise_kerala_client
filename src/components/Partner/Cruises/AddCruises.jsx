@@ -11,7 +11,8 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import axios from 'axios';
 import { partnerApi } from '../../../store/Api';
 import { useNavigate } from 'react-router-dom';
-
+import AddCruiseFormValidation from '../../../utils/AddCruiseFormValidation'
+import { ToastContainer, toast } from 'react-toastify';
 
 setOptions({
     theme: 'ios',
@@ -66,6 +67,12 @@ function AddCruises() {
             event.preventDefault()
 
            const cruiseData={name,category,description,boarding,town,district,pin,rooms,baseRate,extraRate,maxGuest,AC,food,TV,pets,partyHall,fishing,games,wifi}
+           const validationError =AddCruiseFormValidation(cruiseData)
+
+             if (validationError !== '') {
+                  toast.error(validationError,{position: "top-center"});
+                 return;
+                    }
 
            const formData = new FormData();
 
@@ -119,7 +126,7 @@ if(response.data.success){
 
     return (
         <Page >
-  
+        <ToastContainer  />
      <Button onClick={()=>{navigate(-1)}} variant="contained" endIcon={<FastRewindIcon />}>
         Back
       </Button>
@@ -133,7 +140,7 @@ if(response.data.success){
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
 
-                        <Dropdown style={{height:"55px"}}  onChange={(event) => setCategory(event.target.value)}  inputStyle='box'>
+                        <Dropdown style={{height:"55px"}} required  onChange={(event) => setCategory(event.target.value)}  inputStyle='box'>
                             <option >Category</option>
                              <option value="Premium">Premium</option>
                              <option value="Luxury">Luxury</option>
@@ -160,7 +167,7 @@ if(response.data.success){
                         <Input required label="District" onChange={(e)=>{setDistrict(e.target.value)}} inputStyle="box" labelStyle="floating" placeholder="Select your district" />
                     </div>
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
-                        <Input required label="Pin"  onChange={(e)=>{setPin(e.target.value)}} inputStyle="box" labelStyle="floating" placeholder="What is your pin code" />
+                        <Input type='number' required label="Pin"  onChange={(e)=>{setPin(e.target.value)}} inputStyle="box" labelStyle="floating" placeholder="What is your pin code" />
                     </div>
                 </div>
                 <div className="mbsc-row">
@@ -190,7 +197,7 @@ if(response.data.success){
                         selectedImages.map((image,index)=>{
                             return(
                                 <div key={image} className='image'>
-                                    <img style={{padding:0,margin:0}} src={image} height="200" alt="uploads" />
+                                    <img style={{padding:0,margin:0}} src={image} className='w-52' height="200" alt="uploads" />
                                     {/* <button onClick={()=>setSelectedImages(selectedImages.filter((e)=>e!==image))}></button> */}
                                     <DeleteForeverIcon className='del-btn' style={{color:"red",cursor:"pointer"}} onClick={()=>setSelectedImages(selectedImages.filter((e)=>e!==image))} /> 
                                     <p id='img-indx'>{index+1}</p>
