@@ -32,8 +32,7 @@ We help you find the best Kerala boat house that suit your requirement.</p>
         </Carousel>
         <div className='container' style={{ padding: "20px" }}>
           <h1 style={{marginTop:"100px"}}> fknsknksdnk
-          lnsknlnfskdln
-          hjhjbkjbkbkj</h1>
+          update soon</h1>
         </div>
       </div>
       <Footer/>

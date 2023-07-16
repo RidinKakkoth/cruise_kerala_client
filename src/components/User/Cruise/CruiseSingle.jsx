@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./CruiseSingle.css";
 
 import GridViewIcon from "@mui/icons-material/GridView";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStation";
 import BedroomParentIcon from "@mui/icons-material/BedroomParent";
@@ -25,15 +24,19 @@ import { Stepper, toast } from "@mobiscroll/react";
 import { baseApi } from "../../../store/Api";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-
+// import DetailViewGallery from './DetailViewGallery'
 import { Button } from "@mui/material";
 import axios from "axios";
+
+const DetailViewGallery = lazy(() => import("./DetailViewGallery"));
+
 
 const greenTick = () => <CheckIcon style={{ color: "green" }} />;
 const redTick = () => <ClearIcon style={{ color: "red" }} />;
 
 function CruiseSingle() {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -41,15 +44,14 @@ function CruiseSingle() {
     if (!id) {return;}
 
     axios.get(`${baseApi}single-view/${id}`).then((res) => {
+      setLoading(false)
       setData(res.data.cruiseData);
       
       localStorage.clear();
     });
   }, [id]);
   const [data, setData] = useState([]);
-  // const [numOfNights, setNumOfNights] = useState(0);
   const [extraGuest, setExtraGuest] = useState(0);
-  // const [totalAmount, setTotalAmount] = useState(0);
   const [inDateError, setInDateError] = useState(false);
   const [outDateError, setOutDateError] = useState(false);
 
@@ -172,101 +174,29 @@ function CruiseSingle() {
   }, [numOfNights, extraGuest, data.baseRate, data.extraRate]);
   
 
-  const [showall, setShowall] = useState(false);
 
-  const handleClick = () => {
-    setShowall(true);
-  };
-
-  if (showall) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 10,
-          marginTop: "100px",
-          marginBottom: "50px",
-        }}
-      >
-        <Button
-          onClick={() => {
-            navigate(0);
-          }}
-          style={{ width: "80px", marginLeft: "410px", borderRadius: "20px" }}
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-        >
-          Back
-        </Button>
-        {data.Images.map((img, index) => {
-          return (
-            <img
-              width={700}
-              style={{ alignSelf: "center" }}
-              key={index}
-              src={`${baseApi}files/${img}`}
-              alt=""
-            />
-          );
-        })}
-      </div>
-    );
-  }
 
   return (
     <div className="single-view-main container">
-      <h3 className="cruise-head">{data.name}</h3>
+
+{!loading?(    
+  <> 
+  <h3 className="cruise-head">{data.name}</h3>
       <div style={{ display: "flex" }}>
-        <LocationOnIcon style={{ color: "green" }} />
-        <p style={{ fontWeight: "500", marginBottom: 20 }}>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+    </svg>
+        <p className="ms-2" style={{ fontWeight: "500", marginBottom: 20 }}>
           {data.boarding},{data.district}
         </p>
       </div>
-      <div style={{ position: "relative" }}>
-        {data.Images && data.Images.length > 0 ? (
-          <div
-            onClick={handleClick}
-            className="img-div-single"
-            style={{ display: "grid", gap: 4, cursor: "pointer" }}
-          >
-            <div>
-              <img
-                style={{
-                  borderTopLeftRadius: "10px",
-                  borderBottomLeftRadius: "10px",
-                  height: "100%",
-                }}
-                id="img-single-view"
-                src={`${baseApi}files/${data.Images[0]}`}
-                alt="Banner 1"
-              />
-            </div>
-            <div style={{ display: "grid", gap: 4 }}>
-              <img
-                id="img-single-view"
-                style={{ borderTopRightRadius: "10px" }}
-                src={`${baseApi}files/${data.Images[1]}`}
-                alt="Banner 1"
-              />
-              <img
-                id="img-single-view"
-                src={`${baseApi}files/${data.Images[2]}`}
-                alt="Banner 1"
-              />
-              <img
-                id="img-single-view"
-                style={{ borderBottomRightRadius: "10px" }}
-                src={`${baseApi}files/${data.Images[3]}`}
-                alt="Banner 1"
-              />
-              <button onClick={handleClick} className="btn-show-all">
-                <GridViewIcon /> Show all photos
-              </button>
-            </div>
-          </div>
-        ) : null}
-      </div>
+
+{/* <DetailViewGallery data={data}/> */}
+<Suspense fallback={<div>Loading...</div>}>
+            <DetailViewGallery data={data} />
+          </Suspense>
+
       <hr />
       <div className="chck-grid-single" style={{ gap: 100 }}>
         <div className="chck-grid-single__details">
@@ -380,7 +310,7 @@ function CruiseSingle() {
             </p>
           </div>
           <button className="primary mt-4" onClick={handleBook}>
-            Book Your Cruise
+            Reserve Your Cruise
           </button>
         </div>
       </div>
@@ -427,6 +357,14 @@ function CruiseSingle() {
           </div>
         </div>
       ) : null}
+      </>
+      ):(<div class="flex flex-col items-center">
+      <img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+      <h5 class="text-center">loading....</h5>
+    </div>
+    )}
+
+
     </div>
   );
 }

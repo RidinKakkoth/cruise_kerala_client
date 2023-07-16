@@ -80,7 +80,7 @@ const initPayment=(recievedData)=>{
       }
     },
     theme:{
-      color:"#3399cc",
+      color:"#011742",
     }
   }
   const rzp1=new window.Razorpay(options)

@@ -59,7 +59,7 @@ const drawerWidth = 240;
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            {['Category', 'District', 'Price'].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
@@ -71,7 +71,7 @@ const drawerWidth = 240;
             ))}
           </List>
           <Divider />
-          <List>
+          {/* <List>
             {['All mail', 'Trash', 'Spam'].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton>
@@ -82,7 +82,7 @@ const drawerWidth = 240;
                 </ListItemButton>
               </ListItem>
             ))}
-          </List>
+          </List> */}
         </Box>
       </Drawer>
       <Box component="main"  sx={{ flexGrow: 1, p: 3 }}>
@@ -106,7 +106,7 @@ const drawerWidth = 240;
 
 
 
-                <div onClick={()=>{handleClick(card)}} key={index} className="each-card">
+                <div onClick={()=>{handleClick(card)}} key={index}  className="each-card shadow">
                   {/* <img className='img-cruise-card' src={`${baseApi}files/${card.Images[0]}`} alt="" /> */}
                   <Carousel  showThumbs={false} showArrows={false}>
                     {card.Images.map((image, index) => (
@@ -128,10 +128,13 @@ const drawerWidth = 240;
 
               ))
             ) : (
-              <div style={{display:"flex",marginLeft:"30rem",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
-  <img style={{width:"250px",height:"250px",alignItems:"center"}} src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-              <h5 style={{color:"#011742",fontWeight:"600"}}>loading....</h5>
+              <div class="flex flex-col  items-center">
+<div className='justify-center'>
+<img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+  <h5 class="text-center">loading....</h5>
 </div>
+</div>
+
             )}
           </div>
                 </div>

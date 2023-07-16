@@ -11,6 +11,8 @@ import { userAdd } from '../store/UserAuth';
 import CheckoutPage from '../pages/User/CheckoutPage';
 import AccountPage from '../pages/User/AccountPage';
 import ConfirmationPage from '../pages/User/ConfirmationPage';
+import BookingDetail from '../components/User/Account/BookingDetail';
+import BookingDetailPage from '../pages/User/BookingDetailPage';
 
 function UserRoute() {
 
@@ -36,7 +38,9 @@ useEffect(()=>{
       <Route path='/cruises/:id' element={<CruiseSingleView />} />
       <Route path='/checkout' element={<CheckoutPage />} />
       <Route path='/account/:subpage?' element={<AccountPage />} />
+      <Route path='/account/:subpage?/:id' element={<BookingDetailPage />} />
       <Route path='/confirmation' element={<ConfirmationPage />} />
+      
 
       
       </Routes>
