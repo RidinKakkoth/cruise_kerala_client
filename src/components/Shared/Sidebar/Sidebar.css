@@ -3,7 +3,7 @@
   width: 250px;
   height: 100vh;
   margin-top: auto;
-  background-color: #0064ff;
+  background-color: rgb(1, 23, 66);
   margin-right: 20px;
   /* position: fixed; */
   
@@ -14,7 +14,7 @@
   width: 50px;
   height: 100vh;
   margin-top: auto;
-  background-color: #0064ff;
+  background-color: rgb(1, 23, 66);
   margin-right: 20px;
   /* position: fixed; */
 }
@@ -22,7 +22,7 @@
 .toggle-icon-right{
   color: white;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .toggle-icon-left{
   color: white;

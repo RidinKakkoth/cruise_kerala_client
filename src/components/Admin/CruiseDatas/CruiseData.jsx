@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './CruiseData.css';
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -21,10 +21,11 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-import Sidebar from '../../Shared/Sidebar/Sidebar';
+
 
 function CruiseData({ status }) {
   const [cruiseDetails, setCruiseDetails] = useState([]);
+  const[loading,setLoading]=useState(true)
   const navigate = useNavigate();
 
   const handleProfile = (id) => {
@@ -93,12 +94,13 @@ function CruiseData({ status }) {
         navigate('/admin/cruises-single',{state:obj})
   }
 
-  const theme = useTheme();
+  // const theme = useTheme();
 
   useEffect(() => {
     axios
-      .get(`${adminApi}cruise-data`, { withCredentials: true })
+      .get(`${baseApi}cruise-data`, { withCredentials: true })
       .then((res) => {
+        setLoading(false)
         setCruiseDetails(res.data);
       })
       .catch((error) => {
@@ -107,13 +109,13 @@ function CruiseData({ status }) {
   }, []);
 
   return (
-    <div className="cruise-page-container">
-      <div>
-      {/* <Sidebar userType="admin" /> */}
-      </div>
-      <div className="cruise-container">
+    <div className="cruise-container  ">
+
+      {/* <div className=" cruise-container"> */}
+     {!loading?( <>
         <ToastContainer autoClose={1000} />
         {cruiseDetails.map((obj, index) => {
+          
           if ((status && obj.isApproved === 'verified') || (!status && obj.isApproved === 'pending')) {
             return (
               <Card
@@ -159,7 +161,7 @@ function CruiseData({ status }) {
                         {status === true ? (
                           <p id="cruise-all-p">
                             Approval :
-                            <VerifiedIcon style={{ color: '#00c600', fontSize: '2rem', position: 'absolute', marginLeft: '10px' }} />
+                            <VerifiedIcon style={{ color: '#00c600', fontSize: '2rem',  marginLeft: '10px' }} />
                           </p>
                         ) : null}
                         {status === true ? (
@@ -213,8 +215,15 @@ function CruiseData({ status }) {
               </Card>
             );
           }
+          return null //added
         })}
-      </div>
+
+       </>):(<div class="flex flex-col h-[100vh] justify-center items-center w-[100vw] ">
+      <img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+      <h5 class="text-center">loading....</h5>
+    </div>
+    )}
+      {/* </div> */}
     </div>
   );
 }

@@ -5,13 +5,13 @@ import { adminApi } from '../../../store/Api';
 import CategoryTable from './CategoryTable';
 
 function OtherSettings() {
-  const [editedName, setEditedName] = useState('');
+  // const [editedName, setEditedName] = useState('');
   const [categories, setCategories] = useState([]);
-  const [editing, setEditing] = useState(false);
+  // const [editing, setEditing] = useState(false);
 
-  const handleEdit = () => {
-    setEditing(true);
-  };
+  // const handleEdit = () => {
+  //   setEditing(true);
+  // };
 
   useEffect(() => {
     const fetchData = async () => {

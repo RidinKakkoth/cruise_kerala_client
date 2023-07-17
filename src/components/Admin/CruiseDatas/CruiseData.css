@@ -9,10 +9,10 @@
   
   }
 
-  .cruise-page-container {
-    display: flex;
+
+  .cruise-container > div::-webkit-scrollbar {
+    display: none;
   }
-  
  
   
   .card img {
@@ -54,14 +54,16 @@
   /* display: flex;
   flex-wrap: wrap;
   justify-content: left; */
+
   margin-right: 100px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .cruise-container > div {
-  flex: 0 0 100%; /* Forces each card to take up the full width of the container */
+
+  /* flex: 0 0 100%;  */
   /* margin-top: 20px; */
-  max-width: 800px;
+  /* max-width: 800px; */
 }
 
 #cruise-all-p{

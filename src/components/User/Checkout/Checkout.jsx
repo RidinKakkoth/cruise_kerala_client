@@ -8,8 +8,7 @@ import { useDispatch } from 'react-redux'
 import { userAdd } from '../../../store/UserAuth'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+
 
 
 function Checkout() {
@@ -135,7 +134,7 @@ const handlePayment=async()=>{
         </div>
 
         <div>
-          <div className="flex-col  items-center border rounded-4    bg-white w-[65%] ">
+          <div className="flex-col  items-center border rounded-4    bg-white w-[72%] ">
             <div className="grid grid-cols-[2fr_3fr]">
               <div>
                 <img

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {useLocation, useNavigate} from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 import "./Account.css"
 import { baseApi, partnerApi } from '../../../store/Api';
 import axios from 'axios';
@@ -27,7 +27,7 @@ const navigate=useNavigate()
 
   useEffect(() => {
 
-    axios.get(`${partnerApi}getPartnerData`,{withCredentials:true}).then((res)=>{
+    axios.get(`${partnerApi}getPartnerProfile`,{withCredentials:true}).then((res)=>{
 
       const partnerDetails=res.data.partnerData
       const {name,email,phone,companyName,isApproved,image}=partnerDetails

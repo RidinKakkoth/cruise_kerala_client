@@ -1,10 +1,8 @@
 import React, { useEffect, useState, lazy, Suspense } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./CruiseSingle.css";
 
-import GridViewIcon from "@mui/icons-material/GridView";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStation";
 import BedroomParentIcon from "@mui/icons-material/BedroomParent";
 import CheckIcon from "@mui/icons-material/Check";
@@ -19,13 +17,12 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
 
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Stepper, toast } from "@mobiscroll/react";
+import { Stepper } from "@mobiscroll/react";
 
 import { baseApi } from "../../../store/Api";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 // import DetailViewGallery from './DetailViewGallery'
-import { Button } from "@mui/material";
 import axios from "axios";
 
 const DetailViewGallery = lazy(() => import("./DetailViewGallery"));

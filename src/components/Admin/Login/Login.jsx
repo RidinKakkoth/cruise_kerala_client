@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const dispatch=useDispatch()
   const navigate=useNavigate()
 
@@ -78,7 +78,7 @@ function Login() {
             </div>
           </form>
 
-          <p>{error}</p>
+          {/* <p>{error}</p> */}
         </div>
       </div>
     </div>

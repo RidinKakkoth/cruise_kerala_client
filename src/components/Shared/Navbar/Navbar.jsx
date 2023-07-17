@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,6 +19,7 @@ import { userLogout } from '../../../store/UserAuth';
 import { useDispatch } from 'react-redux';
 import { useCookies } from 'react-cookie';
 
+
 const pages = [
   { name: 'Cruises', path: '/cruises' },
   { name: 'About', path: '/about' }
@@ -34,7 +35,7 @@ function Navbar() {
     const dispatch=useDispatch()
     const navigate=useNavigate()
     
-    const[cookie,setCookie,removeCookie]=useCookies(['userCookie'])
+    const[removeCookie]=useCookies(['userCookie'])
 
 
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -70,7 +71,6 @@ function Navbar() {
   return (
     <AppBar
       style={{
-        // background: "linear-gradient(90deg, rgba(29,33,81,1) 25%, rgba(29,33,81,0) 50%, rgba(29,33,81,1) 75%)"
         background: "#011742"
       }}
       position="fixed"

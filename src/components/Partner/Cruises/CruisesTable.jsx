@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import "./CruisesTable.css"
+import React, { useEffect, useState } from 'react';
+import "./CruisesTable.css";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
@@ -9,163 +9,144 @@ import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 import SailingIcon from '@mui/icons-material/Sailing';
 import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 import { ToastContainer, toast } from 'react-toastify';
-
-
 import LazyLoad from 'react-lazy-load';
-
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { TabView, TabPanel } from 'primereact/tabview';
 import axios from 'axios';
 import { baseApi, partnerApi } from '../../../store/Api';
 import { Button } from '@mui/material';
 
-
 const GreenCheckIcon = () => {
-  return <CheckIcon style={{ color:"green" }} />;
+  return <CheckIcon style={{ color: "green" }} />;
 };
+
 const RedCloseIcon = () => {
-  return <CloseIcon style={{ color:"red" }} />;
+  return <CloseIcon style={{ color: "red" }} />;
 };
 
 function CruisesTable() {
+  const [cruiseData, setCruiseData] = useState([]);
+  const [trigger, setTrigger] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const[cruiseData,setCruiseData]=useState([])
-  const[trigger,setTrigger]=useState(false)
+  const navigate = useNavigate();
 
+  const handleClick = () => {
+    navigate('/partner/add-cruise');
+  };
 
-const navigate=useNavigate()
+  useEffect(() => {
+    axios.get(`${partnerApi}cruise-data`, { withCredentials: true })
+      .then((response) => {
+        const data = response.data.cruiseData;
+        setLoading(false);
+        setCruiseData(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [trigger]);
 
-const handleClick=()=>{
-  navigate('/partner/add-cruise')
-}
-
-
-
-useEffect(()=>{
-  axios.get(`${partnerApi}cruise-data`,{withCredentials:true}).then((response)=>{
-
-    const data=response.data.cruiseData
-    setCruiseData(data)
-
-  }).catch((error)=>{
-    console.log(error);
-  })
-},[trigger])
-
-const handleBlock = (id) => {
-  console.log(id);
-
-  axios.patch(`${partnerApi}blockCruise?id=${id}`,{withCredentials:true}).then((res)=>{
-    toast.success("Success",{position: "top-center"})
-    setTrigger(!trigger)
-
-
-    }).catch((error)=>{console.log(error);})
-};
-
+  const handleBlock = (id) => {
+    axios.patch(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
+      .then((res) => {
+        toast.success("Success", { position: "top-center" });
+        setTrigger(!trigger);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
-    <div>
-                <ToastContainer autoClose={1000} />
-
-      <Button variant="contained" onClick={handleClick} style={{marginTop:"20px"}} endIcon={<SailingIcon />}>
-        Add Cruise
-      </Button>
-
-          
-    {cruiseData? <div className="tabview-demo">
-    {
-  cruiseData?.map((obj, index) => (
-   
-    <div key={index} className="card" id='cruise-table-card' style={{ marginBottom: "20px" }}>
-      <h5 style={{ marginTop: "20px", marginLeft: "20px",fontWeight:"700",color:"#0064ff" }}>{obj.name}</h5>
-      <TabView className="tabview-custom">
-        <TabPanel header="CRUISE DATA" >
-          <p>Name: {obj.name}</p>
-          <p>Category: {obj.category}</p>
-          <p>Boarding: {obj.boarding}</p>
-          <p>Description: {obj.description}</p>
-        </TabPanel>
-        <TabPanel header="PRICE & FACILITIES" >
-          <p>Rooms: {obj.rooms}</p>
-          <p>Base Rate: {obj.baseRate}</p>
-          <p>Add-Rate: {obj.extraRate}</p>
-          <p>Max-Guest: {obj.maxGuest}</p>
-
-           <div style={{ display: 'flex', gap: '75px' }}>
-    <p>AC: {obj.Facilities[0].AC ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-    <p>Food: {obj.Facilities[0].food ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-    <p>Pets: {obj.Facilities[0].pets ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-    <p>Party Hall: {obj.Facilities[0].partyHall ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-    <p>Fishing: {obj.Facilities[0].fishing ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-    <p>Games: {obj.Facilities[0].games ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-    <p>Wi-Fi: {obj.Facilities[0].wifi ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-    <p>TV: {obj.Facilities[0].TV ? <GreenCheckIcon  /> : <RedCloseIcon />}</p>
-  </div>
-        </TabPanel>
-
-        <TabPanel id="posters" header="PHOTOS" style={{ display: 'flex', gap: '20px' }}>
-  <div className="cruise-map-img-container">
-    {obj.Images.map((img, index) => (
-      <React.Fragment key={index}>
-        <div className="cruie-map-img-div">
-          <LazyLoad>
-<img      id="cruise-map-img"
-            src={`${baseApi}files/${img}`}
-            alt="cruise" />
-
-          </LazyLoad>
-        
+    <div className=''>
+      {!loading ? (
+        <div className="tabview-demo">
+          <div className="">
+            <ToastContainer autoClose={1000} />
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              style={{ marginTop: "20px" }}
+              endIcon={<SailingIcon />}
+            >
+              Add Cruise
+            </Button>
+            {cruiseData?.map((obj, index) => (
+              <div key={index} className="card w-[100vw]" id="cruise-table-card" style={{ marginBottom: "20px" }}>
+                <h5 style={{ marginTop: "20px", marginLeft: "20px", fontWeight: "700", color: "#0064ff" }}>{obj.name}</h5>
+                <TabView className="tabview-custom ">
+                  <TabPanel header="CRUISE DATA">
+                    <p>Name: {obj.name}</p>
+                    <p>Category: {obj.category}</p>
+                    <p>Boarding: {obj.boarding}</p>
+                    <p>Description: {obj.description}</p>
+                  </TabPanel>
+                  <TabPanel header="PRICE & FACILITIES">
+                    <p>Rooms: {obj.rooms}</p>
+                    <p>Base Rate: {obj.baseRate}</p>
+                    <p>Add-Rate: {obj.extraRate}</p>
+                    <p>Max-Guest: {obj.maxGuest}</p>
+                    <div style={{ display: 'flex', gap: '75px' }}>
+                      <p>AC: {obj.Facilities[0].AC ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>Food: {obj.Facilities[0].food ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>Pets: {obj.Facilities[0].pets ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>Party Hall: {obj.Facilities[0].partyHall ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>Fishing: {obj.Facilities[0].fishing ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>Games: {obj.Facilities[0].games ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>Wi-Fi: {obj.Facilities[0].wifi ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>TV: {obj.Facilities[0].TV ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                    </div>
+                  </TabPanel>
+                  <TabPanel id="posters" className="" header="PHOTOS" style={{ display: 'flex', gap: '20px' }}>
+                    <div className="cruise-map-img">
+                      {obj.Images.map((img, index) => (
+                        <React.Fragment key={index}>
+                          <div className="cruie-map-img-div">
+                            <LazyLoad>
+                              <img
+                                id="cruise-map-img"
+                                src={`${baseApi}files/${img}`}
+                                alt="cruise"
+                              />
+                            </LazyLoad>
+                          </div>
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </TabPanel>
+                  <TabPanel header="SETTINGS" className="w-[100%]">
+                    <p>Block Status: {obj.isBlocked ? <ToggleOnIcon onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ color: "red", fontSize: "2rem" }} /> : <ToggleOffIcon onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ fontSize: "2rem" }} />}</p>
+                    <p>
+                      Verification:{" "}
+                      {obj.isApproved === "verified" ? (
+                        <React.Fragment>
+                          <VerifiedIcon style={{ color: "green" }} />
+                        </React.Fragment>
+                      ) : obj.isApproved === "pending" ? (
+                        <React.Fragment>
+                          <GppMaybeIcon style={{ color: "yellow" }} />
+                        </React.Fragment>
+                      ) : obj.isApproved === "rejected" ? (
+                        <React.Fragment>
+                          <RemoveModeratorIcon style={{ color: "red" }} />
+                        </React.Fragment>
+                      ) : null}
+                    </p>
+                  </TabPanel>
+                </TabView>
+              </div>
+            ))}
+          </div>
         </div>
-      </React.Fragment>
-    ))}
-  </div>
-</TabPanel>
-
-
-        <TabPanel header="SETTINGS"  >
-          <p>Block Status : {obj.isBlocked? <ToggleOnIcon onClick={()=>{handleBlock(obj._id)}} checked={obj.isBlocked}  style={{color:"red",fontSize:"2rem"}} /> :<ToggleOffIcon onClick={()=>{handleBlock(obj._id)}} checked={obj.isBlocked} style={{fontSize:"2rem"}} />}</p>
-          <p>
-  Verification:{" "}
-  {obj.isApproved === "verified" ? (
-    <React.Fragment>
-      <VerifiedIcon style={{ color: "green" }} />
-    </React.Fragment>
-  ) : obj.isApproved === "pending" ? (
-    <React.Fragment>
-      <GppMaybeIcon style={{ color: "yellow" }} /> 
-      
-    </React.Fragment>
-  ) : obj.isApproved === "rejected" ? (
-    <React.Fragment>
-      <RemoveModeratorIcon style={{ color: "red" }} />
-    </React.Fragment>
-  ) : null}
-</p>
-
-        </TabPanel>
-      </TabView>
+      ) : (
+        <div className="flex flex-col h-[100vh]  justify-center  items-center  w-[100vw] ">
+          <img className="w-52  " src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+          <h5 className="text-center">loading....</h5>
+        </div>
+      )}
     </div>
-
-
-  ))
+  );
 }
 
-    </div>
-    :<div style={{display:"flex",marginLeft:"30rem",justifyContent:"center",alignItems:"center"}}>
-  <img style={{width:"150px",height:"150px"}} src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif?20170503175831" alt="" />
-
-</div>}
-
-
-
-    </div>
-  )
-}
-
-export default CruisesTable
-
-
-
-
-
+export default CruisesTable;

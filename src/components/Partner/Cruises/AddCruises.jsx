@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
@@ -6,7 +6,6 @@ import './AddCruises.css'
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Input, Page, setOptions,Dropdown,Checkbox } from '@mobiscroll/react';
-// import AppBreadCrumbs from '../../Shared/AppBreadCrumbs';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import axios from 'axios';
 import { partnerApi } from '../../../store/Api';
@@ -198,7 +197,6 @@ if(response.data.success){
                             return(
                                 <div key={image} className='image'>
                                     <img style={{padding:0,margin:0}} src={image} className='w-52' height="200" alt="uploads" />
-                                    {/* <button onClick={()=>setSelectedImages(selectedImages.filter((e)=>e!==image))}></button> */}
                                     <DeleteForeverIcon className='del-btn' style={{color:"red",cursor:"pointer"}} onClick={()=>setSelectedImages(selectedImages.filter((e)=>e!==image))} /> 
                                     <p id='img-indx'>{index+1}</p>
                                 </div>

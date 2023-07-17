@@ -36,6 +36,7 @@
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.7.12",
     "typeface-nunito": "^1.1.13",
+    "typewriter-effect": "^2.20.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.2.0"
   },

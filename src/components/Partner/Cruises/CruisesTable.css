@@ -40,22 +40,25 @@
     flex-direction: row;
     
 }
-/* #posters{
-    
-    overflow-x: scroll;
-    overflow-y: hidden;
-} */
+#posters{
+    width: 100%; 
+    overflow-x: scroll; 
+    /* overflow-y: hidden; */
+      scrollbar-width: none; 
+  -ms-overflow-style: none; 
+} 
 
-/* #posters::-webkit-scrollbar{
+ #posters::-webkit-scrollbar{
     
     display: none;
-} */
-.cruise-map-img-container {
+}
+.cruise-map-img{
     display: flex;
     gap: 20px;
-    overflow-x: auto;
+    width: 100vw;
+    overflow-x: scroll;
     width: 100%;
-    white-space: nowrap;
+    white-space: nowrap; 
   }
   
   .cruie-map-img-div {
