@@ -4,12 +4,60 @@ import { useParams } from "react-router-dom";
 import { baseApi } from "../../../store/Api";
 import DetailViewGallery from "../Cruise/DetailViewGallery";
 import dateConvertor from "../../../utils/DateFormat";
+import Rating from "@mui/material/Rating";
+import { Box, Modal, TextField, Typography } from "@mui/material";
 
 function BookingDetail() {
   const [data, setData] = useState(null);
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [star, setStar] = useState(0);
+  const [ferror, setfError] = useState(false);
+  const [serror, setsError] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [trigger, setTrigger] = useState(false);
+  const [ourStar, setOurStar] = useState(0);
+  const [buttonHide, setButtonHide] = useState(false);
   const { id } = useParams();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let isFormValid = true;
+
+    if (feedback.length < 15) {
+      setfError(true);
+      isFormValid = false;
+    } else {
+      setfError(false);
+    }
+
+    if (star < 1) {
+      setsError(true);
+      isFormValid = false;
+    } else {
+      setsError(false);
+    }
+
+    if (isFormValid) {
+      let obj={star,feedback,cruiseId:data._id}
+      handleClose();
+      axios.post(`${baseApi}review`,obj,{withCredentials:true}).then((res)=>{setTrigger(!trigger)}).catch((err)=>console.log(err))
+    }
+  };
+  const handleFeedbackChange = (e) => {
+    const value = e.target.value;
+    setFeedback(value);
+    setfError(false);
+  };
+  const handleStarChange = (e) => {
+    const value = e.target.value;
+    setStar(value);
+    setsError(false);
+  };
 
   useEffect(() => {
     if (id) {
@@ -19,10 +67,24 @@ function BookingDetail() {
           setLoading(false);
           setBooking(found);
           setData(found.cruiseId);
+          
         }
       });
     }
-  }, [id]);
+  }, [id,trigger]);
+
+
+  useEffect(() => {
+    if (data) {
+      const foundReview = data.review.find((element) => element.userId === booking.userId);
+      setOurStar(foundReview.ratings)
+      if (foundReview) {
+        setButtonHide(true);
+      }
+    }
+  }, [data, booking]);
+
+  
 
   return (
     <div className="mt-24 container ">
@@ -61,7 +123,9 @@ function BookingDetail() {
                   />
                 </svg>
               </div>
-              <p className="mt-2 ms-2  block font-semibold">{data?.boarding},</p>
+              <p className="mt-2 ms-2  block font-semibold">
+                {data?.boarding},
+              </p>
             </div>
 
             <p className="mt-2 mb-3 ms-2 block font-semibold">
@@ -74,10 +138,41 @@ function BookingDetail() {
       )}
 
       <div className="mt-5 container">
-        <h3 className="">Booking Details</h3>
+        <div className="flex items-center justify-between py-3">
+          {" "}
+          <div>
+            <h3 className="ms-3">Booking Details</h3>
+          </div>
+{!buttonHide? 
+         <div className="flex">
+            <button
+              onClick={handleOpen}
+              className="rounded-2xl me-3 w-32 h-8 px-2 shadow text-black font-semibold border   flex items-center justify-around" >
+              {" "}
+              Add review
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="#f7d800"
+                className="w-6 h-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>:          <Rating
+            className="me-3"
+            name="simple-controlled"
+            value={ourStar}    
+            readOnly  
+          />}
+        </div>
 
         <div className="py-1 ms-3  flex-col pr-3 grow">
-          <div className="flex gap-2 items-center border-t text-gray-500 border-gray-300 mt-2 py-3">
+          <div className="flex-wrap sm:flex gap-2  items-center border-t text-gray-500 border-gray-300 mt-2 py-3">
             <div className="flex gap-2 items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +214,7 @@ function BookingDetail() {
                 {dateConvertor(booking?.checkOut)}
               </span>
             </div>
-            <div className="flex gap-2 ml-auto text-black items-center">
+            <div className="flex mt-3 sm:mt-0 gap-2 ml-auto text-black items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -141,7 +236,7 @@ function BookingDetail() {
             </div>
           </div>
 
-          <div className="flex gap-5 mb-3">
+          <div className="flex-wrap sm:flex gap-5 mb-3">
             <div className="flex mt-2 gap-2 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +252,8 @@ function BookingDetail() {
                   d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
                 />
               </svg>
-              <span className="font-medium">Total guest: </span> {booking?.guest}
+              <span className="font-medium">Total guest: </span>{" "}
+              {booking?.guest}
             </div>
             <div className="flex mt-2 gap-2 ">
               <svg
@@ -198,7 +294,7 @@ function BookingDetail() {
             </div>
           </div>
 
-          <div className="flex gap-5 mb-4">
+          <div className="flex-wrap sm:flex gap-5 mb-4">
             <div className="flex mt-2 gap-2 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -239,8 +335,73 @@ function BookingDetail() {
           </div>
         </div>
       </div>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            className="font-medium py-2"
+            variant="h6"
+            component="h2"
+          >
+            Rating
+          </Typography>
+          <Rating
+            className=""
+            name="simple-controlled"
+            // value={star}
+            // defaultValue={0}
+            onChange={handleStarChange}
+          />
+          {serror && <p className="text-red-500">Choose rating !!</p>}
+          <TextField
+            className="mt-3 w-[100%]"
+            id="outlined-multiline-static"
+            label="feedback"
+            onChange={handleFeedbackChange}
+            multiline
+            rows={4}
+            placeholder="Enter your feedback..."
+          />
+          {ferror && (
+            <p className="text-red-600">Minimum five words required !!</p>
+          )}
+          <div className="flex justify-around py-2 mt-3">
+            <button
+              onClick={handleSubmit}
+              className="bg-green-700 w-20 text-white rounded-2xl h-8"
+            >
+              submit
+            </button>
+            <button
+              onClick={handleClose}
+              className="bg-red-700 w-20 text-white rounded-2xl h-8"
+            >
+              cancel
+            </button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 }
 
 export default BookingDetail;
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};

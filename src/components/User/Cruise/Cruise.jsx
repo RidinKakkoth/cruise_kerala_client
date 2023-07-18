@@ -19,6 +19,7 @@ import { Carousel } from 'react-responsive-carousel';
 import './Cruise.css';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
+import { Rating } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -40,6 +41,14 @@ function Cruise() {
   const handleClick = (obj) => {
     navigate('/cruises/' + obj._id);
   }
+
+  function calculateAverageRating(reviews) {
+    const ratingsArray = reviews?.map((value) => value.ratings);
+    const averageRating = ratingsArray?.reduce((acc, rating) => acc + rating, 0) / (ratingsArray?.length || 1);
+    return averageRating;
+  }
+
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -98,7 +107,17 @@ function Cruise() {
                     </Carousel>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                       <h5>{card.name}</h5>
-                      {/* Rating */}
+
+
+                <Rating
+                  className=""
+                  readOnly
+                  value={calculateAverageRating(card.review)}
+                  size="small"
+                  name="simple-controlled"
+                />
+
+
                     </div>
                     <p style={{ color: "#717171", fontWeight: '500' }}>{card.category}</p>
                     <p style={{ color: "#717171" }}>{card.boarding}, {card.district}</p>

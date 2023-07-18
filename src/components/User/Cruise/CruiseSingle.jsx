@@ -5,16 +5,7 @@ import "./CruiseSingle.css";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStation";
 import BedroomParentIcon from "@mui/icons-material/BedroomParent";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
-import PetsIcon from "@mui/icons-material/Pets";
-import CasinoIcon from "@mui/icons-material/Casino";
-import CelebrationIcon from "@mui/icons-material/Celebration";
-import PhishingIcon from "@mui/icons-material/Phishing";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
-import WifiIcon from "@mui/icons-material/Wifi";
-import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
+
 import  DatePicker  from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import { parseISO, startOfDay, isSameDay } from 'date-fns';
@@ -27,13 +18,11 @@ import { baseApi } from "../../../store/Api";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import axios from "axios";
+import Facilities from "./Facilities";
+import { Rating } from "@mui/material";
 
 
 const DetailViewGallery = lazy(() => import("./DetailViewGallery"));
-
-
-const greenTick = () => <CheckIcon style={{ color: "green" }} />;
-const redTick = () => <ClearIcon style={{ color: "red" }} />;
 
 function CruiseSingle() {
   const { id } = useParams();
@@ -47,8 +36,7 @@ function CruiseSingle() {
     axios.get(`${baseApi}single-view/${id}`).then((res) => {
       setLoading(false)
       setData(res.data.cruiseData);
-      
-    //  localStorage.clear();
+
     });
   }, [id]);
   const [data, setData] = useState([]);
@@ -104,19 +92,17 @@ const disabledDates = [];
 bookedDates.forEach((dates, index) => {
   const startDate = startOfDay(parseISO(dates.checkIn));
   const endDate = startOfDay(parseISO(dates.checkOut));
-  console.log(startDate,"ssssssstttttt",endDate);
 
   let currentDate = startDate;
   while (currentDate <= endDate) {
-    // if (isSameDay(currentDate, startDate)) {
+
       disabledDates.push(new Date(currentDate));
 
-    // }
     currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
   }
 });
 
-console.log(disabledDates);
+
 
 
 
@@ -143,13 +129,17 @@ console.log(disabledDates);
     extraGuest,
   };
 
-
+  function calculateAverageRating(reviews) {
+    const ratingsArray = reviews?.map((value) => value.ratings);
+    const averageRating = ratingsArray?.reduce((acc, rating) => acc + rating, 0) / (ratingsArray?.length || 1);
+    return averageRating;
+  }
 
   const handleBook = () => {
     if (!checkInDate) setInDateError(true);
 
     if (!checkOutDate) setOutDateError(true);
-console.log(checkInDate,"hb1",checkOutDate);
+
     checkInDate &&
       checkOutDate &&
       navigate("/checkout", { state: { data: obj } });
@@ -251,7 +241,7 @@ console.log(checkInDate,"hb1",checkOutDate);
           </Suspense>
 
       <hr />
-      <div className="chck-grid-single" style={{ gap: 100 }}>
+      <div className="chck-grid-single mb-2 sm:mb-5" style={{ gap: 100 }}>
         <div className="chck-grid-single__details">
           <div style={{ marginTop: "10px", marginBottom: "20px" }}>
             <h5 style={{ marginTop: "10px" }}>About</h5>
@@ -368,49 +358,31 @@ console.log(checkInDate,"hb1",checkOutDate);
           </button>
         </div>
       </div>
-      <hr />
-      <h4>What this place offers</h4>
-      <br />
-      {data.Facilities && data.Facilities.length > 0 ? (
-        <div className="chck-grid-single">
-          <div className="chck-grid-single__facility">
-            <p>
-              <AcUnitIcon className="chck-grid-single__facility-icon" /> AC:{" "}
-              {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-            <p>
-              <PersonalVideoIcon className="chck-grid-single__facility-icon" />{" "}
-              TV: {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-            <p>
-              <WifiIcon className="chck-grid-single__facility-icon" /> Wi-Fi:{" "}
-              {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-            <p>
-              <PhishingIcon className="chck-grid-single__facility-icon" />{" "}
-              Fishing: {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-          </div>
-          <div className="chck-grid-single__facility">
-            <p>
-              <FastfoodIcon className="chck-grid-single__facility-icon" /> Food:{" "}
-              {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-            <p>
-              <PetsIcon className="chck-grid-single__facility-icon" /> Pets:{" "}
-              {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-            <p>
-              <CelebrationIcon className="chck-grid-single__facility-icon" />{" "}
-              Party Hall: {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-            <p>
-              <CasinoIcon className="chck-grid-single__facility-icon" /> Games:{" "}
-              {data.Facilities[0].AC ? greenTick() : redTick()}
-            </p>
-          </div>
+ 
+      <h4 className="border-t py-3" >What this place offers</h4>
+     
+
+      <Facilities data={data}/> 
+{/* {      
+  data?.review.length > 0 ? data.review.map((review) => review.userId.name) : []
+} */}
+
+      <h4 className="border-t-2 mt-3 py-3 ">Customer Reviews  <Rating className="ms-3 items-center me-2" name="read-only" value={calculateAverageRating(data.review)} readOnly /><span className="text-lg">({data.review.length})</span> </h4>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {data.review?.map((review, index) => (
+            
+            <div 
+              key={review._id}
+              className="bg-white shadow  p-4 rounded-lg"
+            >
+              <div className="text-lg flex justify-between font-semibold mb-3">{review.userId.name}
+              <Rating name="read-only" value={review.ratings} readOnly /></div>
+              <div className="text-gray-700">{review.feedback}</div>
+            </div>
+          ))}
         </div>
-      ) : null}
+
       </>
       ):(<div className="flex flex-col items-center">
       <img className="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
