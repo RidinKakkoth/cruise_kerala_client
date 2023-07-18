@@ -32,6 +32,7 @@ function Cruise() {
     axios.get(`${baseApi}cruise-data`, { withCredentials: true })
       .then((res) => {
         setCards(res.data);
+        localStorage.clear()
       })
       .catch((error) => console.log(error));
   }, []);
@@ -105,10 +106,10 @@ function Cruise() {
                   </div>
                 ))
             ) : (
-              <div class="flex flex-col items-center">
+              <div className="flex flex-col items-center">
                 <div className='justify-center'>
-                  <img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-                  <h5 class="text-center">loading....</h5>
+                  <img className="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+                  <h5 className="text-center">loading....</h5>
                 </div>
               </div>
             )}

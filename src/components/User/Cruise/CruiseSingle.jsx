@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import "./CruiseSingle.css";
 
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -15,6 +15,9 @@ import PhishingIcon from "@mui/icons-material/Phishing";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import WifiIcon from "@mui/icons-material/Wifi";
 import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
+import  DatePicker  from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css'
+import { parseISO, startOfDay, isSameDay } from 'date-fns';
 
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Stepper } from "@mobiscroll/react";
@@ -22,8 +25,9 @@ import { Stepper } from "@mobiscroll/react";
 import { baseApi } from "../../../store/Api";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-// import DetailViewGallery from './DetailViewGallery'
+
 import axios from "axios";
+
 
 const DetailViewGallery = lazy(() => import("./DetailViewGallery"));
 
@@ -44,7 +48,7 @@ function CruiseSingle() {
       setLoading(false)
       setData(res.data.cruiseData);
       
-      localStorage.clear();
+    //  localStorage.clear();
     });
   }, [id]);
   const [data, setData] = useState([]);
@@ -52,14 +56,22 @@ function CruiseSingle() {
   const [inDateError, setInDateError] = useState(false);
   const [outDateError, setOutDateError] = useState(false);
 
-  const [checkInDate, setCheckInDate] = useState(() => {
-    const checkIn = localStorage.getItem("checkInDate");
-    return checkIn ? JSON.parse(checkIn) : "";
-  });
-  const [checkOutDate, setCheckOutDate] = useState(() => {
-    const checkOut = localStorage.getItem("checkOutDate");
-    return checkOut ? JSON.parse(checkOut) : "";
-  });
+
+const [checkInDate, setCheckInDate] = useState(() => {
+  const storedDateString = localStorage.getItem('checkInDate');
+  const storedDateObj = storedDateString ? new Date(JSON.parse(storedDateString)) : null
+  return storedDateObj;
+});
+
+const [checkOutDate, setCheckOutDate] = useState(() => {
+  const storedDateString = localStorage.getItem('checkOutDate');
+  const storedDateObj = storedDateString ? new Date(JSON.parse(storedDateString)) : null
+  return storedDateObj;
+});
+
+
+
+
   const [guest, setGuest] = useState(() => {
     const noOfGuest = localStorage.getItem("guest");
     return noOfGuest ? JSON.parse(noOfGuest) : 0;
@@ -72,7 +84,41 @@ function CruiseSingle() {
     const total = localStorage.getItem("total");
     return total ? JSON.parse(total) : 0;
   });
-  
+
+  const today = new Date();
+const sixMonthCheckOutDate = new Date(today.getFullYear(), today.getMonth() + 6, today.getDate());
+
+const [maxCheckOutDate, setMaxCheckOutDate] = useState(null);
+const [bookedDates, setBookedDates] = useState([]);
+
+useEffect(()=>{
+  axios.get(`${baseApi}booked-dates?id=${id}`,{withCredentials:true}).then((res)=>{
+      setBookedDates(res.data)
+     
+  }).catch((err)=>console.log(err))
+},[id])
+
+const disabledDates = [];
+
+
+bookedDates.forEach((dates, index) => {
+  const startDate = startOfDay(parseISO(dates.checkIn));
+  const endDate = startOfDay(parseISO(dates.checkOut));
+  console.log(startDate,"ssssssstttttt",endDate);
+
+  let currentDate = startDate;
+  while (currentDate <= endDate) {
+    // if (isSameDay(currentDate, startDate)) {
+      disabledDates.push(new Date(currentDate));
+
+    // }
+    currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+  }
+});
+
+console.log(disabledDates);
+
+
 
   useEffect(() => {
     localStorage.setItem("checkInDate", JSON.stringify(checkInDate));
@@ -103,24 +149,44 @@ function CruiseSingle() {
     if (!checkInDate) setInDateError(true);
 
     if (!checkOutDate) setOutDateError(true);
-
+console.log(checkInDate,"hb1",checkOutDate);
     checkInDate &&
       checkOutDate &&
       navigate("/checkout", { state: { data: obj } });
   };
 
   const handleCheckInDateChange = (event) => {
-    setCheckInDate(event.target.value);
-    setCheckOutDate("");
+    const selectedDate = event;
+    const nextDisabledDay = disabledDates.find((date) => date > selectedDate);
+  
+    setCheckInDate(selectedDate);
+    setCheckOutDate(null);
     setInDateError(false);
-    calculateNumOfNights(event.target.value, checkOutDate);
+  
+    if (nextDisabledDay) {
+      setMaxCheckOutDate(nextDisabledDay);
+    }else{
+
+      setMaxCheckOutDate(sixMonthCheckOutDate);
+    }
   };
+  
 
   const handleCheckOutDateChange = (event) => {
-    setCheckOutDate(event.target.value);
-    calculateNumOfNights(checkInDate, event.target.value);
-    setOutDateError(false);
+    const selectedDate = event;
+    const isDisabled = disabledDates.some((date) => {
+      return date >= checkInDate && date <= selectedDate;
+    });
+  
+    if (isDisabled) {
+      setOutDateError(true);
+    } else {
+      setCheckOutDate(selectedDate);
+      calculateNumOfNights(checkInDate, selectedDate);
+      setOutDateError(false);
+    }
   };
+  
 
   const handleGuest = (e) => {
     const added = e.target.value;
@@ -148,16 +214,6 @@ function CruiseSingle() {
   };
 
 
-  const getNextDayDate = (date) => {
-    const nextDay = new Date(date);
-    nextDay.setDate(nextDay.getDate() + 1);
-    return nextDay.toISOString().split("T")[0];
-  };
-  const getTomorrowDate = () => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split("T")[0];
-  };
 
   useEffect(() => {
     const pricePerNight = data.baseRate;
@@ -189,7 +245,7 @@ function CruiseSingle() {
         </p>
       </div>
 
-{/* <DetailViewGallery data={data}/> */}
+
 <Suspense fallback={<div>Loading...</div>}>
             <DetailViewGallery data={data} />
           </Suspense>
@@ -237,37 +293,38 @@ function CruiseSingle() {
             <div style={{ display: "flex" }}>
               <div className="py-3 px-4">
                 <label>Check in:</label>
-                <input
-                  style={
-                    inDateError
-                      ? { borderStyle: "none", fontWeight: "600", color: "red" }
-                      : { borderStyle: "none", fontWeight: "600" }
-                  }
-                  value={checkInDate}
-                  required
-                  onChange={handleCheckInDateChange}
-                  min={getTomorrowDate()}
-                  type="date"
-                />
+ 
+                
+                <DatePicker
+  className={`rounded border custom-border-thick font-semibold mt-3 h-8 `}
+  selected={checkInDate}
+  onChange={handleCheckInDateChange}
+  dateFormat="dd/MM/yyyy"
+  minDate={new Date()}
+  excludeDates={disabledDates}
+/>
+{inDateError&& <span className="text-red-600">Choose checkin date</span>}
+
+
               </div>
               <div
                 className="py-3 px-4"
                 style={{ borderLeft: "2px solid #dee2e6" }}
               >
                 <label>Check out:</label>
-                <input
-                  style={
-                    outDateError
-                      ? { borderStyle: "none", fontWeight: "600", color: "red" }
-                      : { borderStyle: "none", fontWeight: "600" }
-                  }
-                  value={checkOutDate}
-                  required
-                  onChange={handleCheckOutDateChange}
-                  min={checkInDate ? getNextDayDate(checkInDate) : ""}
-                  disabled={!checkInDate}
-                  type="date"
-                />
+
+
+                <DatePicker className="rounded border font-semibold  mt-3 h-8" selected={checkOutDate} 
+                onChange={handleCheckOutDateChange}
+                dateFormat="dd/MM/yyyy"
+
+                minDate={checkInDate ? new Date(checkInDate.getTime() + 86400000) : null}
+                maxDate={maxCheckOutDate?maxCheckOutDate:sixMonthCheckOutDate}
+                excludeDates={disabledDates}
+                disabled={!checkInDate}
+                 />
+                 {outDateError&& <span className="text-red-600">Choose checkout date</span>}
+
               </div>
             </div>
 
@@ -355,9 +412,9 @@ function CruiseSingle() {
         </div>
       ) : null}
       </>
-      ):(<div class="flex flex-col items-center">
-      <img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-      <h5 class="text-center">loading....</h5>
+      ):(<div className="flex flex-col items-center">
+      <img className="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+      <h5 className="text-center">loading....</h5>
     </div>
     )}
 

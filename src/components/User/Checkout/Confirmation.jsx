@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { baseApi } from "../../../store/Api";
+import { parseISO } from 'date-fns';
 
 function Confirmation() {
 
@@ -11,6 +12,8 @@ function Confirmation() {
 
   const location = useLocation();
   const data = location.state?.data;//passed data from booking page
+  const checkInDate=new Date(data.checkInDate)
+  const checkOutDate=new Date(data.checkOutDate)
   const booked = location.state?.bookedData;//booked data from payment
 
   return (
@@ -40,12 +43,12 @@ function Confirmation() {
   <div className="flex flex-col items-center  font-medium mt-2 sm:mt-0">
     Check-In:
     <span className="mr-1 mb-3 text-xl font-medium"></span>
-    {data.checkInDate}
+    {checkInDate.toDateString()}
   </div>
   <div className="flex flex-col items-center font-medium mt-2 sm:mt-0">
     Check-Out:
     <span className="mr-1 mb-3 text-xl font-medium"></span>
-    {data.checkOutDate}
+    {checkOutDate.toDateString()}
   </div>
   <div className="flex flex-col items-center  font-medium mt-2 sm:mt-0">
     Guest:

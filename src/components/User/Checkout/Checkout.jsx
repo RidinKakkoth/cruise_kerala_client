@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import { userAdd } from '../../../store/UserAuth'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { parseISO } from 'date-fns';
 
 
 function Checkout() {
@@ -19,8 +19,12 @@ function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state ? location.state.data : null;
-const{totalAmount,guest,checkOutDate,checkInDate,cruiseId}=data
-
+  const{totalAmount,guest,cruiseId}=data
+  const checkInDate=new Date(data.checkInDate)
+  console.log(checkInDate,"chck 1");  //issues with date picker so converted
+  const checkOutDate=new Date(data.checkOutDate) //issues with date picker so converted
+  console.log(checkOutDate,"chckot 1");  //issues with date picker so converted
+  
   const user = useSelector((state) => state.User);
   const isSignIn = user.userToken;
 
@@ -62,8 +66,9 @@ const initPayment=(recievedData)=>{
     name:"Cruise",
     image:"https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png",
     description:"test transaction",
-    checkInDate,
-    checkOutDate,
+    checkInDate:checkInDate,
+    checkOutDate:checkOutDate,
+
     guest,
     order_id:recievedData.id,
     handler:async(response)=>{
@@ -126,9 +131,10 @@ const handlePayment=async()=>{
           <h3 className="mb-2">Your trip</h3>
           <hr />
           <h5 className="mb-3 mt-5  font-medium">Check In Date : </h5>
-          <p className="font-normal mb-5">{data.checkInDate}</p>
+          <p className="font-normal mb-5">{checkInDate}</p>
           <h5 className="mb-3">Check Out Date : </h5>
-          <p className="font-normal mb-5">{data.checkOutDate} </p>
+          <p className="font-normal mb-5">{checkOutDate}</p>
+
           <h5>Guests : </h5>
           <p className="font-normal">{data.guest} </p>
         </div>
