@@ -11,6 +11,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
 import axios from 'axios';
 import { adminApi } from '../../../store/Api';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -29,13 +30,15 @@ export default function Category() {
   const [category, setCategory] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const navigate=useNavigate()
 
  const handleCancel=()=>setOpen(false);
  const data={categoryName:category}
   const handleSave=()=>{
     axios.post(`${adminApi}add-category`,data,{withCredentials:true}).then((res)=>{
       setOpen(false);
+      navigate(0)
+      
     }).catch((error)=>{
       console.log(error);
     })

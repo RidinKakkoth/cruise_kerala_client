@@ -17,7 +17,8 @@ function PartnerTable({ status }) {
   const [loading, setLoading] = useState(true);
 
   const handleBlock = (id) => {
-    axios.patch(`${adminApi}blockPartner?id=${id}`, { withCredentials: true }).then((res) => {
+    axios.get(`${adminApi}blockPartner?id=${id}`, { withCredentials: true }).then((res) => {
+    // axios.patch(`${adminApi}blockPartner?id=${id}`, { withCredentials: true }).then((res) => {
       console.log(res);
       setBlock(!block);
     }).catch((error) => {
@@ -114,9 +115,9 @@ function PartnerTable({ status }) {
         </div>
       </div>
     ) : (
-      <div class="flex flex-col h-[100vh] justify-center items-center w-[100vw]">
-        <img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-        <h5 class="text-center">loading....</h5>
+      <div className="flex flex-col h-[100vh] justify-center items-center w-[100vw]">
+        <img className="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
+        <h5 className="text-center">loading....</h5>
       </div>
     )
   );

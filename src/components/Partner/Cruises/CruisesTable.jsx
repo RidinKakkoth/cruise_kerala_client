@@ -48,7 +48,8 @@ function CruisesTable() {
   }, [trigger]);
 
   const handleBlock = (id) => {
-    axios.patch(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
+    axios.get(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
+    // axios.patch(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
       .then((res) => {
         toast.success("Success", { position: "top-center" });
         setTrigger(!trigger);
@@ -78,7 +79,8 @@ function CruisesTable() {
                 <TabView className="tabview-custom ">
                   <TabPanel header="CRUISE DATA">
                     <p>Name: {obj.name}</p>
-                    <p>Category: {obj.category}</p>
+                    {console.log(obj,"ooooooooo")}
+                    <p>Category: {obj.category.name}</p>
                     <p>Boarding: {obj.boarding}</p>
                     <p>Description: {obj.description}</p>
                   </TabPanel>
@@ -90,7 +92,7 @@ function CruisesTable() {
                     <div style={{ display: 'flex', gap: '75px' }}>
                       <p>AC: {obj.Facilities[0].AC ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
                       <p>Food: {obj.Facilities[0].food ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
-                      <p>Pets: {obj.Facilities[0].pets ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
+                      <p>Pets: {obj.Facilities[0].Pets ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
                       <p>Party Hall: {obj.Facilities[0].partyHall ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
                       <p>Fishing: {obj.Facilities[0].fishing ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
                       <p>Games: {obj.Facilities[0].games ? <GreenCheckIcon /> : <RedCloseIcon />}</p>
@@ -116,7 +118,7 @@ function CruisesTable() {
                     </div>
                   </TabPanel>
                   <TabPanel header="SETTINGS" className="w-[100%]">
-                    <p>Block Status: {obj.isBlocked ? <ToggleOnIcon onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ color: "red", fontSize: "2rem" }} /> : <ToggleOffIcon onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ fontSize: "2rem" }} />}</p>
+                    <p>Block Status: {obj.isBlocked ? <ToggleOnIcon  onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ color: "red", fontSize: "2rem",cursor:"pointer" }} /> : <ToggleOffIcon onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ fontSize: "2rem",cursor:"pointer" }} />}</p>
                     <p>
                       Verification:{" "}
                       {obj.isApproved === "verified" ? (

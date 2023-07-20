@@ -88,7 +88,6 @@ axios.patch(`${partnerApi}update-profile`,updatedProfileData,{withCredentials:tr
 
 const handleCancel = () => {
   setEditing(false);
- // Reset the edited values to the original values
   setEditedName(editedName);
   setEditedEmail(editedEmail);
   setEditedCompanyName(editedCompanyName);
@@ -191,6 +190,10 @@ partnerData?
     <Card className="profile-card-partner-account">
     <h3 style={{marginLeft:"100px"}}>PROFILE</h3>
     {editedStatus === "verified" ?<   VerifiedIcon  style={{ color: '#00c600', fontSize: '2rem' ,marginTop:"50px",position:"absolute",marginLeft:"200px" }}/>:""}
+
+
+
+
 <div  onClick={handleImageClick}>
 
 {

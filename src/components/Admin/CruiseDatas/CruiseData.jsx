@@ -53,7 +53,8 @@ function CruiseData({ status }) {
       if (result.isConfirmed) {
     
         axios
-          .patch(`${adminApi}cruise-approval?result=${status}&id=${id}`, { withCredentials: true })
+          // .patch(`${adminApi}cruise-approval?result=${status}&id=${id}`, { withCredentials: true })
+          .get(`${adminApi}cruise-approval?result=${status}&id=${id}`, { withCredentials: true })
           .then((res) => {
  
             navigate(0);
@@ -135,7 +136,7 @@ function CruiseData({ status }) {
                       {obj.name}
                     </Typography>
                     <Typography variant="subtitle1" color="text.secondary" style={{ marginBottom: '10px' }} component="div">
-                      {obj.category}
+                      {obj.category.name}
                     </Typography>
                     <div style={{ display: 'flex', gap: '30px' }}>
                       <div>

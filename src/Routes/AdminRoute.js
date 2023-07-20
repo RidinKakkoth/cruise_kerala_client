@@ -9,6 +9,8 @@ import CruiseDetail from '../pages/AdminPage/CruiseDetail'
 import CruiseRequest from '../pages/AdminPage/CruiseRequest'
 import CruiseSingle from '../pages/AdminPage/CruiseSingle'
 import OtherManagements from '../pages/AdminPage/OtherManagements'
+import Bookings from '../pages/AdminPage/Bookings'
+import UserDetail from '../pages/AdminPage/UserDetail'
 
 
 function AdminRoute() {
@@ -22,8 +24,10 @@ function AdminRoute() {
             <Route path='/partner-request' element={<PartnerRequestView/>}/>
             <Route path='/partner-profile' element={<PartnerProfile/>}/>
             <Route path='/cruises' element={<CruiseDetail/>}/>
+            <Route path='/users' element={<UserDetail/>}/>
             <Route path='/cruise-request' element={<CruiseRequest/>}/>
             <Route path='/cruises-single' element={<CruiseSingle/>}/>
+            <Route path='/bookings' element={<Bookings/>}/>
             <Route path='/other' element={<OtherManagements/>}/>
         </Routes>
 

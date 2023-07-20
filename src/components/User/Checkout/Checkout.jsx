@@ -21,9 +21,9 @@ function Checkout() {
   const data = location.state ? location.state.data : null;
   const{totalAmount,guest,cruiseId}=data
   const checkInDate=new Date(data.checkInDate)
-  console.log(checkInDate,"chck 1");  //issues with date picker so converted
+
   const checkOutDate=new Date(data.checkOutDate) //issues with date picker so converted
-  console.log(checkOutDate,"chckot 1");  //issues with date picker so converted
+
   
   const user = useSelector((state) => state.User);
   const isSignIn = user.userToken;
@@ -131,9 +131,9 @@ const handlePayment=async()=>{
           <h3 className="mb-2">Your trip</h3>
           <hr />
           <h5 className="mb-3 mt-5  font-medium">Check In Date : </h5>
-          <p className="font-normal mb-5">{checkInDate}</p>
+          <p className="font-normal mb-5">{checkInDate.toDateString()}</p>
           <h5 className="mb-3">Check Out Date : </h5>
-          <p className="font-normal mb-5">{checkOutDate}</p>
+          <p className="font-normal mb-5">{checkOutDate.toDateString()}</p>
 
           <h5>Guests : </h5>
           <p className="font-normal">{data.guest} </p>

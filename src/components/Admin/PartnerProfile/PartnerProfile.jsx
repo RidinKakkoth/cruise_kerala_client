@@ -33,8 +33,10 @@ const PartnerProfile = () => {
   };
 
   const handleRequest = (result) => {
+   
     axios
-      .patch(`${adminApi}partner-approval?result=${result}&id=${_id}`, { withCredentials: true })
+      // .patch(`${adminApi}partner-approval?result=${result}&id=${_id}`, { withCredentials: true })
+      .get(`${adminApi}partner-approval?result=${result}&id=${_id}`, { withCredentials: true })
       .then((res) => {
         const resData = res.data.status;
         setStatus(resData);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
@@ -8,7 +8,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Input, Page, setOptions,Dropdown,Checkbox } from '@mobiscroll/react';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import axios from 'axios';
-import { partnerApi } from '../../../store/Api';
+import { baseApi, partnerApi } from '../../../store/Api';
 import { useNavigate } from 'react-router-dom';
 import AddCruiseFormValidation from '../../../utils/AddCruiseFormValidation'
 import { ToastContainer, toast } from 'react-toastify';
@@ -45,6 +45,7 @@ function AddCruises() {
     const[wifi,setWifi]=useState(true)
     const[pets,setPets]=useState(true)
     const[license,setLicense]=useState(null)
+    const[categoryData,setCategoryData]=useState([])
 
     const navigate=useNavigate()
 
@@ -118,7 +119,15 @@ if(response.data.success){
     });
   });
       };
-    
+
+
+useEffect(()=>{
+    axios.get(`${partnerApi}get-categories`,{withCredentials:true}).then((res)=>{
+       
+      setCategoryData(res.data.categories)
+    }).catch((err)=>{console.log(err)})
+  
+},[])
 
 
 
@@ -140,12 +149,15 @@ if(response.data.success){
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
 
                         <Dropdown style={{height:"55px"}} required  onChange={(event) => setCategory(event.target.value)}  inputStyle='box'>
-                            <option >Category</option>
-                             <option value="Premium">Premium</option>
-                             <option value="Luxury">Luxury</option>
-                            <option value="Classic">Classic</option>
-                             <option value="Deluxe">Deluxe</option>
-                             <option value="Honemoon Special">Honemoon Special</option>
+                            <option value={""}>Category</option>
+                           
+                             {categoryData.map((value,index)=>{
+                                    
+                                    return  <option key={value._id} value={value._id}>{value.name}</option>
+                             })
+                            }
+{                            console.log(category)
+}
                         </Dropdown>
 
 

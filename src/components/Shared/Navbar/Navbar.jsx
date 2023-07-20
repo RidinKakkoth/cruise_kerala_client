@@ -74,8 +74,9 @@ function Navbar() {
         background: "#011742"
       }}
       position="fixed"
+ 
     >
-      <Container maxWidth="xl">
+      <Container maxWidth="xl"      >
         <Toolbar disableGutters>
           <img
             src="https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png" // Replace with the URL or path to your image
