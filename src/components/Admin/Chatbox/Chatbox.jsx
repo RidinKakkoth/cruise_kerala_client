@@ -4,6 +4,8 @@ import moment from 'moment-timezone';
 import { chatApi, messageApi } from '../../../store/Api';
 import InputEmoji from "react-input-emoji";
 import SyncLoader from 'react-spinners/SyncLoader'
+import { io } from "socket.io-client";
+import { useNavigate } from 'react-router-dom';
 
 function Chatbox() {
   const [adminChats, setAdminChats] = useState(null);
@@ -15,6 +17,10 @@ function Chatbox() {
   const [messageError, setMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
 
+  const navigate=useNavigate()
+
+  const socket = useRef(null);
+
   useEffect(() => {
     setChatLoading(true);
     setChatError(null);
@@ -22,7 +28,6 @@ function Chatbox() {
       .get(`${chatApi}adminChat`, { withCredentials: true })
       .then((res) => {
         setAdminChats(res.data);
-        console.log(res.data);
         setChatLoading(false);
         // Set the initial chat to the first chat in the adminChats array
 
@@ -57,6 +62,20 @@ function Chatbox() {
     }
   }, [adminMessage]);
 
+  useEffect(() => {
+    socket.current = io("http://localhost:8080");
+
+    socket.current.on('message', (message) => {
+      setAdminMessage((prevMessages) => [...prevMessages, message]);
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, []);
+
+
+  //no need because admin never starts chat
   const open = () => {
     axios
       .post(`${chatApi}`, {}, { withCredentials: true })
@@ -83,7 +102,14 @@ function Chatbox() {
       .then((res) => {
         console.log('Message sent successfully.');
         setNewMessage('');
-        setAdminMessage((prevMessages) => [...prevMessages, res.data]);
+        // setAdminMessage((prevMessages) => [...prevMessages, res.data]);
+
+        //emit
+        socket.current.emit('message', {
+          senderId: currentChat.adminId,
+          chatId: currentChat._id,
+          text: newMessage,
+        });
       })
       .catch((err) => {
         console.log('Failed to send message.', err);
@@ -98,6 +124,7 @@ function Chatbox() {
     return (
       <div className="container mt-12 mb-6">
         <div>
+        <button className='bg-[#36D7b7] w-24 mb-3 rounded-lg text-white h-10 cursor-pointer' onClick={()=>{navigate(-1)}}>Dashboard</button>
 
         <h3 className='mb-5'>Users Chats  </h3>
         </div>
@@ -118,7 +145,7 @@ function Chatbox() {
             </div>
             {isChatLoading && <SyncLoader color='#36D7b7'/>}
             {adminChats?.map((chat, index) => (
-              <div className='bg-[#36D7b7] ml-2 me-2 justify-around text-white h-10 text-center flex mt-2 mb-2 rounded-2xl text-lg font-semibold items-center cursor-pointer'  onClick={() => clickUser(chat)} key={index}>
+              <div className={chat===currentChat?' bg-[#187a66] ml-2 me-2 justify-around text-white h-10 text-center flex mt-2 mb-2 rounded-2xl text-lg font-semibold items-center cursor-pointer':' bg-[#36D7b7] ml-2 me-2 justify-around text-white h-10 text-center flex mt-2 mb-2 rounded-2xl text-lg font-semibold items-center cursor-pointer' }  onClick={() => clickUser(chat)} key={index}>
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
 </svg>
@@ -177,15 +204,15 @@ function Chatbox() {
                   placeholder="Type a message"
                   borderColour="rgba(72, 112, 223, 0.2)"
                 />
-                <button onClick={sendMessage} className="flex ml-auto mt-3 text-green-500">
-                  <span className="text-white rounded-lg w-24 font-semibold bg-blue-950">Send</span>
+                <button onClick={sendMessage} className="flex ml-auto mt-2 text-green-500">
+                  {/* <span className="text-white rounded-lg w-24 font-semibold bg-blue-950">Send</span> */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className="w-6 h-6 ml-2"
+                    className="w-8 h-8 "
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                   </svg>

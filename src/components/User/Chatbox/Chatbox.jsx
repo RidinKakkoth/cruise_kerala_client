@@ -4,6 +4,8 @@ import moment from 'moment-timezone';
 import { chatApi, messageApi } from '../../../store/Api';
 import InputEmoji from 'react-input-emoji';
 import SyncLoader from 'react-spinners/SyncLoader'
+import { useSelector } from 'react-redux';
+import {io} from "socket.io-client"
 
 
 function Chatbox() {
@@ -15,6 +17,29 @@ function Chatbox() {
   const [messageLoading, setMessageLoading] = useState(false);
   const [messageError, setMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  // const [socket, setSocket] = useState(null);
+  
+  //initialise socket
+
+  const user = useSelector((state) => state.User.userToken);
+
+  const socket = useRef(null);
+
+useEffect(()=>{
+   socket.current=io("http://localhost:8080");
+ 
+
+  socket.current.on('message',(message)=>{
+    setUserMessage((prevMessages)=>[...prevMessages,message])
+  })
+return()=>{
+  socket.current.disconnect()
+}
+
+},[currentChat,setUserMessage])
+
+
+
 
   useEffect(() => {
     setChatLoading(true);
@@ -23,7 +48,7 @@ function Chatbox() {
       .get(`${chatApi}userChat`, { withCredentials: true })
       .then((res) => {
         setUSerChats(res.data);
-        console.log(res.data);
+
         setChatLoading(false);
         // Set the initial chat to the first chat in the userChats array
         if (res.data.length > 0) {
@@ -63,7 +88,8 @@ function Chatbox() {
   const open = () => {
     axios
       .post(`${chatApi}`, {}, { withCredentials: true })
-      .then((res) => console.log(res.data))
+      .then((res) =>//check if error comes
+       setUSerChats(res.data))
       .catch((err) => console.log(err));
   };
 
@@ -86,11 +112,19 @@ function Chatbox() {
       .then((res) => {
         console.log('Message sent successfully.');
         setNewMessage('');
-        setUserMessage((prevMessages) => [...prevMessages, res.data]);
+        // setUserMessage((prevMessages) => [...prevMessages, res.data]);
+       
+        //emit message
+        socket.current.emit('message',{
+          senderId:currentChat.userId,
+          chatId:currentChat._id,
+          text:newMessage
+        })
       })
       .catch((err) => {
         console.log('Failed to send message.', err);
       });
+
   };
 
   
@@ -98,7 +132,16 @@ function Chatbox() {
       <div className="container mt-24 mb-6">
         <h3 className='mb-3'>Chat with us </h3>
   
-        {userChats?.length < 1 ? null : (
+        {userChats?.length < 1 ? 
+        (
+          <div className='flex justify-center '>
+            <div >
+            <img className='w-[30%]' src="https://www.carprolive.com/hubfs/Contact_Us_Animation.gif" alt="" />
+              <button onClick={open} className='sm:mb-32 ms-4  rounded-2xl h-10 bg-[#182eff] text-white font-semibold w-10  sm:w-48 cursor-pointer '> Start </button>
+            </div>
+          </div>
+        )
+        : (
           <div className="grid grid-cols-4">
             <div className="col-span-3 bg-gray-200 min-h-[350px] border rounded-3xl px-5 py-3">
               {/* Use 'max-h-[300px]' class to set a maximum height for the message container */}

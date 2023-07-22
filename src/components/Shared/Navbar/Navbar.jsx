@@ -1,5 +1,4 @@
-// import * as React from 'react';
-import React, {  useState } from 'react'
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,34 +11,26 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-// import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { userLogout } from '../../../store/UserAuth';
-import { useDispatch } from 'react-redux';
 import { useCookies } from 'react-cookie';
-
 
 const pages = [
   { name: 'Cruises', path: '/cruises' },
   { name: 'About', path: '/about' }
 ];
-const settings = [{name:'Profile',path:"/profile" },{name:'Account',path:"/account"},{name:'Chat',path:"/chatbox"}];
-
+const settings = [{ name: 'Profile', path: "/profile" }, { name: 'Account', path: "/account" }, { name: 'Chat', path: "/chatbox" }];
 
 function Navbar() {
-  
-  
-    const data = useSelector((state) => state.User);
-    const UserName=data.userName
-    const dispatch=useDispatch()
-    const navigate=useNavigate()
-    
-    const[removeCookie]=useCookies(['userCookie'])
+  const data = useSelector((state) => state.User);
+  const UserName = data.userName;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [, , removeCookie] = useCookies(['userCookie']);
 
-
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -57,16 +48,11 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-
-    removeCookie('userCookie')
+    removeCookie('userCookie');
     localStorage.clear();
-
-    dispatch(userLogout())
-    navigate('/')
-    
+    dispatch(userLogout());
+    navigate('/');
   };
-
-
 
   return (
     <AppBar
