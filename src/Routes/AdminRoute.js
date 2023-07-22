@@ -11,6 +11,8 @@ import CruiseSingle from '../pages/AdminPage/CruiseSingle'
 import OtherManagements from '../pages/AdminPage/OtherManagements'
 import Bookings from '../pages/AdminPage/Bookings'
 import UserDetail from '../pages/AdminPage/UserDetail'
+import Chatbox from '../components/Admin/Chatbox/Chatbox'
+import ChatBox from '../pages/AdminPage/ChatBox'
 
 
 function AdminRoute() {
@@ -29,6 +31,8 @@ function AdminRoute() {
             <Route path='/cruises-single' element={<CruiseSingle/>}/>
             <Route path='/bookings' element={<Bookings/>}/>
             <Route path='/other' element={<OtherManagements/>}/>
+            <Route path='/chatbox' element={<ChatBox />} />
+
         </Routes>
 
     </>

@@ -24,7 +24,7 @@ const pages = [
   { name: 'Cruises', path: '/cruises' },
   { name: 'About', path: '/about' }
 ];
-const settings = [{name:'Profile',path:"/profile" },{name:'Account',path:"/account"}];
+const settings = [{name:'Profile',path:"/profile" },{name:'Account',path:"/account"},{name:'Chat',path:"/chatbox"}];
 
 
 function Navbar() {

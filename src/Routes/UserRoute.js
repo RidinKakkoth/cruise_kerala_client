@@ -12,6 +12,7 @@ import CheckoutPage from '../pages/User/CheckoutPage';
 import AccountPage from '../pages/User/AccountPage';
 import ConfirmationPage from '../pages/User/ConfirmationPage';
 import BookingDetailPage from '../pages/User/BookingDetailPage';
+import ChatboxPage from '../pages/User/ChatboxPage';
 
 function UserRoute() {
 
@@ -39,6 +40,7 @@ useEffect(()=>{
       <Route path='/account/:subpage?' element={<AccountPage />} />
       <Route path='/account/:subpage?/:id' element={<BookingDetailPage />} />
       <Route path='/confirmation' element={<ConfirmationPage />} />
+      <Route path='/chatbox' element={<ChatboxPage />} />
       
 
       

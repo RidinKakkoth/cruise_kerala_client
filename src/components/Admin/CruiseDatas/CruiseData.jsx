@@ -99,10 +99,11 @@ function CruiseData({ status }) {
 
   useEffect(() => {
     axios
-      .get(`${baseApi}cruise-data`, { withCredentials: true })
+      .get(`${adminApi}cruise-data`, { withCredentials: true })
       .then((res) => {
         setLoading(false)
-        setCruiseDetails(res.data);
+      console.log(res.data.data);
+        setCruiseDetails(res.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -115,7 +116,8 @@ function CruiseData({ status }) {
       {/* <div className=" cruise-container"> */}
      {!loading?( <>
         <ToastContainer autoClose={1000} />
-        {cruiseDetails.map((obj, index) => {
+     {   console.log(cruiseDetails)}
+        {cruiseDetails?.map((obj, index) => {
           
           if ((status && obj.isApproved === 'verified') || (!status && obj.isApproved === 'pending')) {
             return (

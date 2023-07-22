@@ -12,7 +12,8 @@ function Account() {
   const [userName, setUserName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [image, setImage] = useState("");
+  const [profileImage, setprofileImage] = useState("");
+
   const [trigger, setTrigger] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ function Account() {
     "https://cdn-icons-png.flaticon.com/512/147/147142.png"
   );
   const [buttonHide, setButtonHide] = useState(true);
-  // const[image,setImage]=useState("")
+
 
   useEffect(() => {
     axios
@@ -31,7 +32,7 @@ function Account() {
         setUserName(name);
         setEmail(email);
         setPhone(phone);
-        setImage(image);
+        setprofileImage(image);
 
         if (image) {
           setOpen(true);
@@ -74,7 +75,7 @@ function Account() {
 
     const imgUrl = URL.createObjectURL(file);
 
-    setImage(file);
+    setprofileImage(file);
     setPreview(imgUrl);
     setOpen(false);
   };
@@ -86,19 +87,20 @@ function Account() {
   const submitPicUpload = async (e) => {
     e.preventDefault();
 
-    setButtonHide(true);
     const formData = new FormData();
-    formData.append("image", image);
+    
+    formData.append('image', profileImage);
 
     axios
-      .post(`${baseApi}partner-dp`, formData, {
+      .post(`${baseApi}user-pic`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
       })
       .then((response) => {
-        setImage(response.data.url);
+        setprofileImage(response.data.url);
+        setButtonHide(true);
         setOpen(true);
       })
       .catch((error) => {
@@ -106,7 +108,9 @@ function Account() {
       });
   };
   const cancelPicUpload = () => {
+    setTrigger(!trigger);
     setButtonHide(true);
+    
   };
 
   let { subpage } = useParams();
@@ -175,7 +179,7 @@ function Account() {
                     sx={{
                       height: 150,
                       width: 150,
-                      left:40,
+                      left:92,
                       borderRadius: "50%",
                       marginTop: 1,
 
@@ -185,7 +189,7 @@ function Account() {
                     }}
                     className="image "
                     component="img"
-                    src={`${baseApi}files/${image}`}
+                    src={`${baseApi}files/${profileImage}`}
                     title="choose image"
                   />
                   <div
@@ -207,8 +211,8 @@ function Account() {
                       height: 150,
                       width: 150,
                       borderRadius: "50%",
-                      marginLeft: 10,
-                      left:40,
+                      marginLeft: 9,
+                      left:30,
                       marginTop: 1,
                       borderStyle: "double",
                       borderColor: "#00ff68",
@@ -251,7 +255,7 @@ function Account() {
                 <button
                   style={{
                     width: "100px",
-                    marginLeft: "50px",
+                    marginLeft: "10px",
                     borderRadius: "20px",
                   }}
                   className="btn btn-primary mt-3"

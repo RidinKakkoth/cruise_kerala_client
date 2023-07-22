@@ -1,3 +1,5 @@
 export const adminApi ='http://localhost:5000/admin/'
 export const partnerApi ='http://localhost:5000/partner/'
 export const baseApi ='http://localhost:5000/'
+export const chatApi ='http://localhost:5000/chat/'
+export const messageApi ='http://localhost:5000/message/'
