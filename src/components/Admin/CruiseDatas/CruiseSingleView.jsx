@@ -8,6 +8,8 @@ import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 
 import { TabView, TabPanel } from 'primereact/tabview';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Loading from '../../Shared/Loading'
+
 
 import LazyLoad from 'react-lazy-load';
 import { baseApi } from '../../../store/Api';
@@ -101,13 +103,8 @@ function CruiseSingleView() {
             </TabView>
           </div>
         ) : (
-          <div style={{ display: 'flex', marginLeft: '30rem', justifyContent: 'center', alignItems: 'center' }}>
-            <img
-              style={{ width: '150px', height: '150px' }}
-              src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif?20170503175831"
-              alt=""
-            />
-          </div>
+          <Loading/>
+
         )}
       </div>
     </div>

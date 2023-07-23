@@ -20,6 +20,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import axios from "axios";
 import Facilities from "./Facilities";
 import { Rating } from "@mui/material";
+import Loading from "../../Shared/Loading";
 
 
 const DetailViewGallery = lazy(() => import("./DetailViewGallery"));
@@ -384,10 +385,9 @@ bookedDates.forEach((dates, index) => {
         </div>
 
       </>
-      ):(<div className="flex flex-col items-center">
-      <img className="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-      <h5 className="text-center">loading....</h5>
-    </div>
+      ):(<div className="items-center h-screen">
+        <Loading/>
+      </div>
     )}
 
 

@@ -42,7 +42,13 @@ function UserSignup() {
           <ToastContainer autoClose={2000} />
           <div className="user-login-body">
             <div className="user-card">
-              <h1 className="user-login">SIGNUP</h1>
+            <img
+        className='mx-auto mt-2'
+            src="https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png" // Replace with the URL or path to your image
+            alt=""
+            style={{ width: '80px', height: '80px', marginRight: '8px' }}
+          />
+          <h3 className='text-center italic font-serif text-white'>Cruise</h3>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label className="user-label">Full Name</label>
@@ -94,9 +100,9 @@ function UserSignup() {
 
     
                 <div className="user-btn-div">
-                  <button type="submit" className="userlogin-btn">
-                    SignUp
-                  </button>
+                <button type="submit" className="adminlogin-btn rounded-3xl shadow">
+                Sign up
+              </button>
                 </div>
               </form>
                     

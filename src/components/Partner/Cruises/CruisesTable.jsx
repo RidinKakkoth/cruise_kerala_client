@@ -15,6 +15,8 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import axios from 'axios';
 import { baseApi, partnerApi } from '../../../store/Api';
 import { Button } from '@mui/material';
+import Loading from '../../Shared/Loading'
+
 
 const GreenCheckIcon = () => {
   return <CheckIcon style={{ color: "green" }} />;
@@ -48,8 +50,8 @@ function CruisesTable() {
   }, [trigger]);
 
   const handleBlock = (id) => {
-    axios.get(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
-    // axios.patch(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
+    // axios.get(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
+    axios.patch(`${partnerApi}blockCruise?id=${id}`,{}, { withCredentials: true })
       .then((res) => {
         toast.success("Success", { position: "top-center" });
         setTrigger(!trigger);
@@ -142,10 +144,9 @@ function CruisesTable() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col h-[100vh]  justify-center  items-center  w-[100vw] ">
-          <img className="w-52  " src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-          <h5 className="text-center">loading....</h5>
-        </div>
+        
+       <Loading/>
+
       )}
     </div>
   );

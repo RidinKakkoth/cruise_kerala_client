@@ -6,6 +6,7 @@ import DetailViewGallery from "../Cruise/DetailViewGallery";
 import dateConvertor from "../../../utils/DateFormat";
 import Rating from "@mui/material/Rating";
 import { Box, Modal, TextField, Typography } from "@mui/material";
+import Loading from "../../Shared/Loading";
 
 function BookingDetail() {
   const [data, setData] = useState(null);
@@ -75,8 +76,9 @@ function BookingDetail() {
 
 
   useEffect(() => {
-    if (data) {
-      const foundReview = data.review.find((element) => element.userId === booking.userId);
+    console.log(data,"hgssssahghg");
+    if (data?.review?.length>0) {
+      const foundReview = data.review?.find((element) => element.userId === booking.userId);
       setOurStar(foundReview.ratings)
       if (foundReview) {
         setButtonHide(true);
@@ -90,12 +92,7 @@ function BookingDetail() {
     <div className="mt-24 container ">
       {loading ? (
         <div class="flex flex-col items-center mb-96">
-          <img
-            class="w-52"
-            src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif"
-            alt=""
-          />
-          <h5 class="text-center">loading....</h5>
+            <Loading/>
         </div>
       ) : (
         <div className="mt-4 bg-gray-200 mx-8 px-8 py-8 ">

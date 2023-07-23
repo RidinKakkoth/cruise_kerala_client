@@ -15,9 +15,7 @@ import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import UpdateIcon from '@mui/icons-material/Update';
 import Stack from '@mui/material/Stack';
-
-
-
+import Loading from '../../Shared/Loading'
 
 
 function Account() {
@@ -347,24 +345,10 @@ sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,bord
       </div>
     </Card>
   </div>
-  {/* <div>
-  <Card sx={{  width: "400px",height:"84%",marginTop:"60px" }}> 
-        <Typography  gutterBottom variant="h5" style={{textAlign:"center",fontWeight:"600"}} component="div">
-         <h3 className='typo'> PROOF</h3>
-        </Typography>
 
-      <CardMedia
-        sx={{ height: 140 }}
-        image=""
-      />
-    </Card>
-  </div> */}
   </div>
   
-: <div style={{display:"flex",marginLeft:"30rem",justifyContent:"center",alignItems:"center"}}>
-  <img style={{width:"150px",height:"150px"}} src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif?20170503175831" alt="" />
-
-</div> }
+:  <Loading/>}
 
   </>
 );

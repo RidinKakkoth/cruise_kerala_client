@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { baseApi } from "../../../store/Api";
 import dateConvertor from "../../../utils/DateFormat";
 import {  useNavigate } from "react-router-dom";
+import Loading from '../../Shared/Loading'
+
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
@@ -15,8 +17,14 @@ function Bookings() {
         setLoading(false);
       setBookings(res.data.bookingData);
     });
-  }, []);
+  }, [bookings]);
 
+  const cancelBooking=(id)=>{  //check out================>
+
+    axios.patch(`${baseApi}cancel-booking/${id}`,{},{withCredentials:true}).then((res)=>{
+      setBookings(res.data.bookingData)
+    }).catch((err)=>{console.log(err);})
+  }
 
   const handleBooking=(id)=>{
         navigate(`/account/bookings/${id}`)
@@ -29,8 +37,8 @@ function Bookings() {
 
 {  !loading?    (bookings.length > 0 &&
         bookings.map((booking, index) => (
-          <div onClick={()=>{handleBooking(booking._id)}} className="flex flex-wrap hover:bg-gray-300 cursor-pointer mb-4 bg-gray-200 rounded-xl">
-            <div className="w-52  mx-auto  ">
+          <div  className="flex flex-wrap hover:bg-gray-300  mb-4 bg-gray-200 rounded-xl">
+            <div onClick={()=>{handleBooking(booking._id)}} className="w-52 cursor-pointer mx-auto  ">
               <img
                 className="rounded-xl p-1 object-cover   "
                 key={index}
@@ -42,7 +50,27 @@ function Bookings() {
 
 
             <div className="py-3 ms-3  flex-col pr-3 grow">
+              <div className="flex">
               <h2 className="text-xl">{booking.cruiseId.name}</h2>
+
+              <div className="flex gap-2 ml-auto text-black items-center">
+
+          {
+            booking?.status==="Booked"?                    <button onClick={()=>cancelBooking(booking._id)} className="font-medium border flex gap-2 rounded-xl text-white hover:bg-red-500 py-2 shadow bg-red-400 px-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+<path strokeLinecap="round" strokeLinejoin="round" d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
+</svg>
+                  Cancel Booking
+                  </button>:<button onClick={()=>cancelBooking(booking._id)} className="font-medium border flex gap-2 cursor-default rounded-xl text-white py-2 shadow bg-red-500 px-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+<path strokeLinecap="round" strokeLinejoin="round" d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
+</svg>
+                  {booking.status}
+                  </button>
+          }
+
+                </div>
+              </div>
 
               <div className="flex gap-2 items-center border-t text-gray-500 border-gray-300 mt-2 py-2">
                 <div className="flex gap-2 items-center">
@@ -135,16 +163,13 @@ function Bookings() {
                   <span className="font-medium">Total price: </span>₹ {' '}
                   {booking.total}
                 </div>
+                
               </div>
             </div>
             
           </div>
         ))): (
-<div class="flex flex-col items-center">
-  <img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-  <h5 class="text-center">loading....</h5>
-</div>
-
+          <Loading/>
           )}
 
 

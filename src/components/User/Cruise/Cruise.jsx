@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { Backdrop, Button, Checkbox, Fade, FormControlLabel, FormGroup, Rating, Typography } from '@mui/material';
 import SearchBar from '../../Shared/SearchBar';
 import Modal from '@mui/material/Modal';
+import Loading from "../../Shared/Loading";
 
 function Cruise() {
   const [cards, setCards] = useState([]);
@@ -123,10 +124,9 @@ console.log(id,"iiiiiiiiiiddddddddddd");
                   </div>
                 ))
             ) : (
-              <div className="flex flex-col items-center">
-                <div className='justify-center'>
-                  <img className="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-                  <h5 className="text-center">loading....</h5>
+              <div className="mt-16 mb-16 flex ">
+                <div className="flex mx-auto">
+                <Loading  />
                 </div>
               </div>
             )}

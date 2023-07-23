@@ -13,6 +13,7 @@ import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import Loading from '../../Shared/Loading'
 
 import axios from 'axios';
 import { adminApi, baseApi, partnerApi } from '../../../store/Api';
@@ -221,10 +222,8 @@ function CruiseData({ status }) {
           return null //added
         })}
 
-       </>):(<div class="flex flex-col h-[100vh] justify-center items-center w-[100vw] ">
-      <img class="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-      <h5 class="text-center">loading....</h5>
-    </div>
+       </>):(
+       <Loading/>
     )}
       {/* </div> */}
     </div>
