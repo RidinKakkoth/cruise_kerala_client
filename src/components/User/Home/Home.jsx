@@ -30,7 +30,7 @@ function Home() {
             <img src="https://wallpapercave.com/wp/wp3194873.jpg" alt="Banner 1" className='img-banner'  />
             <div className="caption-overlay">
               <h1 className="image-text ">Sail with Us</h1>
-              <p className='image-p mt-4'>We offer an array of houseboats in Deluxe, Premium and Luxury
+              <p className='image-p mt-20 sm:mt-2 ms-5 sm:ms-0 '>We offer an array of houseboats in Deluxe, Premium and Luxury
  categories with varying capacity of accommodation. 
 There are one-bedroom houseboats to up to ten-bedrooms</p>
             </div>
@@ -38,8 +38,8 @@ There are one-bedroom houseboats to up to ten-bedrooms</p>
           <div style={{ position: "relative"}}>
             <img src="https://i0.wp.com/happyhouseboat.com/wp-content/uploads/2020/12/Dolphin-one-bedroom-3.jpeg" alt="Banner 2" className='img-banner'  />
             <div className="caption-overlay">
-              <h1 className="image-text">Explore New Journey</h1> 
-              <p className='image-p mt-2'>Kerala Houseboat Guide Is your ultimate destination to book the perfect package. 
+              <h1 className="image-text ms-3 sm:ms-0 ">Explore New Journey</h1> 
+              <p className='image-p mt-12 sm:mt-2 ms-5 sm:ms-0'>Kerala Houseboat Guide Is your ultimate destination to book the perfect package. 
 We help you find the best Kerala boat house that suit your requirement.</p>
             </div>
           </div>

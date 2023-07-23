@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './PartnerTable.css';
 import { IconButton } from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
+import Loading from '../../Shared/Loading';
 
 function PartnerTable({ status }) {
   const [search, setSearch] = useState('');
@@ -17,8 +18,8 @@ function PartnerTable({ status }) {
   const [loading, setLoading] = useState(true);
 
   const handleBlock = (id) => {
-    axios.get(`${adminApi}blockPartner?id=${id}`, { withCredentials: true }).then((res) => {
-    // axios.patch(`${adminApi}blockPartner?id=${id}`, { withCredentials: true }).then((res) => {
+    // axios.get(`${adminApi}blockPartner?id=${id}`, { withCredentials: true }).then((res) => {
+    axios.patch(`${adminApi}blockPartner?id=${id}`,{}, { withCredentials: true }).then((res) => {
       console.log(res);
       setBlock(!block);
     }).catch((error) => {
@@ -115,10 +116,7 @@ function PartnerTable({ status }) {
         </div>
       </div>
     ) : (
-      <div className="flex flex-col h-[100vh] justify-center items-center w-[100vw]">
-        <img className="w-52" src="https://raw.githubusercontent.com/spagnuolocarmine/spagnuolocarmine/main/sail.gif" alt="" />
-        <h5 className="text-center">loading....</h5>
-      </div>
+        <Loading/>
     )
   );
 }

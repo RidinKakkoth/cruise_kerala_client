@@ -7,15 +7,17 @@ import SyncLoader from 'react-spinners/SyncLoader'
 import { io } from "socket.io-client";
 import { useNavigate } from 'react-router-dom';
 
+
 function Chatbox() {
   const [adminChats, setAdminChats] = useState(null);
   const [isChatLoading, setChatLoading] = useState(false);
   const [chatError, setChatError] = useState(null);
   const [currentChat, setCurrentChat] = useState(null);
-  const [adminMessage, setAdminMessage] = useState(null);
+  const [adminMessage, setAdminMessage] = useState([]);
   const [messageLoading, setMessageLoading] = useState(false);
   const [messageError, setMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  const [unreadCounts, setUnreadCounts] = useState({});
 
   const navigate=useNavigate()
 
@@ -55,24 +57,41 @@ function Chatbox() {
 
   const messageContainerRef = useRef(null);
 
+  // Scroll to the bottom of the message container
   useEffect(() => {
     if (messageContainerRef.current) {
-      // Scroll to the bottom of the message container
       messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }
   }, [adminMessage]);
 
-  useEffect(() => {
-    socket.current = io("http://localhost:8080");
 
-    socket.current.on('message', (message) => {
-      setAdminMessage((prevMessages) => [...prevMessages, message]);
-    });
+//initialise socket
+useEffect(() => {
+  socket.current = io("http://localhost:8080");
 
-    return () => {
-      socket.current.disconnect();
-    };
-  }, []);
+  socket.current.on('message', (message) => {
+    setAdminMessage((prevMessages) => [...(prevMessages?.length ? prevMessages : []), message]);
+
+    if (currentChat && message.senderId === currentChat.userId._id) {
+      // If the message is from the currentChat user, reset the unread count to zero for this user chat
+      setUnreadCounts((prevCounts) => ({
+        ...prevCounts,
+        [message.senderId]: 0,
+      }));
+    } else {
+      // If the message is from a different user, increment the unread count for this user chat
+      setUnreadCounts((prevCounts) => {
+        const userUnreadCount = prevCounts[message.senderId] || 0;
+        return { ...prevCounts, [message.senderId]: userUnreadCount + 1 };
+      });
+    }
+  });
+
+  return () => {
+    socket.current.disconnect();
+  };
+}, [currentChat]);
+
 
 
   //no need because admin never starts chat
@@ -118,7 +137,14 @@ function Chatbox() {
 
   const clickUser = (chat) => {
     setCurrentChat(chat);
+  
+    // Reset the unread count for the selected user to 0
+    setUnreadCounts((prevCounts) => ({
+      ...prevCounts,
+      [chat.userId._id]: 0,
+    }));
   };
+  
 
   
     return (
@@ -144,14 +170,27 @@ function Chatbox() {
 
             </div>
             {isChatLoading && <SyncLoader color='#36D7b7'/>}
-            {adminChats?.map((chat, index) => (
-              <div className={chat===currentChat?' bg-[#187a66] ml-2 me-2 justify-around text-white h-10 text-center flex mt-2 mb-2 rounded-2xl text-lg font-semibold items-center cursor-pointer':' bg-[#36D7b7] ml-2 me-2 justify-around text-white h-10 text-center flex mt-2 mb-2 rounded-2xl text-lg font-semibold items-center cursor-pointer' }  onClick={() => clickUser(chat)} key={index}>
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-</svg>
- {chat.userId.name}
-              </div>
-            ))}
+
+{adminChats?.map((chat, index) => (
+  <div
+    className={chat === currentChat ? 'bg-[#187a66] ml-2 me-2 justify-around text-white h-10 text-center flex mt-2 mb-2 rounded-2xl text-lg font-semibold items-center cursor-pointer' : 'bg-green-100 ml-2 me-2 justify-around text-black h-10 text-center flex mt-2 mb-2 rounded-2xl text-lg font-semibold items-center cursor-pointer hover:bg-[#187a66]'}
+    onClick={() => clickUser(chat)}
+    key={index}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+    {chat.userId.name}
+
+    {/* Only show the unread count if this chat is not the currentChat */}
+    {chat !== currentChat && unreadCounts[chat.userId._id] > 0 && (
+      <span className='text-white rounded-full bg-[#187a66] w-5 text-sm'>{unreadCounts[chat.userId._id]}</span>
+    )}
+  </div>
+))}
+
+
+
           </div>
 
 
@@ -196,7 +235,8 @@ function Chatbox() {
               </div>
 
 
-              <div className="flex mt-4">
+{  !messageLoading? 
+       (<div className="flex mt-4">
                 <InputEmoji
                   value={newMessage}
                   onChange={setNewMessage}
@@ -217,9 +257,9 @@ function Chatbox() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                   </svg>
                 </button>
-              </div>
+              </div>):<SyncLoader color='#36D7b7'/>}
             </div>:
-            <div className='flex relative  w-[100vw]'>
+            <div className='flex relative  '>
 
               <img className='ms-3 rounded-2xl shadow' src="https://cdn.pixabay.com/animation/2022/11/16/11/48/11-48-15-802_512.gif" alt="" />
               <h4 className='left-12 bottom-5 text-gray-500  absolute'>Open chats to  view messages...</h4>

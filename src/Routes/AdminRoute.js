@@ -13,6 +13,7 @@ import Bookings from '../pages/AdminPage/Bookings'
 import UserDetail from '../pages/AdminPage/UserDetail'
 import Chatbox from '../components/Admin/Chatbox/Chatbox'
 import ChatBox from '../pages/AdminPage/ChatBox'
+import Notification from '../pages/AdminPage/Notification'
 
 
 function AdminRoute() {
@@ -32,6 +33,7 @@ function AdminRoute() {
             <Route path='/bookings' element={<Bookings/>}/>
             <Route path='/other' element={<OtherManagements/>}/>
             <Route path='/chatbox' element={<ChatBox />} />
+            <Route path='/notification' element={<Notification />} />
 
         </Routes>
 
