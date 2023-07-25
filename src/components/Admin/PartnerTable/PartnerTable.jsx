@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 import Switch from '@mui/material/Switch';
-import { adminApi } from '../../../store/Api';
+import { adminApi } from  '../../../config/Api';
 import 'bootstrap/dist/css/bootstrap.css';
 import './PartnerTable.css';
 import { IconButton } from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
 import Loading from '../../Shared/Loading';
+import { blockPartner, getPartnerData } from '../../../config/AdminEndpoints';
 
 function PartnerTable({ status }) {
   const [search, setSearch] = useState('');
@@ -17,14 +18,11 @@ function PartnerTable({ status }) {
   const [block, setBlock] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const handleBlock = (id) => {
-    // axios.get(`${adminApi}blockPartner?id=${id}`, { withCredentials: true }).then((res) => {
-    axios.patch(`${adminApi}blockPartner?id=${id}`,{}, { withCredentials: true }).then((res) => {
-      console.log(res);
-      setBlock(!block);
-    }).catch((error) => {
-      console.log(error);
-    });
+  const handleBlock =async (id) => {
+      const data=await blockPartner(id)
+      if(data){
+        setBlock(!block);
+      }
   };
 
   const navigate = useNavigate();
@@ -50,16 +48,15 @@ function PartnerTable({ status }) {
   };
 
   useEffect(() => {
-    axios
-      .get(`${adminApi}getPartnerData`, { withCredentials: true })
-      .then((response) => {
-        setPartnerData(response.data);
+    async function invoke(){
+        const data=await getPartnerData()
+        if(data){
+         setPartnerData(data);
         setLoading(false);
-        setFilterData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        setFilterData(data);
+        }
+    }
+    invoke()
   }, [block]);
 
   return (
@@ -90,7 +87,7 @@ function PartnerTable({ status }) {
             </thead>
             <tbody className="values" style={{ color: 'black' }}>
               {filterData.map((obj, index) => {
-                if ((status && obj.isApproved === 'verified') || (!status && obj.isApproved === 'pending')) {
+                if ((status && obj.isApproved === 'verified') || (!status && obj.isApproved === 'pending') ||(!status && obj.isApproved === 'upload proof')) {
                   return (
                     <tr key={index}>
                       {/* <td style={{ color: 'black' }}>{index + 1}</td> */}
@@ -116,7 +113,9 @@ function PartnerTable({ status }) {
         </div>
       </div>
     ) : (
-        <Loading/>
+        <div className='flex justify-center mx-auto'>
+          <Loading/>
+        </div>
     )
   );
 }

@@ -13,9 +13,10 @@ import LazyLoad from 'react-lazy-load';
 import { useNavigate } from 'react-router-dom';
 import { TabView, TabPanel } from 'primereact/tabview';
 import axios from 'axios';
-import { baseApi, partnerApi } from '../../../store/Api';
+import { baseApi, partnerApi } from  '../../../config/Api';
 import { Button } from '@mui/material';
 import Loading from '../../Shared/Loading'
+import { blockCruise } from '../../../config/PartnerEndpoints';
 
 
 const GreenCheckIcon = () => {
@@ -38,27 +39,23 @@ function CruisesTable() {
   };
 
   useEffect(() => {
-    axios.get(`${partnerApi}cruise-data`, { withCredentials: true })
-      .then((response) => {
-        const data = response.data.cruiseData;
-        setLoading(false);
-        setCruiseData(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [trigger]);
 
-  const handleBlock = (id) => {
-    // axios.get(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
-    axios.patch(`${partnerApi}blockCruise?id=${id}`,{}, { withCredentials: true })
-      .then((res) => {
-        toast.success("Success", { position: "top-center" });
-        setTrigger(!trigger);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    async function invoke(){
+     const data=await cruiseData()
+     setLoading(false)
+     setCruiseData(data.data);
+    }
+    invoke()
+   }, [trigger]);
+ 
+
+   const handleBlock =async (id) => {
+
+    const data=await blockCruise(id)
+    if(data){    
+      setTrigger(!trigger); 
+          toast.success('Success', { position: 'top-center' });
+    }
   };
 
   return (
@@ -70,7 +67,7 @@ function CruisesTable() {
             <Button
               variant="contained"
               onClick={handleClick}
-              style={{ marginTop: "20px" }}
+              style={{ marginTop: "20px",marginBottom:"20px" }}
               endIcon={<SailingIcon />}
             >
               Add Cruise
@@ -110,7 +107,7 @@ function CruisesTable() {
                             <LazyLoad>
                               <img
                                 id="cruise-map-img"
-                                src={`${baseApi}files/${img}`}
+                                src={img}
                                 alt="cruise"
                               />
                             </LazyLoad>
@@ -145,7 +142,9 @@ function CruisesTable() {
         </div>
       ) : (
         
-       <Loading/>
+      <div className='flex justify-center mt-56'>
+         <Loading/>
+      </div>
 
       )}
     </div>

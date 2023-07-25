@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { baseApi } from "../../../store/Api";
+import { baseApi } from  '../../../config/Api';
 import dateConvertor from "../../../utils/DateFormat";
 import {  useNavigate } from "react-router-dom";
 import Loading from '../../Shared/Loading'
@@ -42,7 +42,7 @@ function Bookings() {
               <img
                 className="rounded-xl p-1 object-cover   "
                 key={index}
-                src={`${baseApi}files/${booking.cruiseId.Images[0]}`}
+                src={booking.cruiseId.Images[0]}
                 alt="ddd"
                 
               />

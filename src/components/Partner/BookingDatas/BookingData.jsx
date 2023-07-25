@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import {  partnerApi } from '../../../store/Api';
+import { getBookings } from '../../../config/PartnerEndpoints';
 
 function BookingData() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get(`${partnerApi}get-bookings`, { withCredentials: true })
-      .then((res) => {
-        console.log(res.data.data);
-        setData(res.data.data);
-
-      })
-      .catch((error) => {
-        console.error('Error fetching bookings:', error);
-      });
+      async function invoke(){
+        const data=  await getBookings()
+        if(data)setData(data.data);
+      }
+      invoke()
   }, []);
+
 
   return (
     <div>
@@ -62,8 +58,6 @@ function BookingData() {
                       {booking.status}
                     </span>
                   </td>
-                  {/* <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{new Date(booking.checkIn).toDateString()}</td> */}
-                  {/* <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{new Date(booking.checkOut).toDateString()}</td> */}
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">        {new Date(booking.checkIn).toLocaleDateString('en-US', {
           day: '2-digit',
           month: '2-digit',

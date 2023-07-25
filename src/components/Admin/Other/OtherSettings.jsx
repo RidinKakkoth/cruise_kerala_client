@@ -1,32 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Category from './Category';
-import axios from 'axios';
-import { adminApi } from '../../../store/Api';
 import CategoryTable from './CategoryTable';
+import { getCategories } from '../../../config/AdminEndpoints';
 
 function OtherSettings() {
-  // const [editedName, setEditedName] = useState('');
-  const [categories, setCategories] = useState([]);
-  // const [editing, setEditing] = useState(false);
 
-  // const handleEdit = () => {
-  //   setEditing(true);
-  // };
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${adminApi}get-categories`, {
-          withCredentials: true,
-        });
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
-    fetchData();
-  }, []); // Empty dependency array to run effect only once
+    async function  invoke(){
+        const data=await getCategories()
+        if(data){
+          setCategories(data.categories);
+        }
+    }
+
+    invoke();
+  }, []); 
 
   return (
     <div>
@@ -34,16 +25,13 @@ function OtherSettings() {
 
         <div style={{display:"flex",justifyContent:"space-between"}}>
         <h4 style={{ marginBottom: '20px' }}>CATEGORIES</h4>
-        <Category />
+      
+        <Category /> {/* add category*/}
+       
         </div>
 
         <div>
-
-       
           <CategoryTable categories={categories} />
-         
-        
-
         </div>
       </div>
     </div>

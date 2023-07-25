@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
-import { baseApi } from '../../../store/Api'
+import { baseApi } from  '../../../config/Api';
 import { userAdd } from '../../../store/UserAuth'
 import './UserSignin.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { userSignin } from '../../../config/UserEndpoints';
 
 
 
@@ -16,24 +17,21 @@ const navigate=useNavigate()
 
 const [email,setEmail]=useState("")
 const[password,setPassword]=useState("")
-// const[error,setError]=useState(null)
 
 
-const handleSubmit=(e)=>{
+const handleSubmit=async(e)=>{
 
-e.preventDefault()
-axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then((response)=>{
+  e.preventDefault()
 
- const result=response.data.userLogin
-
- if(result.status){
-  dispatch(userAdd({token:result.token,userName:result.name}))
-  navigate('/')
- }
-
-}).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
-console.log(error.response.data.error);})
-
+const data=await userSignin(email,password)
+    const result=data?.userLogin
+    if(data.status==="failed"){
+     toast.error(data.message,{position: "top-center"})
+    }
+      else if(result.status){
+         dispatch(userAdd({token:result.token,userName:result.name}))
+         navigate('/')
+         }
 }
 
 

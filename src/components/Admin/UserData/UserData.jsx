@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { adminApi } from "../../../store/Api";
+import { adminApi } from  '../../../config/Api';
 import axios from "axios";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Loading from "../../Shared/Loading";
+import { blockUser, getUserData } from "../../../config/AdminEndpoints";
 
 function UserData() {
   const [data, setData] = useState([]);
@@ -11,28 +12,20 @@ function UserData() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`${adminApi}get-userData`, { withCredentials: true })
-      .then((res) => {
-        setData(res.data);
+    async function invoke(){
+      const data=await getUserData()
+      if(data){
+        setData(data);
         setLoading(false)
-     
-      })
-      .catch((error) => {
-        console.error("Error fetching datas:", error);
-      });
+      }
+  }
+  invoke()
   }, [block]);
 
-  const handleBlock = (id) => {
-    // axios.get(`${adminApi}blockUser?id=${id}`, { withCredentials: true }).then((res) => {
-    axios
-      .patch(`${adminApi}blockUser?id=${id}`, {}, { withCredentials: true })
-      .then((res) => {
-        setBlock(!block);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+  const handleBlock = async(id) => {
+     const data= await blockUser(id)
+      if(data)setBlock(!block);
   };
 
   return (

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
-import { partnerApi } from '../../../store/Api'
+import { partnerApi } from  '../../../config/Api';
 import { partnerAdd } from '../../../store/PartnerAuth'
 import './Login.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { partnerSignin } from '../../../config/PartnerEndpoints';
 
 
 
@@ -16,24 +17,20 @@ const navigate=useNavigate()
 
 const [email,setEmail]=useState("")
 const[password,setPassword]=useState("")
-// const[error,setError]=useState(null)
 
+const handleSubmit = async (e) => {
+    
+  e.preventDefault()
 
-const handleSubmit=(e)=>{
-
-e.preventDefault()
-axios.post(`${partnerApi}partnerSignin`,{email,password},{withCredentials:true}).then((response)=>{
-
- const result=response.data.partnerLogin
-
- if(result.status){
-  dispatch(partnerAdd({token:result.token}))
-  navigate('/partner/dashboard')
- }
-
-}).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
-console.log(error.response.data.error);})
-
+const data=await partnerSignin(email,password)
+    const result=data?.partnerLogin
+    if(data.status==="failed"){
+     toast.error(data.message,{position: "top-center"})
+    }
+      else if(result.status){
+         dispatch(partnerAdd({token:result.token}))
+         navigate('/partner/dashboard')
+         }
 }
 
 

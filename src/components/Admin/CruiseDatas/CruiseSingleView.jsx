@@ -12,7 +12,7 @@ import Loading from '../../Shared/Loading'
 
 
 import LazyLoad from 'react-lazy-load';
-import { baseApi } from '../../../store/Api';
+import { baseApi } from  '../../../config/Api';
 import { Button } from '@mui/material';
 
 const GreenCheckIcon = () => {
@@ -27,7 +27,8 @@ const RedCloseIcon = () => {
 function CruiseSingleView() {
     const navigate=useNavigate()
   const location = useLocation();
-  const obj = location.state;
+  const obj = location?.state;
+  console.log(obj,"oooooooooooo");
 
   return (
 
@@ -49,7 +50,7 @@ function CruiseSingleView() {
             <TabView className="tabview-custom">
               <TabPanel header="CRUISE DATA">
                 <p>Name: {obj.name}</p>
-                <p>Category: {obj.category}</p>
+                <p>Category: {obj.category.name}</p>
                 <p>Boarding: {obj.boarding}</p>
                 <p>Description: {obj.description}</p>
               </TabPanel>
@@ -72,14 +73,14 @@ function CruiseSingleView() {
               </TabPanel>
 
               <TabPanel id="posters" header="PHOTOS" style={{ display: 'flex', gap: '20px' }}>
-                <div className="cruise-map-img-container">
-                  {obj.Images.map((img, index) => (
+                <div className="cruise-map-img">
+                  {obj?.Images?.map((img, index) => (
                     <React.Fragment key={index}>
                       <div className="cruie-map-img-div">
                         <LazyLoad>
                           <img
                             id="cruise-map-img"
-                            src={`${baseApi}files/${img}`}
+                            src={img}
                             alt="cruise"
                           />
                         </LazyLoad>

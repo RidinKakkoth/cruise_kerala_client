@@ -8,10 +8,16 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Input, Page, setOptions,Dropdown,Checkbox } from '@mobiscroll/react';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import axios from 'axios';
-import { baseApi, partnerApi } from '../../../store/Api';
+import {  partnerApi } from  '../../../config/Api';
 import { useNavigate } from 'react-router-dom';
 import AddCruiseFormValidation from '../../../utils/AddCruiseFormValidation'
 import { ToastContainer, toast } from 'react-toastify';
+import AddHotelLocation from './MapBox';
+import { addCruise, getCategories } from '../../../config/PartnerEndpoints';
+import { Backdrop, CircularProgress } from '@mui/material';
+
+
+
 
 setOptions({
     theme: 'ios',
@@ -46,6 +52,9 @@ function AddCruises() {
     const[pets,setPets]=useState(true)
     const[license,setLicense]=useState(null)
     const[categoryData,setCategoryData]=useState([])
+    const[uploading,setUploading]=useState(false)
+
+   
 
     const navigate=useNavigate()
 
@@ -61,7 +70,7 @@ function AddCruises() {
         setImages(selectedFiles)
     }
 
-    const handleAddCruise = (event) => {
+    const handleAddCruise = async(event) => {
 
 
             event.preventDefault()
@@ -71,8 +80,7 @@ function AddCruises() {
 
              if (validationError !== '') {
                   toast.error(validationError,{position: "top-center"});
-                 return;
-                    }
+                 return; }
 
            const formData = new FormData();
 
@@ -89,48 +97,45 @@ function AddCruises() {
            // Append the license file to the formData
            formData.append('license', license);
          
-   axios.post(`${partnerApi}add-cruise`, formData,{
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    withCredentials: true,
-  }).then((response) => {
-    
-if(response.data.success){
-    Swal.fire({
-        icon: 'success',
-        title: 'Cruise added successfully',
-        timer: 2000, 
-        showConfirmButton: false
-      }).then(() => {
-        navigate(-1); // Navigate to cruise table
-      });
-}
+           setUploading(true)
 
-  })
-  .catch((error) => {
-    console.log(error);
-
-    Swal.fire({
-      icon: 'error',
-      title: 'Error adding cruise',
-      timer: 2000, 
-      showConfirmButton: false
-    });
-  });
-      };
+            const data=await addCruise(formData)
+            if(data?.status){
+                setUploading(false)
+                Swal.fire({
+                            icon: 'success',
+                            title: 'Cruise added successfully',
+                            timer: 2000, 
+                            showConfirmButton: false
+                          }).then(() => {
+                            navigate(-1); // Navigate to cruise table
+                          });
+                     }
+            else{
+                setUploading(false)
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Error adding cruise',
+                    timer: 2000, 
+                    showConfirmButton: false
+                     });
+            } };
 
 
 useEffect(()=>{
-    axios.get(`${partnerApi}get-categories`,{withCredentials:true}).then((res)=>{
-       
-      setCategoryData(res.data.categories)
-    }).catch((err)=>{console.log(err)})
+    async function invoke(){
+        const data=await getCategories()
+        if(data){
+            setCategoryData(data.categories)
+        }
+    }
+    invoke()
   
 },[])
 
-
-
+const handleLocationSelect = (location) => {
+    // setHotelInfo({ ...hotelInfo, location });
+  };
 
     return (
         <Page >
@@ -174,6 +179,7 @@ useEffect(()=>{
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
                         <Input required label="Town" onChange={(e)=>{setTown(e.target.value)}} inputStyle="box" labelStyle="floating" placeholder="Enter Town name" />
                     </div>
+
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
                         <Input required label="District" onChange={(e)=>{setDistrict(e.target.value)}} inputStyle="box" labelStyle="floating" placeholder="Select your district" />
                     </div>
@@ -181,6 +187,11 @@ useEffect(()=>{
                         <Input type='number' required label="Pin"  onChange={(e)=>{setPin(e.target.value)}} inputStyle="box" labelStyle="floating" placeholder="What is your pin code" />
                     </div>
                 </div>
+                <div className='mt-3 mb-3'>
+
+                <AddHotelLocation className="" onLocationSelect={handleLocationSelect} />
+                </div>
+
                 <div className="mbsc-row">
                     <div className="mbsc-col-12 mbsc-col-md-6 mbsc-col-lg-3">
                         <Input required type='number' onChange={(e)=>{setRooms(e.target.value)}} label="No of Rooms" inputStyle="box" labelStyle="floating" placeholder="Enter No of Rooms" />
@@ -216,7 +227,8 @@ useEffect(()=>{
                         })
                         }
                 </div>
-
+                
+              
 
 
 
@@ -264,7 +276,18 @@ useEffect(()=>{
                     </div>
                 </div>
                 </form>
+                <div>
+               
+                </div>
             </div>
+            {uploading && (
+        <Backdrop open={true}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <CircularProgress color="inherit" />
+            <p style={{ marginTop: '10px', color: 'white' }}>Uploading data, please wait...</p>
+          </div>
+        </Backdrop>
+      )}
         </Page>
     ); 
 }

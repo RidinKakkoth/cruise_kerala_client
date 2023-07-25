@@ -10,17 +10,21 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
 
 export default function CategoryTable({ categories }) {
   const [obj, setObj] = React.useState([]);
+  const [editing, setEditing] = React.useState(false);
+  const [editedName, setEditedName] = React.useState();
 
   React.useEffect(() => {
     setObj(categories);
   }, [categories]);
+
+  const handleEdit = (id) => {
+    setEditing(true);
+  };
+
+  
 
   return (
     <TableContainer component={Paper}>
@@ -28,8 +32,8 @@ export default function CategoryTable({ categories }) {
         <TableHead>
           <TableRow>
             <TableCell style={{fontWeight:"600"}}>Category Name</TableCell>
-            <TableCell style={{fontWeight:"600"}} align="center">Blocked</TableCell>
-            <TableCell style={{fontWeight:"600"}} align="center">Edit</TableCell>
+            <TableCell style={{fontWeight:"600"}} align="center">Status</TableCell>
+            <TableCell   style={{fontWeight:"600"}} align="center">Edit</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -38,15 +42,17 @@ export default function CategoryTable({ categories }) {
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+
+               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="center">                  {obj.isBlocked ? (
-                    <ToggleOnIcon checked={row.isListed} style={{ color: 'red', fontSize: '2rem' }} />
+
+              <TableCell align="center">                  {row.isListed ? (
+                    <ToggleOnIcon checked={row.isListed} style={{ color: 'green', fontSize: '2rem' }} />
                   ) : (
                     <ToggleOffIcon checked={row.isListed} style={{ fontSize: '2rem' }} />
                   )}</TableCell>
-              <TableCell align="center"><EditNoteIcon style={{color:"blue"}} /></TableCell>
+              <TableCell align="center"><EditNoteIcon className='cursor-pointer' onClick={()=>handleEdit(row._id)} style={{color:"blue"}} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

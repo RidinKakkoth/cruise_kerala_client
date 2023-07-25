@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { adminApi } from "../../../store/Api";
 import Loading from "../../Shared/Loading";
+import { getBookings } from "../../../config/AdminEndpoints";
 
 function BookingData() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    axios
-      .get(`${adminApi}get-bookings`, { withCredentials: true })
-      .then((res) => {
-        setData(res.data.bookingData);
+  useEffect(()=>{
+    async function invoke(){
+      const data=await getBookings()      
+       setData(data.bookingData);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching bookings:", error);
-      });
-  }, []);
+    }
+    invoke()
+  },[])
 
   return (
     <div>

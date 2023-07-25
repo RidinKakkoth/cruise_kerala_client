@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { baseApi } from "../../../store/Api";
+import { baseApi } from  '../../../config/Api';
 import { parseISO } from 'date-fns';
 
 function Confirmation() {
@@ -14,7 +14,9 @@ function Confirmation() {
   const data = location.state?.data;//passed data from booking page
   const checkInDate=new Date(data.checkInDate)
   const checkOutDate=new Date(data.checkOutDate)
-  const booked = location.state?.bookedData;//booked data from payment
+  const booked = location.state.bookedData;//booked data from payment
+  console.log(booked,"booked");
+  console.log(data,"data");
 
   return (
     <div className=" container">
@@ -37,7 +39,7 @@ function Confirmation() {
 
         <div className="flex flex-wrap mt-4 bg-white pt-3 pb-3 justify-around">
   <div className="flex flex-col items-center sm:flex-row sm:items-center">
-    <img className="w-28 h-28 mr-5 rounded" src={`${baseApi}files/${data.cruiseImg[0]}`} alt="dfdf" />
+    <img className="w-28 h-28 mr-5 rounded" src={data.cruiseImg[0]} alt="dfdf" />
     <span className="font-medium text-lg">{data.cruiseName}</span>
   </div>
   <div className="flex flex-col items-center  font-medium mt-2 sm:mt-0">

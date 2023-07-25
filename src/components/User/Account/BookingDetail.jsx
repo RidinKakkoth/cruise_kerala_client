@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { baseApi } from "../../../store/Api";
+import { baseApi } from  '../../../config/Api';
 import DetailViewGallery from "../Cruise/DetailViewGallery";
 import dateConvertor from "../../../utils/DateFormat";
 import Rating from "@mui/material/Rating";

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { baseApi } from '../../../store/Api';
+import { baseApi } from  '../../../config/Api';
 import Typewriter from 'typewriter-effect';
 
 const Cards = ({ data }) => {
@@ -29,8 +29,9 @@ const Cards = ({ data }) => {
               className='w-full shadow-2xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300 text-center'
             >
               <img
-                className='rounded-xl mx-auto mt-[-3rem] bg-white'
-                src={`${baseApi}files/${detail.Images?.[0]}`}
+                className='rounded-xl mx-auto mt-[-3rem] max-h-40  bg-white'
+                
+                src={detail.Images?.[0]}
                 alt='/'
               />
               <h2 className='text-2xl font-bold text-center py-4'>{detail.name}</h2>

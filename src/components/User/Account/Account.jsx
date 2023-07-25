@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { baseApi } from "../../../store/Api";
+import { baseApi } from  '../../../config/Api';
 import Bookings from "./Bookings";
 import { ToastContainer, toast } from "react-toastify";
 import { CardMedia } from "@mui/material";
@@ -21,6 +21,7 @@ function Account() {
     "https://cdn-icons-png.flaticon.com/512/147/147142.png"
   );
   const [buttonHide, setButtonHide] = useState(true);
+  const inputEditRef=useRef(null)
 
 
   useEffect(() => {
@@ -87,6 +88,7 @@ function Account() {
   const submitPicUpload = async (e) => {
     e.preventDefault();
 
+    setButtonHide(true);
     const formData = new FormData();
     
     formData.append('image', profileImage);
@@ -100,7 +102,6 @@ function Account() {
       })
       .then((response) => {
         setprofileImage(response.data.url);
-        setButtonHide(true);
         setOpen(true);
       })
       .catch((error) => {
@@ -174,8 +175,8 @@ function Account() {
           <div className="flex-col text-center justify-center mt-5   md:w-[30%] w-[100%]">
             <div className="flex " >
               {open ? (
-                <div className="image-container  flex ">
-                  <CardMedia
+                <div className="image-container ml-16 sm:ml-4 flex ">
+                  <CardMedia 
                     sx={{
                       height: 150,
                       width: 150,
@@ -189,7 +190,8 @@ function Account() {
                     }}
                     className="image "
                     component="img"
-                    src={`${baseApi}files/${profileImage}`}
+                    src={profileImage}
+                    // src={`${baseApi}files/${profileImage}`}
                     title="choose image"
                   />
                   <div
@@ -281,20 +283,23 @@ function Account() {
               <div className="flex-col">
                 <div>
                   <input
-                    className="mt-4 border h-10 w-64 bg-gray-200 rounded-lg pl-4"
+                    className="mt-4 border  h-10 w-64  bg-gray-200 rounded-lg pl-4"
                     defaultValue={userName}
+                    autoFocus
                     onChange={(e) => setUserName(e.target.value)}
                     type="text"
                   />
                   <input
                     className="mt-4 border h-10 w-64 bg-gray-200 rounded-lg pl-4"
                     defaultValue={phone}
+                    
                     onChange={(e) => setPhone(e.target.value)}
                     type="text"
                   />
                   <input
                     className="mt-4 border h-10 w-64 bg-gray-200 rounded-lg pl-4"
                     defaultValue={email}
+                    
                     onChange={(e) => setEmail(e.target.value)}
                     type="text"
                   />

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
 import axios from 'axios'
-import { partnerApi } from '../../../store/Api'
+import { partnerApi } from  '../../../config/Api';
 import './SignUp.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { partnerSignUp } from '../../../config/PartnerEndpoints';
 
 function SignUp() {
     const [name,setName]=useState("")
@@ -16,19 +17,20 @@ function SignUp() {
     
     const navigate=useNavigate()
     
-    const handleSubmit=(e)=>{
+    const handleSubmit=async(e)=>{
     
     e.preventDefault()
 
-    axios.post(`${partnerApi}partnerSignUp`,{email,password,phone,name,company},{withCredentials:true}).then((response)=>{
-    
-      if(response)
+      const data=await partnerSignUp(email,password,phone,name,company)
+      if(data.status==="failed"){
+        toast.error(data.message,{position: "top-center"})
+      }
+      else{
         navigate('/partner')
-
-    }).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})
-    console.log(error.response.data.error);})
+      }
     
     } 
+
     
     
       return (
@@ -82,7 +84,7 @@ function SignUp() {
                 <div className="form-group">
                   <label className="partner-label">Company Name</label>
                   <input
-                  required
+                  // required
                     type="text"
                     
                     onChange={(e) => {

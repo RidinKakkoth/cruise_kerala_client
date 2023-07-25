@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
-import axios from 'axios'
-import { baseApi } from '../../../store/Api'
 import './UserSignup.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { userSignUp } from '../../../config/UserEndpoints';
 
 function UserSignup() {
     const [name,setName]=useState("")
@@ -15,26 +14,16 @@ function UserSignup() {
     
     const navigate=useNavigate()
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
       e.preventDefault();
     
-      axios
-        .post(`${baseApi}userSignUp`, { email, password, phone, name }, { withCredentials: true })
-        .then(() => {
-          toast.success("Success", {
-            position: "top-center",
-            onClose: () => navigate("/signin")
-          });
-        })
-        .catch((error) => {
-          if (error.response && error.response.data && error.response.data.error) {
-            console.log(error.response.data.error);
-            toast.error(error.response.data.error, { position: "top-center" });
-          } else {
-            console.log(error);
-            toast.error("An error occurred", { position: "top-center" });
-          }
-        });
+      const data=await userSignUp(email,password,phone,name)
+      if(data.status==="failed"){
+        toast.error(data.message,{position: "top-center"})
+      }
+      else{
+        navigate('/signin')
+      }
     };
     
       return (

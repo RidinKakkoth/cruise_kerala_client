@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate} from 'react-router-dom'
 import "./Account.css"
-import { baseApi, partnerApi } from '../../../store/Api';
+import { baseApi, partnerApi } from  '../../../config/Api';
 import axios from 'axios';
 
 //material-ui-items
@@ -16,6 +16,7 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import UpdateIcon from '@mui/icons-material/Update';
 import Stack from '@mui/material/Stack';
 import Loading from '../../Shared/Loading'
+import { getPartnerProfileData, updateProfileData, updateProfilePic } from '../../../config/PartnerEndpoints';
 
 
 function Account() {
@@ -25,9 +26,11 @@ const navigate=useNavigate()
 
   useEffect(() => {
 
-    axios.get(`${partnerApi}getPartnerProfile`,{withCredentials:true}).then((res)=>{
+    async function invoke(){
 
-      const partnerDetails=res.data.partnerData
+     const data=await getPartnerProfileData() 
+      const partnerDetails=data.partnerData
+
       const {name,email,phone,companyName,isApproved,image}=partnerDetails
       setEditedName(name)
       setEditedPhone(phone)
@@ -36,17 +39,15 @@ const navigate=useNavigate()
       seteditedStatus(isApproved)
       setPartnerData(partnerDetails)
       setprofileImage(image)
-if(image){
-
-  setOpen(true)
-}
-
-
-    }).catch((error)=>{
-      console.log(error.msg);
-    })
+      if(image){
+        
+        setOpen(true)
+      }
+    }
+    invoke()
     
     }, [])
+
 const [partnerData,setPartnerData]=useState('')
 const [editing, setEditing] = useState(false);
 const [editedName, setEditedName] = useState("");
@@ -69,7 +70,7 @@ const handleEdit = () => {
   setEditing(true);
 };
 
-const handleSave = () => {
+const handleSave =async () => {
 
   const updatedProfileData = {
     name: editedName,
@@ -78,11 +79,10 @@ const handleSave = () => {
     phone: editedPhone,
   };
 
-axios.patch(`${partnerApi}update-profile`,updatedProfileData,{withCredentials:true}).then((res)=>{
-  
-  setEditing(false);
-}).catch((error)=>{console.log(error);})
-};
+const data=await updateProfileData(updatedProfileData)
+if(data){
+    setEditing(false);
+}}
 
 const handleCancel = () => {
   setEditing(false);
@@ -154,26 +154,15 @@ setButtonHide(true)
     const formData=new FormData()
     formData.append('image',profileImage)
     
-        axios.post(`${partnerApi}partner-dp`,formData,{
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }).then((response)=>{
-          setprofileImage(response.data.url)
-          setOpen(true)
-       
-          
-        }).catch((error)=>{
-            console.log(error);
-        })
-      
-      
-
+    const data=await updateProfilePic(formData)
+    if(data){
+                setprofileImage(data.url)
+               setOpen(true)
+    }
 }
+
 const cancelPicUpload=()=>{
   setButtonHide(true)
- 
 }
 
 return (
@@ -183,9 +172,9 @@ return (
 { 
 partnerData? 
 <div className="mbsc-col-12 mbsc-col-lg-6"  style={{display:"flex", justifyContent:"center", alignItems:"center",gap:"25PX",maxWidth:"75%"}}>
-<div className="centered-container" >
+<div className="centered-container rounded-2xl shadow " >
  
-    <Card className="profile-card-partner-account">
+    <Card className="profile-card-partner-account  ">
     <h3 style={{marginLeft:"100px"}}>PROFILE</h3>
     {editedStatus === "verified" ?<   VerifiedIcon  style={{ color: '#00c600', fontSize: '2rem' ,marginTop:"50px",position:"absolute",marginLeft:"200px" }}/>:""}
 
@@ -195,12 +184,12 @@ partnerData?
 <div  onClick={handleImageClick}>
 
 {
-  open? <div className="image-container">
+  open? <div className="image-container rounded-xl ">
   <CardMedia
   sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,borderStyle:"double",borderColor:"#00ff68",borderWidth:"5px" }}
     className="image"
     component="img"
-    src={`${baseApi}files/${profileImage}`}
+    src={profileImage}
     title="choose image"
   />
   <div
@@ -348,7 +337,9 @@ sx={{ height: 150, width: 150,borderRadius:"50%" ,marginLeft:10,marginTop:1,bord
 
   </div>
   
-:  <Loading/>}
+:  <div className='flex justify-center items-center mx-auto'>
+  <Loading/>
+  </div>}
 
   </>
 );

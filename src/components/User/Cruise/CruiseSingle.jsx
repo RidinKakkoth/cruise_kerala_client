@@ -13,7 +13,7 @@ import { parseISO, startOfDay, isSameDay } from 'date-fns';
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Stepper } from "@mobiscroll/react";
 
-import { baseApi } from "../../../store/Api";
+import { baseApi } from  '../../../config/Api';
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
@@ -21,6 +21,8 @@ import axios from "axios";
 import Facilities from "./Facilities";
 import { Rating } from "@mui/material";
 import Loading from "../../Shared/Loading";
+import dateConvert from "../../../utils/DateFormat";
+import { bookedDatesData } from "../../../config/UserEndpoints";
 
 
 const DetailViewGallery = lazy(() => import("./DetailViewGallery"));
@@ -81,10 +83,13 @@ const [maxCheckOutDate, setMaxCheckOutDate] = useState(null);
 const [bookedDates, setBookedDates] = useState([]);
 
 useEffect(()=>{
-  axios.get(`${baseApi}booked-dates?id=${id}`,{withCredentials:true}).then((res)=>{
-      setBookedDates(res.data)
-     
-  }).catch((err)=>console.log(err))
+    async function invoke(){
+      const data=await bookedDatesData(id)
+      if(data){
+        setBookedDates(data)
+      }
+    }
+    invoke()
 },[id])
 
 const disabledDates = [];
@@ -377,9 +382,9 @@ bookedDates.forEach((dates, index) => {
               key={review._id}
               className="bg-white shadow  p-4 rounded-lg"
             >
-              <div className="text-lg flex justify-between font-semibold mb-3">{review.userId.name}
+              <div className="text-lg flex justify-between font-semibold mb-3"><div className="flex gap-2"><img className="w-8 h-8 rounded-full" src={review.userId.image} alt="" /> {review.userId.name}</div>
               <Rating name="read-only" value={review.ratings} readOnly /></div>
-              <div className="text-gray-700">{review.feedback}</div>
+              <div className="flex justify-between  text-gray-700"><div>{review.feedback}</div> <span className="text-xs">{dateConvert(review.created)}</span></div>
             </div>
           ))}
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment-timezone';
-import { chatApi, messageApi } from '../../../store/Api';
+import { chatApi, messageApi } from  '../../../config/Api';
 import InputEmoji from "react-input-emoji";
 import SyncLoader from 'react-spinners/SyncLoader'
 import { io } from "socket.io-client";

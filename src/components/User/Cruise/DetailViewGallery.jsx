@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { baseApi } from "../../../store/Api";
+import { baseApi } from  '../../../config/Api';
 import { Carousel } from "react-responsive-carousel";
 
 export default function DetailViewGaller({ data }) {
@@ -42,7 +42,7 @@ export default function DetailViewGaller({ data }) {
               {data.Images?.length > 0 && (
                 <img
                   className="aspect-square object-cover rounded-l-3xl w-full h-full"
-                  src={`${baseApi}files/${data.Images[0]}`}
+                  src={data.Images[0]}
                   alt="img"
                 />
               )}
@@ -51,7 +51,7 @@ export default function DetailViewGaller({ data }) {
               {data.Images?.length > 0 && (
                 <img
                   className="aspect-square object-cover rounded-tr-3xl w-full h-full"
-                  src={`${baseApi}files/${data.Images[1]}`}
+                  src={data.Images[1]}
                   alt="img"
                 />
               )}
@@ -59,7 +59,7 @@ export default function DetailViewGaller({ data }) {
                 {data.Images?.length > 0 && (
                   <img
                     className="aspect-square rounded-br-[2.5rem] object-cover relative top-2 w-full h-full"
-                    src={`${baseApi}files/${data.Images[2]}`}
+                    src={data.Images[2]}
                     alt="img"
                   />
                 )}
@@ -73,7 +73,7 @@ export default function DetailViewGaller({ data }) {
        return <div style={{ position: "relative"}}>
 
 
-         <img   src={`${baseApi}files/${img}`}
+         <img   src={img}
         alt="Banner 1" className='img-banner'  />
 
 

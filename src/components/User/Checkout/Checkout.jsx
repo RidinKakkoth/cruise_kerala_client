@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { baseApi } from "../../../store/Api";
+import { baseApi } from  '../../../config/Api';
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useDispatch } from 'react-redux'
@@ -9,6 +9,7 @@ import { userAdd } from '../../../store/UserAuth'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { parseISO } from 'date-fns';
+import { orders, userSignin, verifyPayment } from "../../../config/UserEndpoints";
 
 
 function Checkout() {
@@ -41,20 +42,19 @@ function Checkout() {
 
   const dispatch=useDispatch()
   
-  const handleSignin=(e)=>{
+  const handleSignin=async(e)=>{
 
     e.preventDefault()
-axios.post(`${baseApi}userSignin`,{email,password},{withCredentials:true}).then((response)=>{
 
- const result=response.data.userLogin
-
- if(result.status){
-  dispatch(userAdd({token:result.token,userName:result.name}))
-  navigate(0)
-  toast.success("Login Success",{position: "top-center"})
- }
-
-}).catch((error)=>{toast.error(error.response.data.error,{position: "top-center"})})
+    const data=await userSignin(email,password)
+        const result=data?.userLogin
+        if(data.status==="failed"){
+         toast.error(data.message,{position: "top-center"})
+        }
+          else if(result.status){
+             dispatch(userAdd({token:result.token,userName:result.name}))
+             navigate(0)
+             }
   }
 
 
@@ -73,12 +73,15 @@ const initPayment=(recievedData)=>{
     order_id:recievedData.id,
     handler:async(response)=>{
       try {
-        await axios.post(`${baseApi}verify`,response,{withCredentials:true}).then((res)=>{
-            const bookedData=res.data.bookedData
-            localStorage.clear()
-            navigate('/confirmation',{state:{data,bookedData}}) // Navigate to confirmation
+        
+        const newData=await verifyPayment(response)
+        if(newData){
           
-        }).catch(err=>console.log(err))
+            const bookedData=newData.bookedData
+            localStorage.clear()
+            navigate('/confirmation',{state:{data,bookedData}})
+        }
+
       } catch (error) {
         console.log(error);
       }
@@ -100,12 +103,12 @@ const handlePayment=async()=>{
 
       try {
 
-       axios.post(`${baseApi}orders`,{totalAmount,guest,checkOutDate,checkInDate,cruiseId},{withCredentials:true}).then((res)=>{
-          
+        const data=await orders(totalAmount,guest,checkOutDate,checkInDate,cruiseId)
+        if(data){
+          initPayment(data.data)
+         
+        }
 
-          initPayment(res.data.data)
-
-        }).catch(err=>console.log(err))
       } catch (error) {
         console.log(error);
       }
@@ -145,7 +148,7 @@ const handlePayment=async()=>{
               <div>
                 <img
                   className="mt-3 border ms-3 h-28 w-28 object-cover rounded-xl"
-                  src={`${baseApi}files/${data.cruiseImg[0]}`}
+                  src={data.cruiseImg[0]}
                   alt="thumbnail"
                 />
               </div>

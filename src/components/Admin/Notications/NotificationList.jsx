@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
-import axios from 'axios';
-import { adminApi } from '../../../store/Api';
+import { deleteNotifications, getNotification } from '../../../config/AdminEndpoints';
 
 function NotificationList() {
     
@@ -10,21 +9,19 @@ function NotificationList() {
     const [refresh,setRefresh]=useState(false)
     const [notifications,setNotifications]=useState([])
 
-
     useEffect(()=>{
-        axios.get(`${adminApi}get-notification`,{withCredentials:true}).then((res)=>{
-            setNotifications(res.data.data)
-        }).catch((err)=>{console.log(err)})
+      async function invoke(){
+        const data=await getNotification() 
+        setNotifications(data.data)     
+      }
+      invoke()
     },[refresh])
 
-    const deleteNotification = (id) => {
 
-        axios.delete(`${adminApi}delete-notification/${id}`,{withCredentials:true}).then((res)=>{
-            
-            setRefresh(!refresh);
-        }).catch((err)=>{console.log(err)})
-    };
-    
+    const deleteNotification = async(id) => {
+      await deleteNotifications(id)
+      setRefresh(!refresh);
+    };  
     
     return (
         <>
@@ -34,8 +31,8 @@ function NotificationList() {
           {notifications?.map((notif,index) => (
             <>
              {notif?.status === "success" && (
-                <div key={index}  className="flex justify-between bg-white rounded-lg mb-5 ">
-                  <div className="sm:px-6 p-2 flex  sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-green-400 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
+                <div key={index}  className="flex shadow justify-between bg-white rounded-lg mb-5 ">
+                  <div className="sm:px-6  flex   sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-green-400 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="text-black"
@@ -100,7 +97,7 @@ function NotificationList() {
     
               {notif?.status === "danger" && (
                 <div  className="flex justify-between bg-white rounded-lg mb-5">
-                  <div className="sm:px-6 p-2 flex mt-4 sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-red-500 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
+                  <div className="sm:px-6  flex mt-4 sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-red-500 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width={40}

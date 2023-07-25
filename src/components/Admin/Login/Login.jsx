@@ -3,41 +3,33 @@ import {useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import { adminAdd } from "../../../store/AdminAuth";
 import React, { useState } from "react";
-import { adminApi } from "../../../store/Api";
-import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { adminSignin } from "../../../config/AdminEndpoints";
 
 
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [error, setError] = useState(null);
   const dispatch=useDispatch()
   const navigate=useNavigate()
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     
     e.preventDefault()
-    axios.post(`${adminApi}adminSignin`,{email,password},{withCredentials:true}).then((response)=>{
-      const result=response.data.adminLogin
 
-      if(response.data.message){
-        
-        toast.success(response.data.message,{position: "top-center"})
+const data=await adminSignin(email,password)
+      const result=data?.adminLogin
+      if(data.status==="failed"){
+       toast.error(data.message,{position: "top-center"})
       }
-
-      if(result.status){
-        
-        dispatch(adminAdd({token:result.token}))
-        navigate('/admin/dashboard')
-      }
-
-    }).catch((error)=>toast.error(error.response.data.message,{position: "top-center"}) )};
-
-
+        else if(result.status){
+             dispatch(adminAdd({token:result.token}))
+              navigate('/admin/dashboard')
+           }
+  }
 
   return (
     <div>
@@ -83,8 +75,6 @@ function Login() {
               </button>
             </div>
           </form>
-
-          {/* <p>{error}</p> */}
         </div>
       </div>
     </div>

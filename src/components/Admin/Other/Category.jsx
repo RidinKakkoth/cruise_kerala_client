@@ -9,9 +9,9 @@ import PlaylistAddCircleIcon from '@mui/icons-material/PlaylistAddCircle';
 import { Input } from '@mobiscroll/react';
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
-import axios from 'axios';
-import { adminApi } from '../../../store/Api';
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { addCategory } from '../../../config/AdminEndpoints';
 
 const style = {
   position: 'absolute',
@@ -33,20 +33,22 @@ export default function Category() {
   const navigate=useNavigate()
 
  const handleCancel=()=>setOpen(false);
- const data={categoryName:category}
-  const handleSave=()=>{
-    axios.post(`${adminApi}add-category`,data,{withCredentials:true}).then((res)=>{
-      setOpen(false);
-      navigate(0)
-      
-    }).catch((error)=>{
-      console.log(error);
-    })
+ const catData={categoryName:category}
+  const handleSave=async ()=>{
+       const data= await addCategory(catData)
+       if(data.status==='failed'){
+        toast.error(data.message,{position: "top-center"})
+       }
+       else
+         {setOpen(false);
+         navigate(0)
+         toast.success("success",{position: "top-center"})}
   }
+
 
   return (
     <div>
-      
+            <ToastContainer autoClose={3000} />
       <Button onClick={handleOpen} variant="outlined" style={{marginBottom:"20px"}} startIcon={<PlaylistAddCircleIcon />}>
       Add Category
 </Button >

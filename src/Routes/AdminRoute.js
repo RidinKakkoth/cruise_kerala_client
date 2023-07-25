@@ -11,7 +11,6 @@ import CruiseSingle from '../pages/AdminPage/CruiseSingle'
 import OtherManagements from '../pages/AdminPage/OtherManagements'
 import Bookings from '../pages/AdminPage/Bookings'
 import UserDetail from '../pages/AdminPage/UserDetail'
-import Chatbox from '../components/Admin/Chatbox/Chatbox'
 import ChatBox from '../pages/AdminPage/ChatBox'
 import Notification from '../pages/AdminPage/Notification'
 

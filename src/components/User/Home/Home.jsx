@@ -6,24 +6,33 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Footer from '../../Shared/Footer/Footer';
 import Cards from '../Cruise/Cards';
 import axios from 'axios';
-import { baseApi } from '../../../store/Api';
+import { baseApi } from  '../../../config/Api';
+import ChatBot from '../../Shared/ChatBot';
+import { useSelector } from 'react-redux';
+import { cruiseData } from '../../../config/UserEndpoints';
 
 function Home() {
+  const user=useSelector(state=>state.User.userToken)
   const[cards,setCards]=useState([])
 
+
   useEffect(() => {
-    axios.get(`${baseApi}cruise-data`, { withCredentials: true })
-      .then((res) => {
-        const firstThreeElements = res.data.slice(0, 3);
+    async function invoke(){
+      const data=await cruiseData()
+      if(data){
+       const firstThreeElements = data?.data.slice(0, 3);
         setCards(firstThreeElements);
-      })
-      .catch((error) => console.log(error));
+      }
+    }
+    invoke()
   }, []);
+
   
 
   return (
     <div>
       <Navbar />
+      {user&&<ChatBot/>}
       <div className='home' style={{ marginTop: "5px" }}>
         <Carousel autoPlay infiniteLoop interval={3000} showThumbs={false} showArrows={false}>
           <div style={{ position: "relative"}}>
@@ -46,6 +55,7 @@ We help you find the best Kerala boat house that suit your requirement.</p>
           
         </Carousel>
         <div className='container' style={{ padding: "20px" }}>
+         
             <Cards data={cards}/>
         </div>
       </div>

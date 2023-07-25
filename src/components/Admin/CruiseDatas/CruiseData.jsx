@@ -14,34 +14,30 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Loading from '../../Shared/Loading'
-
-import axios from 'axios';
-import { adminApi, baseApi, partnerApi } from '../../../store/Api';
+import { baseApi } from  '../../../config/Api';
 
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { blockCruise, cruiseApproval, cruiseData, getPartnerProfileData } from "../../../config/AdminEndpoints";
 
 
 function CruiseData({ status }) {
   const [cruiseDetails, setCruiseDetails] = useState([]);
   const[loading,setLoading]=useState(true)
+  const[trigger,setTrigger]=useState(true)
   const navigate = useNavigate();
 
-  const handleProfile = (id) => {
-    axios
-      .get(`${adminApi}getPartnerProfileData?id=${id}`, { withCredentials: true })
-      .then((res) => {
-        const profileData = res.data.partnerData;
-        navigate('/admin/partner-profile', { state: profileData });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleProfile =async (id) => {
+ const data=  await getPartnerProfileData(id)
+      if(data){
+        const profileData = data.partnerData;
+       navigate('/admin/partner-profile', { state: profileData });
+       }
   };
 
-  const handleRequest = (status, id) => {
+  const handleRequest =async (status, id) => {
   
     Swal.fire({
       title: 'Are you sure?',
@@ -52,40 +48,29 @@ function CruiseData({ status }) {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
-    
-        axios
-          // .patch(`${adminApi}cruise-approval?result=${status}&id=${id}`, { withCredentials: true })
-          .get(`${adminApi}cruise-approval?result=${status}&id=${id}`, { withCredentials: true })
-          .then((res) => {
- 
-            navigate(0);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        // handle cancel logic
+
+        async function invoke(){
+          const data=await cruiseApproval(status,id)
+          if(data) setTrigger(!trigger);         
+        }
+        invoke()
+      } else if (result.dismiss === Swal.DismissReason.cancel) {  
       }
     });
   };
 
-  const handleBlock = (id) => {
-    console.log(id);
+  const handleBlock =async (id) => {
 
-    axios
-      .patch(`${partnerApi}blockCruise?id=${id}`, { withCredentials: true })
-      .then((res) => {
-        toast.success('Success', { position: 'top-center' });
-        navigate(0);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const data=await blockCruise(id)
+    if(data){    
+      setTrigger(!trigger); 
+          toast.success('Success', { position: 'top-center' });
+    }
   };
 
   const handleProof = (proof) => {
     const link = document.createElement('a');
-    link.href = `${baseApi}files/${proof}`;
+    link.href = proof.pdf
     link.download = proof;
     document.body.appendChild(link);
     link.click();
@@ -96,20 +81,15 @@ function CruiseData({ status }) {
         navigate('/admin/cruises-single',{state:obj})
   }
 
-  // const theme = useTheme();
-
   useEffect(() => {
-    axios
-      .get(`${adminApi}cruise-data`, { withCredentials: true })
-      .then((res) => {
-        setLoading(false)
-      console.log(res.data.data);
-        setCruiseDetails(res.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+
+   async function invoke(){
+    const data=await cruiseData()
+    setLoading(false)
+    setCruiseDetails(data.data);
+   }
+   invoke()
+  }, [trigger]);
 
   return (
     <div className="cruise-container  ">
@@ -117,7 +97,6 @@ function CruiseData({ status }) {
       {/* <div className=" cruise-container"> */}
      {!loading?( <>
         <ToastContainer autoClose={1000} />
-     {   console.log(cruiseDetails)}
         {cruiseDetails?.map((obj, index) => {
           
           if ((status && obj.isApproved === 'verified') || (!status && obj.isApproved === 'pending')) {
@@ -200,7 +179,7 @@ function CruiseData({ status }) {
                   <CardMedia
                     component="img"
                     sx={{ width: 151, height: '100%' }}
-                    src={`${baseApi}files/${obj.Images[0]}`}
+                    src={obj.Images[0]}
                     alt="Cruise"
                   />
                   <div
@@ -223,9 +202,11 @@ function CruiseData({ status }) {
         })}
 
        </>):(
-       <Loading/>
+             <div className='flex justify-center h-[100vh] items-center'>
+             <Loading/>
+           </div>
     )}
-      {/* </div> */}
+    
     </div>
   );
 }

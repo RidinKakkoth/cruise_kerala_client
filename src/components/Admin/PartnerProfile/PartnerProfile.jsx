@@ -9,46 +9,46 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
 import './PartnerProfile.css';
-import { adminApi, baseApi } from '../../../store/Api';
+import { adminApi, baseApi } from  '../../../config/Api';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import { partnerApproval } from '../../../config/AdminEndpoints';
+import Sidebar from '../../Shared/Sidebar/Sidebar';
 
 const PartnerProfile = () => {
   const location = useLocation();
 
-  
-
-  const { name, email, phone, companyName, isApproved, image, proof, _id } = location.state
-  
+  const { name, email, phone, companyName, isApproved, image, proof, _id } = location.state  
 
   const [status, setStatus] = useState(isApproved);
 
   const handleDownload = () => {
     const link = document.createElement('a');
-    link.href = `${baseApi}files/${proof}`;
+    link.href = `${proof}`;
     link.download = proof;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const handleRequest = (result) => {
+  const handleRequest = async(result) => {
+    
+     const data=await partnerApproval(result,_id)
+     if(data){
+              const resData = data.status;
+              setStatus(resData);
+     }
+
    
-    axios
-      // .patch(`${adminApi}partner-approval?result=${result}&id=${_id}`, { withCredentials: true })
-      .get(`${adminApi}partner-approval?result=${result}&id=${_id}`, { withCredentials: true })
-      .then((res) => {
-        const resData = res.data.status;
-        setStatus(resData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
+
   return (
-    <div className="centered-container-partner-profile">
-      <Card className="profile-card-partner">
+   <div className='flex '>
+    <Sidebar userType={"admin"}   />
+    <div className="centered-container-partner-profile mx-auto">
+      
+      <Card className="profile-card-partner rounded-3xl shadow">
         <h3 style={{ marginLeft: '100px' }}>PROFILE</h3>
         <div>
           {status === 'verified' ? (
@@ -72,14 +72,19 @@ const PartnerProfile = () => {
             <p>
               Status: <span style={status === 'verified' ? { color: '#00c600' } : { color: 'orange' }}>{status}</span>
             </p>
-            <p>
+{       status==="verified"|| status==="pending"?  <p>
               Proof: <span onClick={handleDownload} style={{ color: '#f74e0c', cursor: 'pointer' }}>
-                <AttachFileIcon /> {proof}
+                <AttachFileIcon /> View
               </span>
-            </p>
+            </p>:""}
             {status === 'verified' ? (
               ''
-            ) : (
+            ) : 
+            status==='upload proof'?<p className='text-red-500'>pending proof upload</p>
+            
+            
+            
+            :(
               <div>
                 <Button
                   onClick={() => handleRequest('verified')}
@@ -102,6 +107,7 @@ const PartnerProfile = () => {
         </div>
       </Card>
     </div>
+   </div>
   );
 };
 
