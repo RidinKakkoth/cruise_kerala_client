@@ -52,12 +52,14 @@ export async function  orders (totalAmount,guest,checkOutDate,checkInDate,cruise
         return {status:'failed',message:'Network error'}
     }
 }
-export async function sendOTP(email){
+export async function sendOTP(email,role){
     try {
-        const {data} = await userAxiosInstance.post("sendOTP", { email });
+        const {data} = await userAxiosInstance.post("sendOTP", { email,role });
         return data;
     } catch (error) {
-        return {error:error.message}
+        
+        
+        return {status:false,message:error.response.data.message}
     }
 }
 export async function verifyOTP(email,otp){

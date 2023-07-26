@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import {Link, useNavigate} from "react-router-dom"
-import axios from 'axios'
-import { partnerApi } from  '../../../config/Api';
 import './SignUp.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { partnerSignUp } from '../../../config/PartnerEndpoints';
+import { partnerSignUp, sendOTP, verifyOTP } from '../../../config/PartnerEndpoints';
+import PartnerSignupValidation from '../../../utils/PartnerSignupValidation '
+import OtpModal from '../../Shared/OtpModal/OtpModal';
 
 function SignUp() {
     const [name,setName]=useState("")
@@ -13,30 +13,94 @@ function SignUp() {
     const [phone,setPhone]=useState("")
     const [company,setCompany]=useState("")
     const[password,setPassword]=useState("")
-    // const[error,setError]=useState(null)
-    
+
+    const [otpModalOpen, setOtpModalOpen] = useState(false);
+    const { validateForm } = PartnerSignupValidation(); // Use the custom hook
+
     const navigate=useNavigate()
     
     const handleSubmit=async(e)=>{
     
     e.preventDefault()
 
-      const data=await partnerSignUp(email,password,phone,name,company)
-      if(data.status==="failed"){
-        toast.error(data.message,{position: "top-center"})
+    const errors = validateForm({ name,company, email, phone, password }); // Pass form values to the validation function
+
+      if (Object.keys(errors).length > 0) {
+        // Display error messages using toast
+        Object.values(errors).forEach((message) => {
+          toast.error(message, { position: 'top-center' });
+        });
+        return;
       }
-      else{
-        navigate('/partner')
+      const role="partner"
+      const data= await sendOTP(email,role)
+
+      if(data.status){
+        setOtpModalOpen(true)
+      }else if(data.status===false){
+        toast.error(data.message,{ position: 'top-center' })
       }
+
+
+      // const data=await partnerSignUp(email,password,phone,name,company)
+      // if(data.status==="failed"){
+      //   toast.error(data.message,{position: "top-center"})
+      // }
+      // else{
+      //   navigate('/partner')
+      // }
     
     } 
+
+
+
+
+
+    const handleVerifyOTP = async (otp) => {
+      try {
+        const verifiedData = await verifyOTP(email, otp);
+  
+        if (verifiedData.status) {
+          toast.success('Verified..Please login', { position: 'top-center' });
+          // Wait for the toast to be displayed, then call the signup function
+          setTimeout(async () => {
+            await partnerSignUp(email,password,phone,name,company)
+              .then((data) => {
+                if (data.status === 'failed') {
+                  toast.error(data.message, { position: 'top-center' });
+                } else {
+                  navigate('/partner');
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }, 3000);
+        }
+  
+        setOtpModalOpen(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+
+
+
+
+
+
+
+
+
+
 
     
     
       return (
         <div>
-          <ToastContainer autoClose={3000} />
           <div className="partner-login-body">
+          <ToastContainer autoClose={3000} />
             <div className="partner-card">
             <img
         className='mx-auto mt-2'
@@ -119,6 +183,8 @@ function SignUp() {
                      <Link style={{textDecoration:"none",color:"blue"}} to={'/partner'}>login</Link>
                     </div>
             </div>
+            <OtpModal user={email} isOpen={otpModalOpen} onRequestClose={() => setOtpModalOpen(false)} handleVerifyOTP={handleVerifyOTP} />
+
           </div>
         </div>
       )

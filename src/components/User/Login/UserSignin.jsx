@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
-import { baseApi } from  '../../../config/Api';
 import { userAdd } from '../../../store/UserAuth'
 import './UserSignin.css'
 import { Link, useNavigate } from 'react-router-dom'

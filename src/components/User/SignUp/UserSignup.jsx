@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { sendOTP, userSignUp, verifyOTP } from '../../../config/UserEndpoints';
 import OtpModal from '../../Shared/OtpModal/OtpModal';
 import UserSignupValidation from '../../../utils/UserSignupValidation'
-import axios from 'axios';
+
 
 function UserSignup() {
     const [name,setName]=useState("")
@@ -32,18 +32,14 @@ function UserSignup() {
         });
         return;
       }
-      setOtpModalOpen(true)
-      // await axios.post("/sendOTP", { email });
-      const data=await sendOTP(email)
+      const role="user"
+     const data= await sendOTP(email,role)
     
-      
-      // const data=await userSignUp(email,password,phone,name)
-      // if(data.status==="failed"){
-      //   toast.error(data.message,{position: "top-center"})
-      // }
-      // else{
-      //   navigate('/signin')
-      // }
+      if(data.status){
+        setOtpModalOpen(true)
+      }else if(data.status===false){
+        toast.error(data.message,{ position: 'top-center' })
+      }
     };
 
 

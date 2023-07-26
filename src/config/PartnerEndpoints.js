@@ -104,3 +104,21 @@ export async function  blockCruise (id){
         return {status:'failed',message:'Network error'}
     }
 }
+export async function sendOTP(email,role){
+    try {
+        const {data} = await partnerAxiosInstance.post("sendOTP", { email,role });
+        return data;
+    } catch (error) {
+        
+        
+        return {status:false,message:error.response.data.message}
+    }
+}
+export async function verifyOTP(email,otp){
+    try {
+        const {data} = await partnerAxiosInstance.post("verifyOTP", { email,otp });
+        return data;
+    } catch (error) {
+        return {error:error.message}
+    }
+}
