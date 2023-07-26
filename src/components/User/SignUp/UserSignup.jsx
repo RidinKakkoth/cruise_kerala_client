@@ -3,33 +3,85 @@ import {Link, useNavigate} from "react-router-dom"
 import './UserSignup.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { userSignUp } from '../../../config/UserEndpoints';
+import { sendOTP, userSignUp, verifyOTP } from '../../../config/UserEndpoints';
+import OtpModal from '../../Shared/OtpModal/OtpModal';
+import UserSignupValidation from '../../../utils/UserSignupValidation'
+import axios from 'axios';
 
 function UserSignup() {
     const [name,setName]=useState("")
     const [email,setEmail]=useState("")
     const [phone,setPhone]=useState("")
     const[password,setPassword]=useState("")
+    
+    const [otpModalOpen, setOtpModalOpen] = useState(false);
+    const { validateForm } = UserSignupValidation(); // Use the custom hook
+
 
     
     const navigate=useNavigate()
     
     const handleSubmit = async(e) => {
       e.preventDefault();
-    
-      const data=await userSignUp(email,password,phone,name)
-      if(data.status==="failed"){
-        toast.error(data.message,{position: "top-center"})
+      const errors = validateForm({ name, email, phone, password }); // Pass form values to the validation function
+
+      if (Object.keys(errors).length > 0) {
+        // Display error messages using toast
+        Object.values(errors).forEach((message) => {
+          toast.error(message, { position: 'top-center' });
+        });
+        return;
       }
-      else{
-        navigate('/signin')
+      setOtpModalOpen(true)
+      // await axios.post("/sendOTP", { email });
+      const data=await sendOTP(email)
+    
+      
+      // const data=await userSignUp(email,password,phone,name)
+      // if(data.status==="failed"){
+      //   toast.error(data.message,{position: "top-center"})
+      // }
+      // else{
+      //   navigate('/signin')
+      // }
+    };
+
+
+  
+    const handleVerifyOTP = async (otp) => {
+      try {
+        const verifiedData = await verifyOTP(email, otp);
+  
+        if (verifiedData.status) {
+          toast.success('Verified..Please login', { position: 'top-center' });
+          // Wait for the toast to be displayed, then call the signup function
+          setTimeout(async () => {
+            await userSignUp(email, password, phone, name)
+              .then((data) => {
+                if (data.status === 'failed') {
+                  toast.error(data.message, { position: 'top-center' });
+                } else {
+                  navigate('/signin');
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }, 3000);
+        }
+  
+        setOtpModalOpen(false);
+      } catch (error) {
+        console.log(error);
       }
     };
+
+
     
       return (
         <div>
-          <ToastContainer autoClose={2000} />
           <div className="user-login-body">
+          <ToastContainer autoClose={2000} />
             <div className="user-card">
             <img
         className='mx-auto mt-2'
@@ -89,7 +141,7 @@ function UserSignup() {
 
     
                 <div className="user-btn-div">
-                <button type="submit" className="adminlogin-btn rounded-3xl shadow">
+              <button  type="submit" className="adminlogin-btn rounded-3xl shadow">
                 Sign up
               </button>
                 </div>
@@ -100,7 +152,10 @@ function UserSignup() {
                      <Link style={{textDecoration:"none",color:"blue"}} to={'/signin'}>login</Link>
                     </div>
             </div>
+            <OtpModal user={email} isOpen={otpModalOpen} onRequestClose={() => setOtpModalOpen(false)} handleVerifyOTP={handleVerifyOTP} />
           </div>
+      
+
         </div>
       )
 }

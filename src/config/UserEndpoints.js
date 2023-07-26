@@ -1,3 +1,4 @@
+import { async } from "react-input-emoji";
 import { userAxiosInstance } from "./axios";
 
 export async function  userSignUp (email,password,phone,name,company){
@@ -49,6 +50,22 @@ export async function  orders (totalAmount,guest,checkOutDate,checkInDate,cruise
         return data;
     }catch(error){
         return {status:'failed',message:'Network error'}
+    }
+}
+export async function sendOTP(email){
+    try {
+        const {data} = await userAxiosInstance.post("sendOTP", { email });
+        return data;
+    } catch (error) {
+        return {error:error.message}
+    }
+}
+export async function verifyOTP(email,otp){
+    try {
+        const {data} = await userAxiosInstance.post("verifyOTP", { email,otp });
+        return data;
+    } catch (error) {
+        return {error:error.message}
     }
 }
 

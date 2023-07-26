@@ -42,6 +42,7 @@ useEffect(()=>{
       <Route path='/confirmation' element={<ConfirmationPage />} />
       <Route path='/chatbox' element={<ChatboxPage />} />
       
+      
 
       
       </Routes>
