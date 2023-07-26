@@ -104,9 +104,9 @@ export async function  blockCruise (id){
         return {status:'failed',message:'Network error'}
     }
 }
-export async function sendOTP(email,role){
+export async function sendOTP(email){
     try {
-        const {data} = await partnerAxiosInstance.post("sendOTP", { email,role });
+        const {data} = await partnerAxiosInstance.post("sendOTP", { email });
         return data;
     } catch (error) {
         
@@ -122,3 +122,22 @@ export async function verifyOTP(email,otp){
         return {error:error.message}
     }
 }
+export async function partnerEmailCheck(email) {
+    try {
+      const { data } = await partnerAxiosInstance.get(`emailTest?email=${email}`);
+      return data;
+    } catch (error) {
+      console.error("Error in emailAuth:", error);
+      return { error: error.message };
+    }
+  }export async function resetPasswordPartner(email,password) {
+    try {
+      
+      const { data } = await partnerAxiosInstance.post("resetPassword",{email,password});
+      return data;
+    } catch (error) {
+      console.error("Error in emailAuth:", error);
+      return { error: error.message };
+    }
+  }
+  

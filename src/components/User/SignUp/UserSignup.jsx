@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom"
 import './UserSignup.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { sendOTP, userSignUp, verifyOTP } from '../../../config/UserEndpoints';
+import { sendOTP, userEmailCheck, userSignUp, verifyOTP } from '../../../config/UserEndpoints';
 import OtpModal from '../../Shared/OtpModal/OtpModal';
 import UserSignupValidation from '../../../utils/UserSignupValidation'
 
@@ -26,20 +26,27 @@ function UserSignup() {
       const errors = validateForm({ name, email, phone, password }); // Pass form values to the validation function
 
       if (Object.keys(errors).length > 0) {
-        // Display error messages using toast
         Object.values(errors).forEach((message) => {
           toast.error(message, { position: 'top-center' });
         });
         return;
       }
-      const role="user"
-     const data= await sendOTP(email,role)
-    
-      if(data.status){
-        setOtpModalOpen(true)
-      }else if(data.status===false){
-        toast.error(data.message,{ position: 'top-center' })
-      }
+     
+      const userExist=await userEmailCheck(email)
+
+     if(userExist.status){
+      toast.error("Email already exist",{ position: 'top-center' })
+     }
+     else{
+
+       const data= await sendOTP(email)
+       if(data.status){
+         setOtpModalOpen(true)
+       }else if(data.status===false){
+         toast.error(data.message,{ position: 'top-center' })
+       }
+     }
+   
     };
 
 

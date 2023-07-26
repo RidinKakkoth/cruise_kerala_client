@@ -1,4 +1,4 @@
-import { async } from "react-input-emoji";
+
 import { userAxiosInstance } from "./axios";
 
 export async function  userSignUp (email,password,phone,name,company){
@@ -52,9 +52,9 @@ export async function  orders (totalAmount,guest,checkOutDate,checkInDate,cruise
         return {status:'failed',message:'Network error'}
     }
 }
-export async function sendOTP(email,role){
+export async function sendOTP(email){
     try {
-        const {data} = await userAxiosInstance.post("sendOTP", { email,role });
+        const {data} = await userAxiosInstance.post("sendOTP", { email });
         return data;
     } catch (error) {
         
@@ -64,12 +64,32 @@ export async function sendOTP(email,role){
 }
 export async function verifyOTP(email,otp){
     try {
+        console.log(email,otp,"ppppppppppppp");
         const {data} = await userAxiosInstance.post("verifyOTP", { email,otp });
         return data;
     } catch (error) {
         return {error:error.message}
     }
 }
+export async function userEmailCheck(email) {
+    try {
+      const { data } = await userAxiosInstance.get(`emailTest?email=${email}`);
+      return data;
+    } catch (error) {
+      console.error("Error in emailAuth:", error);
+      return { error: error.message };
+    }
+  }
+export async function resetPassword(email,password) {
+    try {
+      const { data } = await userAxiosInstance.post("resetPassword",{email,password});
+      return data;
+    } catch (error) {
+      console.error("Error in emailAuth:", error);
+      return { error: error.message };
+    }
+  }
+  
 
 
 

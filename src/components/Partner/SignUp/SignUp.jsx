@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom"
 import './SignUp.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { partnerSignUp, sendOTP, verifyOTP } from '../../../config/PartnerEndpoints';
+import { partnerEmailCheck, partnerSignUp, sendOTP, verifyOTP } from '../../../config/PartnerEndpoints';
 import PartnerSignupValidation from '../../../utils/PartnerSignupValidation '
 import OtpModal from '../../Shared/OtpModal/OtpModal';
 
@@ -32,23 +32,21 @@ function SignUp() {
         });
         return;
       }
-      const role="partner"
-      const data= await sendOTP(email,role)
+      const userExist=await partnerEmailCheck(email)
+      
 
-      if(data.status){
-        setOtpModalOpen(true)
-      }else if(data.status===false){
-        toast.error(data.message,{ position: 'top-center' })
+      if(userExist.status){
+        toast.error("Email already exist",{ position: 'top-center' })
+      } 
+      else{
+
+        const data= await sendOTP(email)
+        if(data.status){
+          setOtpModalOpen(true)
+        }else if(data.status===false){
+          toast.error(data.message,{ position: 'top-center' })
+        }
       }
-
-
-      // const data=await partnerSignUp(email,password,phone,name,company)
-      // if(data.status==="failed"){
-      //   toast.error(data.message,{position: "top-center"})
-      // }
-      // else{
-      //   navigate('/partner')
-      // }
     
     } 
 

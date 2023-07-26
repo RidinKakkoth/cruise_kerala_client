@@ -10,6 +10,7 @@ const OtpModal = ({user, isOpen, onRequestClose, handleVerifyOTP }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Call the function to verify OTP
+    onRequestClose()//===========
     handleVerifyOTP(otp);
   };
   const inputRefs = useRef([]);
@@ -60,7 +61,6 @@ const OtpModal = ({user, isOpen, onRequestClose, handleVerifyOTP }) => {
       
       <form  className="flex " onSubmit={handleSubmit}>
         
-        {/* <input className="" type="text" value={otp} onChange={(e) => setOtp(e.target.value)} /> */}
         <div style={{ display: "flex flex-col", justifyContent: "center" }}>
           {Array.from({ length: 6 }, (_, index) => (
             <input
