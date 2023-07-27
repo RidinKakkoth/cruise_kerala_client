@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  cruiseData,
-  getBookings,
-  getNotification,
-  getPartnerData,
-} from "../../../config/AdminEndpoints";
+import { cruiseData,  getBookings, getNotification,  getPartnerData,} from "../../../config/AdminEndpoints";
 import AdminChart from "./AdminChart";
 import SailingIcon from "@mui/icons-material/Sailing";
+import SalesReport from "./SalesReport";
+import Loading from "../../Shared/Loading";
 
 function Dashboard() {
   const [count, setCount] = useState();
@@ -15,11 +12,13 @@ function Dashboard() {
   const [data, setData] = useState([]);
   const [partner, setPartner] = useState([]);
   const [cruise, setCruise] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function invoke() {
       const { bookingData } = await getBookings();
       setData(bookingData);
+      setLoading(false)
     }
     invoke();
   }, []);
@@ -38,15 +37,6 @@ function Dashboard() {
     return data.reduce((accumultaor, rate) => {
       return (accumultaor += rate.total);
     }, 0);
-  };
-  const totalCustomers = () => {
-    const userData = [];
-    data.forEach((item) => {
-      userData.push(item.userId._id);
-    });
-
-    const distinctData = new Set(userData);
-    return distinctData.size;
   };
 
   useEffect(() => {
@@ -67,6 +57,8 @@ function Dashboard() {
 
   return (
     <div className="bg-gray-200 rounded">
+      
+      {!loading?<>
       <div className="flex  justify-end mt-3 py-2 me-3">
         <button
           onClick={handleChat}
@@ -115,7 +107,7 @@ function Dashboard() {
 
       <div className="grid bg-gray-200 py-3 grid-cols-1 md:grid-cols-4 gap-10 rounded-md container mt-2 mb-5 w-full">
         <div className="bg-white text-center shadow-2xl justify-around rounded-lg h-40 grid grid-cols-2 items-center  px-4 group group hover:scale-105 transform transition-transform">
-          <div className="col-span-2 text-xl  font-bold border-b-2 py-3">
+          <div className="col-span-2 text-base  font-bold border-b-2 py-3">
             REVENUE
           </div>
           <div className="col-span-1 mx-auto   ">
@@ -125,7 +117,7 @@ function Dashboard() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-12 h-12"
+              className="w-10 h-10"
             >
               <path
                 strokeLinecap="round"
@@ -134,25 +126,25 @@ function Dashboard() {
               />
             </svg>
           </div>
-          <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">
+          <div className="col-span-1 font-medium text-green-600 text-base mx-auto">
             ₹ {totalRevenue()}
           </div>
         </div>
 
         <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center group hover:scale-105 transform transition-transform  px-4">
-          <div className="col-span-2 text-xl  font-bold border-b-2 py-3">
+          <div className="col-span-2 text-base  font-bold border-b-2 py-3">
             CRUISES
           </div>
           <div className="col-span-1 mx-auto  px-12 ">
             <SailingIcon sx={{ width: "40px", height: "40px" }} />
           </div>
-          <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">
+          <div className="col-span-1 font-medium text-green-600 text-base mx-auto">
             {" "}
             {cruise}
           </div>
         </div>
         <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center group hover:scale-105 transform transition-transform  px-4">
-          <div className="col-span-2 text-xl  font-bold border-b-2 py-3">
+          <div className="col-span-2 text-base  font-bold border-b-2 py-3">
             PARTNERS
           </div>
           <div className="col-span-1 mx-auto  px-12 ">
@@ -162,7 +154,7 @@ function Dashboard() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-12 h-12"
+              className="w-10 h-10"
             >
               <path
                 strokeLinecap="round"
@@ -171,14 +163,14 @@ function Dashboard() {
               />
             </svg>
           </div>
-          <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">
+          <div className="col-span-1 font-medium text-green-600 text-base mx-auto">
             {" "}
             {partner}
           </div>
         </div>
 
         <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center group hover:scale-105 transform transition-transform px-4">
-          <div className="col-span-2 text-xl  font-bold border-b-2 py-3">
+          <div className="col-span-2 text-base  font-bold border-b-2 py-3">
             TOTAL BOOKINGS
           </div>
           <div className="col-span-1 mx-auto  px-12">
@@ -188,7 +180,7 @@ function Dashboard() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="#011742"
-              className="w-12 h-12"
+              className="w-10 h-10"
             >
               <path
                 strokeLinecap="round"
@@ -197,7 +189,7 @@ function Dashboard() {
               />
             </svg>
           </div>
-          <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">
+          <div className="col-span-1 font-medium text-green-600 text-base mx-auto">
             {data?.length > 0 ? data?.length : ""}
           </div>
         </div>
@@ -205,6 +197,8 @@ function Dashboard() {
       <div className="w-full sm:w-[100%]">
         <AdminChart data={data} />
       </div>
+      <SalesReport loading={loading} data={data}/>
+      </>:<div className="flex justify-center items-center h-[100vh]"><Loading/></div>}
     </div>
   );
 }

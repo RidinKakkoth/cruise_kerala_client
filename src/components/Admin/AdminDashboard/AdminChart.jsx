@@ -106,13 +106,13 @@ const AdminChart = ({ data }) => {
     <div className='grid grid-cols-1 md:grid-cols-2 ms-3 gap-10'>
       {/* Monthly Sales Chart */}
       <div className='rounded-lg bg-white mb-3 group h shadow-2xl ps-4 w-[90%]'>
-        <h3 className='mb-5 pt-5'>Monthly Revenue Chart</h3>
+        <h4 className='mb-5 pt-5'>Monthly Revenue Chart</h4>
         <ReactApexChart options={monthlyChartData.options} series={monthlyChartData.series} type="bar" height={350} />
       </div>
 
       {/* Donut Chart */}
       <div className='rounded-lg bg-white  shadow-2xl mb-3 ps-4 w-[90%]'>
-        <h3 className='mb-5 pt-5'>Cruise wise Booking Chart</h3>
+        <h4 className='mb-5 pt-5'>Cruise wise Booking Chart</h4>
         <ReactApexChart options={donutChartOptions} series={donutChartSeries} type="donut" height={350} />
       </div>
     </div>

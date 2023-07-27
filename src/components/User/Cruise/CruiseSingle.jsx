@@ -46,6 +46,9 @@ function CruiseSingle() {
   const [extraGuest, setExtraGuest] = useState(0);
   const [inDateError, setInDateError] = useState(false);
   const [outDateError, setOutDateError] = useState(false);
+  const [tax, setTax] = useState(0);
+  const [fee, setFee] = useState(0);
+
 
 
 const [checkInDate, setCheckInDate] = useState(() => {
@@ -128,6 +131,8 @@ bookedDates.forEach((dates, index) => {
     numOfNights,
     guest,
     totalAmount,
+    tax,
+    fee,
     cruiseName: data.name,
     cruiseImg: data.Images,
     cruisePlace: data.boarding,
@@ -216,8 +221,13 @@ bookedDates.forEach((dates, index) => {
     const extraRate = data.extraRate;
   
     if (numOfNights > 0 && extraGuest >= 0) {
-      setTotalAmount(
-        pricePerNight * numOfNights + extraGuest * numOfNights * extraRate
+     const totalNoTax= pricePerNight * numOfNights + extraGuest * numOfNights * extraRate
+     setTax(totalNoTax/10)
+     setFee(totalNoTax/10)
+    const updatedTotal=totalNoTax+(totalNoTax/10)*2
+
+      setTotalAmount(updatedTotal
+        // pricePerNight * numOfNights + extraGuest * numOfNights * extraRate
       );
     }
   }, [numOfNights, extraGuest, data.baseRate, data.extraRate]);
@@ -282,7 +292,7 @@ bookedDates.forEach((dates, index) => {
           style={{ borderRadius: "20px" }}
         >
           <div id="head-price" className=" text-center">
-            Price: ₹{data.baseRate}/ per night
+            Price: ₹{data.baseRate}/ per day
           </div>
 
           <div className="border rounded-2xl mt-4 mb-4">
@@ -351,6 +361,14 @@ bookedDates.forEach((dates, index) => {
             <p className="mb-3">
               <span style={{ fontWeight: "600" }}>Number of Guests : </span>
               {guest}
+            </p>
+            <p className="mb-3">
+              <span style={{ fontWeight: "600" }}>Cruise Fee :  ₹</span>
+             { fee}{" "}
+            </p>
+            <p className="mb-3">
+              <span style={{ fontWeight: "600" }}>Tax :  ₹</span>
+              {tax}{" "}
             </p>
           </div>
           <div>

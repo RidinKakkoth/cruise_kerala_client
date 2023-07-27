@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import PartnerChart from "./PartnerChart";
 import { getBookings } from "../../../config/PartnerEndpoints";
+import SalesReport from "../../Shared/Sales/SalesReport"
+import Loading from "../../Shared/Loading";
 
 function Dashboard() {
   const[data,setData]=useState([])
+  const [loading, setLoading] = useState(true);
  
   useEffect(()=>{
       async function invoke(){
         const {data}=await getBookings()
         setData(data)
+        setLoading(false)
       }
       invoke()
   },[])
@@ -31,9 +35,10 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col w-screen container">
-      <div className="grid bg-gray-200 py-3 grid-cols-1 md:grid-cols-3 gap-10 rounded-md container mt-5 mb-5 w-full">
-        <div className="bg-white text-center shadow-2xl  rounded-lg h-52 grid grid-cols-2 items-center  px-4">
-          <div className="col-span-2 text-xl  font-bold border-b-2 py-3">
+     {!loading? <>
+      <div className="grid bg-gray-100 py-3 grid-cols-1 md:grid-cols-3 gap-10 rounded-md container mt-5 mb-5 w-full">
+        <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center  px-4">
+          <div className="col-span-2 text-base text-[#011742] font-bold border-b-2 py-3">
             REVENUE
           </div>
           <div className="col-span-1 mx-auto border-r-2 px-12 ">
@@ -42,8 +47,8 @@ function Dashboard() {
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-12 h-12"
+              stroke="#011742"
+              className="w-10 h-10"
             >
               <path
                 strokeLinecap="round"
@@ -55,8 +60,8 @@ function Dashboard() {
           <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">₹ {totalRevenue()}</div>
         </div>
 
-        <div className="bg-white text-center shadow-2xl  rounded-lg h-52 grid grid-cols-2 items-center px-4">
-          <div className="col-span-2 text-xl  font-bold border-b-2 py-3">
+        <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center px-4">
+          <div className="col-span-2 text-base text-[#011742] font-bold border-b-2 py-3">
             TOTAL BOOKINGS
           </div>
           <div className="col-span-1 mx-auto border-r-2 px-12">
@@ -66,7 +71,7 @@ function Dashboard() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="#011742"
-              className="w-12 h-12"
+              className="w-10 h-10"
             >
               <path
                 strokeLinecap="round"
@@ -78,8 +83,8 @@ function Dashboard() {
           <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">{data.length>0?data?.length:""}</div>
         </div>
 
-        <div className="bg-white text-center shadow-2xl  rounded-lg h-52 grid grid-cols-2 items-center px-4">
-          <div className="col-span-2 text-xl  font-bold border-b-2 py-3">
+        <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center px-4">
+          <div className="col-span-2 text-base text-[#011742] font-bold border-b-2 py-3">
             CUSTOMERS
           </div>
           <div className="col-span-1 mx-auto border-r-2 px-12">
@@ -88,8 +93,8 @@ function Dashboard() {
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-12 h-12"
+              stroke="#011742"
+              className="w-10 h-10"
             >
               <path
                 strokeLinecap="round"
@@ -104,6 +109,8 @@ function Dashboard() {
       <div className="w-full sm:w-[100%]">
         <PartnerChart data={data} />
       </div>
+      <SalesReport loading={loading} data={data}/>
+      </>:<div className="flex justify-center items-center h-[100vh]"><Loading/></div>}
     </div>
   );
 }

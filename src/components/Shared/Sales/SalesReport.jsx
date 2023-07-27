@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import Loading from "../../Shared/Loading";
+import Loading from "../Loading";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 
-import  downloadPdf  from "../../Shared/Sales/PdfCreator"; 
+import  downloadPdf  from "./PdfCreator"; 
 
 
 function SalesReport({loading,data}) {

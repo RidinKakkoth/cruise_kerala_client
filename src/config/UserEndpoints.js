@@ -44,9 +44,9 @@ export async function  verifyPayment (response){
         return {status:'failed',message:'Network error'}
     }
 }
-export async function  orders (totalAmount,guest,checkOutDate,checkInDate,cruiseId){
+export async function  orders (totalAmount,guest,checkOutDate,checkInDate,cruiseId,tax,fee){
     try{
-        const {data}=await userAxiosInstance.post(`orders`,{totalAmount,guest,checkOutDate,checkInDate,cruiseId})
+        const {data}=await userAxiosInstance.post(`orders`,{totalAmount,guest,checkOutDate,checkInDate,cruiseId,tax,fee})
         return data;
     }catch(error){
         return {status:'failed',message:'Network error'}

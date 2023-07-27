@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { baseApi } from  '../../../config/Api';
 import { useSelector } from "react-redux";
-import axios from "axios";
 import { useDispatch } from 'react-redux'
 import { userAdd } from '../../../store/UserAuth'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { parseISO } from 'date-fns';
 import { orders, userSignin, verifyPayment } from "../../../config/UserEndpoints";
 
 
@@ -20,7 +17,7 @@ function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state ? location.state.data : null;
-  const{totalAmount,guest,cruiseId}=data
+  const{totalAmount,tax,fee,guest,cruiseId}=data
   const checkInDate=new Date(data.checkInDate)
 
   const checkOutDate=new Date(data.checkOutDate) //issues with date picker so converted
@@ -103,7 +100,7 @@ const handlePayment=async()=>{
 
       try {
 
-        const data=await orders(totalAmount,guest,checkOutDate,checkInDate,cruiseId)
+        const data=await orders(totalAmount,guest,checkOutDate,checkInDate,cruiseId,tax,fee)
         if(data){
           initPayment(data.data)
          
@@ -171,7 +168,8 @@ const handlePayment=async()=>{
                     {" "}
                     extra guest ({data.extraGuest}){" "}
                   </p>
-                  <p className="font-medium text-lg mb-3">Taxes</p>
+                  <p className="font-medium text-lg mb-3">Taxes </p>
+                  <p className="font-medium text-lg mb-3">Cruise Fee </p>
                   <hr />
                   <p className="font-medium text-lg mt-4">Total(INR)</p>
 
@@ -185,7 +183,8 @@ const handlePayment=async()=>{
                   <p className="font-normal text-lg mx-auto mb-3">
                     {data.extraGuest * 1000 * data.numOfNights}.00 ₹
                   </p>
-                  <p className="font-normal text-lg mx-auto mb-3">0.0 ₹</p>
+                  <p className="font-normal text-lg mx-auto mb-3">{tax}.00 ₹</p>
+                  <p className="font-normal text-lg mx-auto mb-3">{fee}.00 ₹</p>
                   <hr />
                   <p className="font-normal text-lg mx-auto mb-4 mt-4">
                     {data.totalAmount}.00 ₹{" "}
