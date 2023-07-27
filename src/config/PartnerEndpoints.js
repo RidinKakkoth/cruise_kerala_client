@@ -130,7 +130,9 @@ export async function partnerEmailCheck(email) {
       console.error("Error in emailAuth:", error);
       return { error: error.message };
     }
-  }export async function resetPasswordPartner(email,password) {
+  }
+  
+  export async function resetPasswordPartner(email,password) {
     try {
       
       const { data } = await partnerAxiosInstance.post("resetPassword",{email,password});
@@ -140,4 +142,5 @@ export async function partnerEmailCheck(email) {
       return { error: error.message };
     }
   }
+ 
   

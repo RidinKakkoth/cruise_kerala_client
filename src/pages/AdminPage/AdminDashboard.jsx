@@ -5,11 +5,16 @@ import { AppBar } from '@mui/material'
 
 function AdminDashboard() {
   return (
-    <div style={{display:"flex"}} >
-      <Sidebar userType="admin"  />
-      <Dashboard/>
-   
+    <div style={{ display: "flex" }}>
+
+    <div >
+      <Sidebar userType="admin" />
     </div>
+
+    <div className='overflow-auto h-[100vh] w-[100vw]'>
+      <Dashboard />
+    </div>
+  </div>
   )
 }
 
