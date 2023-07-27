@@ -144,3 +144,19 @@ export async function partnerEmailCheck(email) {
   }
  
   
+  export async function updateProof(formData) {
+    try {
+      const { data } = await partnerAxiosInstance.post(
+        "proof-upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return { status: "failed", message: "Network error" };
+    }
+  }
