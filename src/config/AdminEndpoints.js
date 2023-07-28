@@ -126,3 +126,13 @@ export async function  blockUser (id){
         return {status:'failed',message:'Network error'}
     }
 }
+
+export async function  addCoupon (datas){
+    try{
+        const {data}=await adminAxiosInstance.post(`add-coupon`,datas)
+        return data;
+    }catch(error){
+        
+        return {status:false,message:error.response.data.error}
+    }
+}

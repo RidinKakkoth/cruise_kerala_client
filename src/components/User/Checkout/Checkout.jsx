@@ -7,7 +7,7 @@ import { userAdd } from '../../../store/UserAuth'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { orders, userSignin, verifyPayment } from "../../../config/UserEndpoints";
-
+import CouponBox from './CouponModal';
 
 function Checkout() {
   const [email,setEmail]=useState("")
@@ -110,7 +110,16 @@ const handlePayment=async()=>{
         console.log(error);
       }
 }
+const [showCouponBox, setShowCouponBox] = useState(false);
 
+const handleToggleCouponBox = () => {
+  setShowCouponBox(!showCouponBox);
+};
+
+const handleApplyCoupon = (couponCode) => {
+  // Do something with the coupon code, e.g., call an API to validate the coupon
+  console.log('Applying coupon code:', couponCode);
+};
 
 
 
@@ -190,6 +199,20 @@ const handlePayment=async()=>{
                     {data.totalAmount}.00 ₹{" "}
                   </p>
                 </div>
+
+                <div>
+      <button className="underline ms-4 font-medium" onClick={handleToggleCouponBox}>
+        {showCouponBox ? '' : 'Enter a coupon'}
+      </button>
+
+      {showCouponBox && (
+        <CouponBox
+          onApply={handleApplyCoupon}
+          onClose={() => setShowCouponBox(false)}
+        />
+      )}
+    </div>
+
               </div>
 <hr />              
               {

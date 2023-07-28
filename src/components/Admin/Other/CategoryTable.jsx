@@ -28,22 +28,22 @@ export default function CategoryTable({ categories }) {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+      <Table sx={{ minWidth: 250 }} aria-label="simple table" className='rounded-xl shadow'>
+        <TableHead className='shadow-sm rounded'>
           <TableRow>
-            <TableCell style={{fontWeight:"600"}}>Category Name</TableCell>
+            <TableCell className='px-5'  style={{fontWeight:"600"}}>Category Name</TableCell>
             <TableCell style={{fontWeight:"600"}} align="center">Status</TableCell>
             <TableCell   style={{fontWeight:"600"}} align="center">Edit</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody className='rounded'>
           {obj.map((row, index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
 
-               <TableCell component="th" scope="row">
+               <TableCell className='px-5' component="th" scope="row">
                 {row.name}
               </TableCell>
 

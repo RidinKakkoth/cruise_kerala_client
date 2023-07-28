@@ -49,9 +49,10 @@ export default function Category() {
   return (
     <div>
             <ToastContainer autoClose={3000} />
-      <Button onClick={handleOpen} variant="outlined" style={{marginBottom:"20px"}} startIcon={<PlaylistAddCircleIcon />}>
+      <button onClick={handleOpen}  className='rounded flex gap-2 bg-blue-300 text-white px-2 items-center h-9' style={{marginBottom:"20px"}} >
+      <PlaylistAddCircleIcon />
       Add Category
-</Button >
+</button >
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
