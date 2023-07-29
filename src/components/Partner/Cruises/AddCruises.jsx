@@ -7,8 +7,7 @@ import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Input, Page, setOptions,Dropdown,Checkbox } from '@mobiscroll/react';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
-import axios from 'axios';
-import {  partnerApi } from  '../../../config/Api';
+
 import { useNavigate } from 'react-router-dom';
 import AddCruiseFormValidation from '../../../utils/AddCruiseFormValidation'
 import { ToastContainer, toast } from 'react-toastify';

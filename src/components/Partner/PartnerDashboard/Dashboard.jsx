@@ -48,7 +48,7 @@ function Dashboard() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="#011742"
-              className="w-10 h-10"
+              className="w-10 h-10 "
             >
               <path
                 strokeLinecap="round"

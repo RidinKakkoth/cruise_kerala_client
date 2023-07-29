@@ -88,9 +88,17 @@ export async function addCruise(formData) {
         return {status:'failed',message:'Network error'}
     }
 }
-export async function  cruiseData (){
+export async function  getCruiseData (){
     try{
         const {data}=await partnerAxiosInstance.get(`cruise-data`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  getSingleCruiseData (id){
+    try{
+        const {data}=await partnerAxiosInstance.get(`single-cruise-data?id=${id}`)
         return data;
     }catch(error){
         return {status:'failed',message:'Network error'}

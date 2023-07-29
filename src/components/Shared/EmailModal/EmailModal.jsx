@@ -14,12 +14,10 @@ const EmailModal = ({role, isOpen, onRequestClose,  }) => {
   const [otpModalOpen,setOtpModalOpen] = useState(false);
   const [passModalOpen,setPassModalOpen] = useState(false);
   const[neweRole,setNewRole]=useState("")
-console.log(neweRole,"nnnnneeeeeeee");
 const handleSend = async (e) => {
   setNewRole(role)
   e.preventDefault();
   try {
-    console.log(role,"rolex");
     let data;
     if(role==="user")
      data = await userEmailCheck(usermail)
@@ -38,7 +36,6 @@ const handleSend = async (e) => {
   };
   
   const handleChange=(value)=>{
-    console.log(value,"nnnnneeeeeeee");
     setUsermail(value)
 }
 const handleVerifyOTP = async (otp) => {

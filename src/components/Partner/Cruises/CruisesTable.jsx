@@ -12,11 +12,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import LazyLoad from 'react-lazy-load';
 import { useNavigate } from 'react-router-dom';
 import { TabView, TabPanel } from 'primereact/tabview';
-import axios from 'axios';
-import { baseApi, partnerApi } from  '../../../config/Api';
 import { Button } from '@mui/material';
 import Loading from '../../Shared/Loading'
-import { blockCruise } from '../../../config/PartnerEndpoints';
+import { blockCruise, getCruiseData } from '../../../config/PartnerEndpoints';
 
 
 const GreenCheckIcon = () => {
@@ -32,21 +30,31 @@ function CruisesTable() {
   const [trigger, setTrigger] = useState(false);
   const [loading, setLoading] = useState(true);
 
+
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate('/partner/add-cruise');
+    // navigate('/partner/add-cruise');
   };
 
   useEffect(() => {
 
     async function invoke(){
-     const data=await cruiseData()
+     const data=await getCruiseData()
      setLoading(false)
-     setCruiseData(data.data);
+     if(data.cruiseData.length>0)
+     setCruiseData(data?.cruiseData
+      
+      );
     }
     invoke()
    }, [trigger]);
+
+    const handleCruiseEdit = (cruiseId) => {
+      navigate(`/partner/edit-cruise?id=${cruiseId}`);
+    };
+   
  
 
    const handleBlock =async (id) => {
@@ -60,10 +68,6 @@ function CruisesTable() {
 
   return (
     <div className=''>
-      {!loading ? (
-        <div className="tabview-demo">
-          <div className="">
-            <ToastContainer autoClose={1000} />
             <Button
               variant="contained"
               onClick={handleClick}
@@ -72,6 +76,11 @@ function CruisesTable() {
             >
               Add Cruise
             </Button>
+           { console.log(cruiseData,"czzzzzzzzzzz")}
+      {!loading ? (
+        <div className="tabview-demo">
+          <div className="">
+            <ToastContainer autoClose={1000} />
             {cruiseData?.map((obj, index) => (
               <div key={index} className="card w-[100vw]" id="cruise-table-card" style={{ marginBottom: "20px" }}>
                 <h5 style={{ marginTop: "20px", marginLeft: "20px", fontWeight: "700", color: "#0064ff" }}>{obj.name}</h5>
@@ -117,6 +126,10 @@ function CruisesTable() {
                     </div>
                   </TabPanel>
                   <TabPanel header="SETTINGS" className="w-[100%]">
+                    <p  className='flex gap-2 mb-2'>Edit Cruise data :<span onClick={()=>{handleCruiseEdit(obj._id)}} className='cursor-pointer'><svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="w-6 h-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+</svg> </span>
+</p>
                     <p>Block Status: {obj.isBlocked ? <ToggleOnIcon  onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ color: "red", fontSize: "2rem",cursor:"pointer" }} /> : <ToggleOffIcon onClick={() => { handleBlock(obj._id) }} checked={obj.isBlocked} style={{ fontSize: "2rem",cursor:"pointer" }} />}</p>
                     <p>
                       Verification:{" "}
