@@ -127,6 +127,22 @@ export async function  blockUser (id){
     }
 }
 
+export async function  getCouponData (){
+    try{
+        const {data}=await adminAxiosInstance.get('get-coupon-data')
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  blockCoupon (id){
+    try{
+        const {data}=await adminAxiosInstance.patch(`blockCoupon?id=${id}`,{})
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
 export async function  addCoupon (datas){
     try{
         const {data}=await adminAxiosInstance.post(`add-coupon`,datas)

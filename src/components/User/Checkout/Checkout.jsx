@@ -6,12 +6,13 @@ import { useDispatch } from 'react-redux'
 import { userAdd } from '../../../store/UserAuth'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { orders, userSignin, verifyPayment } from "../../../config/UserEndpoints";
+import {  orders, userSignin, verifyPayment } from "../../../config/UserEndpoints";
 import CouponBox from './CouponModal';
 
 function Checkout() {
   const [email,setEmail]=useState("")
   const[password,setPassword]=useState("")
+  const[discount,setDiscount]=useState(0)
 
 
   const navigate = useNavigate();
@@ -20,6 +21,12 @@ function Checkout() {
   const{totalAmount,tax,fee,guest,cruiseId}=data
   const checkInDate=new Date(data.checkInDate)
 
+  const discountAmntLocal = localStorage?.getItem('discount');
+
+  const getOfferId = localStorage?.getItem('offerId');
+  const offerId = JSON.parse(getOfferId)
+  const discountAmnt=JSON.parse(discountAmntLocal)
+  
   const checkOutDate=new Date(data.checkOutDate) //issues with date picker so converted
 
   
@@ -56,6 +63,7 @@ function Checkout() {
 
 
 const initPayment=(recievedData)=>{
+  
   const options={
     key:"rzp_test_drvVy05m61MDRI",
     amount:recievedData.amount,
@@ -70,10 +78,9 @@ const initPayment=(recievedData)=>{
     order_id:recievedData.id,
     handler:async(response)=>{
       try {
-        
+        response.offerId=offerId
         const newData=await verifyPayment(response)
         if(newData){
-          
             const bookedData=newData.bookedData
             localStorage.clear()
             navigate('/confirmation',{state:{data,bookedData}})
@@ -100,7 +107,8 @@ const handlePayment=async()=>{
 
       try {
 
-        const data=await orders(totalAmount,guest,checkOutDate,checkInDate,cruiseId,tax,fee)
+        const data=await orders(totalAmount,guest,checkOutDate,checkInDate,cruiseId,discountAmnt,tax,fee)
+       
         if(data){
           initPayment(data.data)
          
@@ -116,18 +124,24 @@ const handleToggleCouponBox = () => {
   setShowCouponBox(!showCouponBox);
 };
 
-const handleApplyCoupon = (couponCode) => {
+const handleApplyCoupon =async (status,offer) => {
   // Do something with the coupon code, e.g., call an API to validate the coupon
-  console.log('Applying coupon code:', couponCode);
+  console.log('Applying coupon code:', status);
+  setShowCouponBox(!showCouponBox);
+  if(status){
+    setDiscount(offer.discount)
+    localStorage.setItem("discount", JSON.stringify(offer.discount));
+    localStorage.setItem("offerId", JSON.stringify(offer._id));
+
+  }
+
 };
-
-
 
 
 
   return (
     <div className="container mt-28 mb-5 bg-[#f0f0f0]">
-              <ToastContainer autoClose={3000} />
+              <ToastContainer autoClose={1000} />
       <div className="flex items-center mb-5 pt-3">
         <ArrowBackIosIcon
           onClick={handleBack}
@@ -180,6 +194,8 @@ const handleApplyCoupon = (couponCode) => {
                   <p className="font-medium text-lg mb-3">Taxes </p>
                   <p className="font-medium text-lg mb-3">Cruise Fee </p>
                   <hr />
+                  <p className="font-medium text-lg mb-3">Sub-Total </p>
+                  <p className="font-medium text-lg mb-3">Discount </p>
                   <p className="font-medium text-lg mt-4">Total(INR)</p>
 
                 </div>
@@ -195,16 +211,20 @@ const handleApplyCoupon = (couponCode) => {
                   <p className="font-normal text-lg mx-auto mb-3">{tax}.00 ₹</p>
                   <p className="font-normal text-lg mx-auto mb-3">{fee}.00 ₹</p>
                   <hr />
-                  <p className="font-normal text-lg mx-auto mb-4 mt-4">
+                  <p className="font-normal text-lg mx-auto mb-3 mt-3">
                     {data.totalAmount}.00 ₹{" "}
+                  </p>
+                  <p className="font-normal text-lg mx-auto mb-3 text-green-400">{discountAmnt}.00 ₹</p>
+                  <p className="font-normal text-lg mx-auto mb-4 mt-3">
+                    {data.totalAmount-discountAmnt}.00 ₹{" "}
                   </p>
                 </div>
 
                 <div>
-      <button className="underline ms-4 font-medium" onClick={handleToggleCouponBox}>
+     {isSignIn&& <button className="underline ms-4 font-medium" onClick={handleToggleCouponBox}>
         {showCouponBox ? '' : 'Enter a coupon'}
       </button>
-
+}
       {showCouponBox && (
         <CouponBox
           onApply={handleApplyCoupon}

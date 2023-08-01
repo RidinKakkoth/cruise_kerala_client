@@ -1,11 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Loading from '../../Shared/Loading'
+import { blockCoupon, getCouponData } from '../../../config/AdminEndpoints'
 
 function Coupon() {
 
-const[loading,setLoading]=useState()
-const[data,setData]=useState([])
+const[loading,setLoading]=useState(true)
+const[trigger,setTrigger]=useState(true)
+const[couponData,setCouponData]=useState([])
 
+useEffect(()=>{
+  async function invoke(){
+      const {data}=await getCouponData()
+      if(data.length>0){
+        setLoading(false)
+        setCouponData(data)
+      }
+  }
+  invoke()
+},[trigger])
+const handleBlock= async (id)=>{
+    const data=await blockCoupon(id)
+    if(data.status){
+      setTrigger(!trigger)
+    }
+}
 
 
   return (
@@ -23,7 +41,7 @@ const[data,setData]=useState([])
                   Coupon code
                 </th>
                 <th className="p-3 w-16 text-sm font-semibold tracking-wide text-left">
-                  Percentage
+                  Discount
                 </th>
                 <th className="p-3 w-24 text-sm font-semibold tracking-wide text-left">
                 Description
@@ -43,65 +61,98 @@ const[data,setData]=useState([])
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data.map((booking) => (
-                <tr key={booking.bookingId} className="bg-white">
+              {couponData.map((coupon) => (
+                <tr key={coupon?._id} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <p className="font-bold text-blue-500 ">
-                      {booking.bookingId}
+                    <p className=" ">
+                      {coupon?.offer}
                     </p>
                   </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {new Date(booking.createdAt).toLocaleDateString("en-US", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
+                  <td className="p-3 font-bold text-blue-500 text-sm whitespace-nowrap">
+                    {coupon?.couponCode}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {booking.userId.name}
+                    {coupon?.discount}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {booking.cruiseId.name}
+                    {coupon?.description}
                   </td>
-                  {/* <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{booking.userId.name}</td> */}
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <span
-                      className={`p-1.5 text-xs font-medium uppercase tracking-wider ${
-                        booking.status === "Booked"
-                          ? "text-green-800 bg-green-200"
-                          : booking.status === "Shipped"
-                          ? "text-yellow-800 bg-yellow-200"
-                          : "text-gray-800 bg-gray-200"
-                      } rounded-lg bg-opacity-50`}
-                    >
-                      {booking.status}
-                    </span>
-                  </td>
-                  {/* <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{new Date(booking.checkIn).toDateString()}</td> */}
-                  {/* <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{new Date(booking.checkOut).toDateString()}</td> */}
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     {" "}
-                    {new Date(booking.checkIn).toLocaleDateString("en-US", {
+                    {new Date(coupon?.validFrom).toLocaleDateString("en-US", {
                       day: "2-digit",
                       month: "2-digit",
                       year: "numeric",
                     })}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {new Date(booking.checkOut).toLocaleDateString("en-US", {
+                    {new Date(coupon?.validUpto).toLocaleDateString("en-US", {
                       day: "2-digit",
                       month: "2-digit",
                       year: "numeric",
                     })}
                   </td>
+                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{coupon?.userLimit}</td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    ₹ {booking.total}
+
+                      { coupon?.isBlock
+                        ? <p onClick={()=>{handleBlock(coupon._id)}} className="cursor-pointer bg-red-400 w-16 text-center text-white uppercase text-xs font-medium rounded py-1">blocked</p> :
+                        <p  onClick={()=>{handleBlock(coupon._id)}} className="cursor-pointer bg-green-400 w-16 text-center text-white uppercase text-xs font-medium rounded py-1">Active</p>  }
                   </td>
+
                 </tr>
               ))}
             </tbody>
           </table>
         </div>):<Loading/>}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+          {couponData?.map((coupon) => (
+            <div
+              key={coupon._id}
+              className="bg-white space-y-3 p-4 rounded-lg shadow"
+            >
+              <div className="flex items-center space-x-2 text-sm">
+                <div>
+                  <p className="text-blue-500 font-bold "></p>
+                  <p className="text-xs"></p>
+                </div>
+
+                <div className="px-2">
+
+                </div>
+              </div>
+              <div className="text-sm text-gray-700">
+                <div>
+                  <span className="font-medium">Offer: </span>{" "}
+                  {coupon.offer}
+                </div>
+                <div className="mt-3">
+                  <span className="font-medium">Code: </span>
+                  {coupon.couponCode}
+                </div>
+              </div>
+              <div className="text-sm text-gray-700">
+                {" "}
+                {new Date(coupon.validFrom).toLocaleDateString("en-US", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}{" "}
+                -{" "}
+                {new Date(coupon.validUpto).toLocaleDateString("en-US", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </div>
+
+              <div className="text-sm  font-medium text-black">
+                Limit: {coupon.userLimit} <br />
+                Discount: {coupon.discount} % <br />
+              </div>
+            </div>
+          ))}
+        </div>
 
       
 

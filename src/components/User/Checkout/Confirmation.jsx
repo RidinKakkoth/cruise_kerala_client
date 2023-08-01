@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { baseApi } from  '../../../config/Api';
-import { parseISO } from 'date-fns';
+
 
 function Confirmation() {
 
@@ -60,7 +59,7 @@ function Confirmation() {
   <div className="flex flex-col items-center font-medium mt-2 sm:mt-0">
     Total:
     <span className="mr-1 mb-3 text-xl font-medium"></span>
-    ₹ {data.totalAmount}.00
+    ₹ {booked.total}.00
   </div>
 </div>
 

@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { addCoupon } from "../../../config/AdminEndpoints";
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 
-const CouponForm = () => {
+const CouponForm = ({onClose}) => {
     const[error,setError]=useState("")
-  const [formData, setFormData] = useState({
+    const navigate=useNavigate()
+      const [formData, setFormData] = useState({
     offer: "",
     couponCode: "",
-    percentage: "",
+    discount: "",
     description: "",
     validFrom: "",
     validUpto: "",
@@ -20,40 +22,52 @@ const CouponForm = () => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = async(e) => {
-    const isAnyFieldEmpty = Object.values(formData).some((value) => value === "");
-    if(isAnyFieldEmpty){
-        setError("All fields must be filled")
-    }
-    e.preventDefault();
-    // Here you can handle the form submission, e.g., send the data to the server or perform any other actions.
-    console.log("Form submitted:", formData);
-    const data=await addCoupon(formData)
-    console.log(data,"llllllllllllll");
-    if(data.status){        
+  const handleSubmit = async (e) => {
+    // Trim the form data values to remove any leading/trailing spaces
+    const trimmedFormData = Object.fromEntries(
+      Object.entries(formData).map(([key, value]) => [key, value.trim()])
+    );
+  
+    const isAnyFieldEmpty = Object.values(trimmedFormData).some(
+      (value) => value === ""
+    );
+  
+    if (isAnyFieldEmpty) {
+      setError("All fields must be filled");
+    } else {
+      e.preventDefault();
+      // Here you can handle the form submission, e.g., send the data to the server or perform any other actions.
+      console.log("Form submitted:", trimmedFormData);
+      const data = await addCoupon(trimmedFormData);
+      if (data.status) {
+
+        toast.success("Successfully added",{ position: "top-center" })
         setFormData({
           offer: "",
           couponCode: "",
-          percentage: "",
+          discount: "",
           description: "",
           validFrom: "",
           validUpto: "",
           userLimit: "",
         });
-    }else{
-        toast.error(data.message,{position: "top-center"})
 
+        onClose();
+        setTimeout(() => {
+          navigate(0)
+        }, 2000);
+        
+      } else {
+        toast.error(data.message, { position: "top-center" });
+      }
     }
-
-
-   
-
   };
+  
 
   return (
       
       <form onSubmit={handleSubmit} className="mt-4 px-4 sm:px-6 md:px-8">
-        <ToastContainer autoClose={3000} />
+        <ToastContainer autoClose={1000} />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="mb-4">
           <label htmlFor="offer" className="block text-sm font-medium text-gray-700">
@@ -82,13 +96,13 @@ const CouponForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="percentage" className="block text-sm font-medium text-gray-700">
-            Percentage
+          <label htmlFor="discount" className="block text-sm font-medium text-gray-700">
+            Discount
           </label>
           <input
             type="number"
-            name="percentage"
-            value={formData.percentage}
+            name="discount"
+            value={formData.discount}
             onChange={handleChange}
             className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
             required

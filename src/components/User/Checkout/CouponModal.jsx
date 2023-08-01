@@ -1,16 +1,32 @@
 import React, { useState } from 'react';
+import { applyCoupon } from '../../../config/UserEndpoints';
 
 const CouponBox = ({ onApply, onClose }) => {
   const [couponCode, setCouponCode] = useState('');
+  const [error, setError] = useState('');
 
   const handleInputChange = (event) => {
     setCouponCode(event.target.value);
   };
 
-  const handleApplyCoupon = () => {
-    onApply(couponCode);
+  const handleApplyCoupon =async () => {
+   const offerCode= couponCode.trim()
+    if(offerCode===""){
+      setError("enter valid coupon code")
+      return 
+    }
+    const data=await applyCoupon(offerCode)
+    if(!data.status){
+
+      setError(data.message)
+    }
+    if(data.status){
+      setError(data.message)
+
+      onApply(data.status,data.offer);
+    }
     setCouponCode(''); // Reset the coupon code after applying
-    onClose(); // Close the coupon box
+    // onClose(); // Close the coupon box
   };
 
   return (
@@ -28,6 +44,10 @@ const CouponBox = ({ onApply, onClose }) => {
         <button onClick={handleApplyCoupon} className="bg-[#011742] text-white px-4 py-2 rounded">
           Apply
         </button>
+       {error&& <p className='mt-3 flex gap-2 text-red-600'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+</svg>
+{error}</p>}
       </div>
     </div>
   );

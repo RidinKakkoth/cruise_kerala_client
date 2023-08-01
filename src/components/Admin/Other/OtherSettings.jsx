@@ -36,7 +36,7 @@ function OtherSettings() {
 
   return (
     <div>
-      <div className='' style={{ marginTop: '100px', marginLeft: '50px' }}>
+      <div className='' style={{ marginTop: '20px', marginLeft: '50px' }}>
         <div className='flex justify-between w-[75%]'>
           <div>
             <h5 style={{ marginBottom: '20px' }}>Categories</h5>
@@ -58,7 +58,7 @@ function OtherSettings() {
 </svg>
 Add coupon</button>
         </div>
-          <Coupon />
+          <Coupon  />
         </div>
   
         {/* Coupon Form Modal */}

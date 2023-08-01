@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { addCruise, getCategories, getSingleCruiseData } from "../../../config/PartnerEndpoints";
+import { addCruise, getCategories, getSingleCruiseData, updateCruise } from "../../../config/PartnerEndpoints";
 import AddCruiseFormValidation from '../../../utils/AddCruiseFormValidation'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,15 +27,15 @@ const EditCruiseForm = () => {
     const[extraRate,setExtraRate]=useState()
     const[maxGuest,setMaxGuest]=useState()
     const[images,setImages]=useState([])
-    const[AC,setAC]=useState()
-    const[food,setFood]=useState()
-    const[TV,setTV]=useState()
-    const[partyHall,setPartyHall]=useState()
-    const[games,setGames]=useState()
-    const[fishing,setFishing]=useState()
-    const[wifi,setWifi]=useState()
-    const[pets,setPets]=useState()
-    const[license,setLicense]=useState(null)
+    const[AC,setAC]=useState(true)
+    const[food,setFood]=useState(true)
+    const[TV,setTV]=useState(true)
+    const[partyHall,setPartyHall]=useState(true)
+    const[games,setGames]=useState(true)
+    const[fishing,setFishing]=useState(true)
+    const[wifi,setWifi]=useState(true)
+    const[pets,setPets]=useState(true)
+    // const[license,setLicense]=useState(null)
     const[categoryData,setCategoryData]=useState([])
     const[uploading,setUploading]=useState(false)
     const [cruiseData, setCruiseData] = useState(null);
@@ -46,17 +46,30 @@ const EditCruiseForm = () => {
 
     const[selectedImages,setSelectedImages]=useState([])
 
-    const handleSelectImage=(event)=>{
-        const selectedFiles=event.target.files;
-        const selectedFilesArray=Array.from(selectedFiles)
-        const imagesArray=selectedFilesArray.map((file)=>{
-            return URL.createObjectURL(file)
-        })
-        setSelectedImages((previousImages)=>previousImages.concat(imagesArray))
-        setImages(selectedFiles)
-    }
-
-    const handleAddCruise = async(event) => {
+    // const handleSelectImage=(event)=>{
+    //   console.log(selectedImages,"hiii");
+    //     const selectedFiles=event.target.files;
+    //     const selectedFilesArray=Array.from(selectedFiles)
+    //     const imagesArray=selectedFilesArray.map((file)=>{
+    //         return URL.createObjectURL(file)
+    //     })
+    //     setSelectedImages((previousImages)=>previousImages.concat(imagesArray))
+    //     setImages(selectedFiles)
+    //     console.log(selectedFiles,"sel");
+    //     console.log(images,"iiiiiiii");
+    // }
+    const handleSelectImage = (event) => {
+      const selectedFiles = event.target.files;
+      const selectedFilesArray = Array.from(selectedFiles);
+      const imagesArray = selectedFilesArray.map((file) => {
+        return URL.createObjectURL(file);
+      });
+      setSelectedImages((previousImages) => [...previousImages, ...imagesArray]);
+      setImages((prevImages) => [...prevImages, ...selectedFiles]);
+    };
+    
+    
+    const handleUpdateCruise = async(event) => {
 
 
             event.preventDefault()
@@ -75,22 +88,26 @@ const EditCruiseForm = () => {
              formData.append(key, value);
            });
          
-           // Append images to the formData
-           for (const image of images) {
-             formData.append('images', image);
-           }
+           // Append images to the formData=============>+++++++++
+          //  for (const image of images) {
+          //    formData.append('images', image);
          
-           // Append the license file to the formData
-           formData.append('license', license);
+          //   }
+            // formData.append('cruiseId', cruiseData._id);
+
+         
+           // Append the license file to the formData===================>++++++++++++++++++++
+          //  formData.append('license', license);
          
            setUploading(true)
 
-            const data=await addCruise(formData)
+            const data=await updateCruise(formData,id)
+            console.log(data,"*******************");
             if(data?.status){
                 setUploading(false)
                 Swal.fire({
                             icon: 'success',
-                            title: 'Cruise added successfully',
+                            title: 'Cruise updated successfully',
                             timer: 2000, 
                             showConfirmButton: false
                           }).then(() => {
@@ -119,9 +136,10 @@ useEffect(()=>{
   
 },[])
 useEffect(() => {
-console.log("xxxxxxxxxxxxxxxxxx");
   async function invoke(){
-   const {data}=await getSingleCruiseData(id)
+    const {data}=await getSingleCruiseData(id)
+    console.log(data,"xxxxxxxxxxxxxxxxxx");
+    setCruiseData(data)
    const{name,description,boarding,town,district,pin,rooms,baseRate,extraRate,maxGuest}=data
     setName(name) 
     setDescription(description)
@@ -142,9 +160,8 @@ console.log("xxxxxxxxxxxxxxxxxx");
     setFishing(data.Facilities[0].fishing)
     setGames(data.Facilities[0].games)
     setWifi(data.Facilities[0].wifi)
-    console.log(data,"-------------");
-    setCruiseData(data)
     setSelectedImages(data.Images)
+    console.log(data.Facilities[0].partyHall,"[[[[[[[[[[[[[[");
 
   }
   invoke()
@@ -162,7 +179,7 @@ return (
 </button>
   <div className="p-4 max-w-screen-md mx-auto bg-white shadow-md rounded-md mt-3 mb-3">
             <ToastContainer  />
-    <form onSubmit={handleAddCruise} className="mt-4">
+    <form onSubmit={handleUpdateCruise} className="mt-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="mb-4">
           <label htmlFor="cruiseName" className="block text-sm font-medium text-gray-700">
@@ -183,9 +200,9 @@ return (
           </label>
           <select
             name="category"
-          defaultValue={cruiseData?.category?._id}
+          defaultValue={category}
           onChange={(event) => setCategory(event.target.value)}              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
-            required
+            // required
           >
             <option  defaultValue={cruiseData?.category?._id} value="">{cruiseData?.category.name}</option>
             {categoryData?.map((value,index)=>{
@@ -317,7 +334,7 @@ return (
           <input
             type="checkbox"
             name="tv"
-          defaultChecked={TV}
+          checked={TV}
           onChange={(e)=>{setTV(e.target.checked)}}
                         className="mr-2"
           />
@@ -327,7 +344,7 @@ return (
           <input
             type="checkbox"
             name="ac"
-          defaultChecked={AC}
+          checked={AC}
             onChange={(e)=>{setAC(e.target.checked)}}             
              className="mr-2"
           />
@@ -337,7 +354,7 @@ return (
           <input
             type="checkbox"
             name="games"
-          defaultChecked={games}
+          checked={games}
           onChange={(e)=>{setGames(e.target.checked)}}
                         className="mr-2"
           />
@@ -347,7 +364,7 @@ return (
           <input
             type="checkbox"
             name="food"
-          defaultChecked={food}
+          checked={food}
             onChange={(e)=>{setFood(e.target.checked)}}
             className="mr-2"
           />
@@ -357,7 +374,8 @@ return (
           <input
             type="checkbox"
             name="fishing"
-          defaultChecked={fishing}
+          // checked={fishing}
+          checked={fishing}
           onChange={(e)=>{setFishing(e.target.checked)}}              
           className="mr-2"
           />
@@ -367,7 +385,7 @@ return (
           <input
             type="checkbox"
             name="partyhall"
-          defaultChecked={partyHall}
+          checked={partyHall}
           onChange={(e)=>{setPartyHall(e.target.checked)}}              
           className="mr-2"
           />
@@ -377,7 +395,7 @@ return (
           <input
             type="checkbox"
             name="pets"
-          defaultChecked={pets}
+          checked={pets}
             onChange={(e)=>{setPets(e.target.checked)}}
                           className="mr-2"
           />
@@ -387,7 +405,7 @@ return (
           <input
             type="checkbox"
             name="wifi"
-          defaultChecked={wifi}
+          checked={wifi}
           onChange={(e)=>{setWifi(e.target.checked)}}              
           className="mr-2"
           />
@@ -420,17 +438,37 @@ return (
              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>                <div className='images flex gap-2'>
-                      {selectedImages&&
+                      {/* {selectedImages&&
                       selectedImages.map((image,index)=>{
                           return(
                               <div key={image} className='image '>
                                   <img style={{padding:0,margin:0}} src={image} className='w-52' height="200" alt="uploads" />
-                                  <DeleteForeverIcon className='del-btn' style={{color:"red",cursor:"pointer"}} onClick={()=>setSelectedImages(selectedImages.filter((e)=>e!==image))} /> 
+                                  <DeleteForeverIcon className='del-btn' style={{color:"red",cursor:"pointer"}} onClick={()=>{setSelectedImages(selectedImages.filter((e)=>e!==image)) 
+                                    console.log(selectedImages,"88888888")   }     } /> 
                                   <p id='img-indx'>{index+1}</p>
                               </div>
                           )
                       })
-                      }
+                      } */}
+{selectedImages &&
+  selectedImages.map((image, index) => {
+    return (
+      <div key={image} className='image'>
+        <img style={{ padding: 0, margin: 0 }} src={image} className='w-52' height='200' alt='uploads' />
+        <DeleteForeverIcon
+          className='del-btn'
+          style={{ color: 'red', cursor: 'pointer' }}
+          onClick={() => {
+            setSelectedImages((previousImages) => previousImages.filter((_, i) => i !== index));
+            setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+          }}
+        />
+        <p id='img-indx'>{index + 1}</p>
+      </div>
+    );
+  })}
+
+
               </div>
 
       </div>

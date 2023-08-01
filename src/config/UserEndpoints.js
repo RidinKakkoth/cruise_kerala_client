@@ -44,9 +44,9 @@ export async function  verifyPayment (response){
         return {status:'failed',message:'Network error'}
     }
 }
-export async function  orders (totalAmount,guest,checkOutDate,checkInDate,cruiseId,tax,fee){
+export async function  orders (totalAmount,guest,checkOutDate,checkInDate,cruiseId,discount,tax,fee){
     try{
-        const {data}=await userAxiosInstance.post(`orders`,{totalAmount,guest,checkOutDate,checkInDate,cruiseId,tax,fee})
+        const {data}=await userAxiosInstance.post(`orders`,{totalAmount,guest,checkOutDate,checkInDate,cruiseId,discount,tax,fee})
         return data;
     }catch(error){
         return {status:'failed',message:'Network error'}
@@ -87,6 +87,15 @@ export async function resetPassword(email,password) {
     } catch (error) {
       console.error("Error in emailAuth:", error);
       return { error: error.message };
+    }
+  }
+export async function applyCoupon(coupon) {
+    try {
+      const { data } = await userAxiosInstance.post("apply-coupon",{coupon});
+      console.log(data,"data");
+      return data;
+    } catch (error) {
+      return { message: error.response.data.message, status:false };
     }
   }
   

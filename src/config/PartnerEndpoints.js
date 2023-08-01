@@ -77,6 +77,23 @@ export async function addCruise(formData) {
       return { status: false, message: "Network error" };
     }
   }
+export async function updateCruise(formData,id) {
+    try {
+      const { data } = await partnerAxiosInstance.post(
+        `update-cruise?id=${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+        
+      return { status: false, message: "Network error" };
+    }
+  }
 
 
 
