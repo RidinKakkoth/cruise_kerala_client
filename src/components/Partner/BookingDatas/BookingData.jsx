@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { getBookings } from '../../../config/PartnerEndpoints';
+import Loading from '../../Shared/Loading'
+
 
 function BookingData() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
       async function invoke(){
         const data=  await getBookings()
+        setLoading(false)
         if(data)setData(data.data);
       }
       invoke()
@@ -14,8 +18,9 @@ function BookingData() {
 
 
   return (
-    <div>
-      <div className="p-5 h-screen ms-4 md:w-[80vw] bg-gray-100">
+    <> 
+    {!loading?(<div>
+     {data.length>0? <div className="p-5 h-screen ms-4 md:w-[80vw] bg-gray-100">
         <h1 className="text-xl mb-2">Bookings</h1>
 
         <div className="overflow-auto rounded-lg shadow hidden md:block">
@@ -26,7 +31,6 @@ function BookingData() {
                 <th className="w-20 p-3 text-sm font-semibold tracking-wide text-left">Date</th>
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">Customer</th>
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">Cruise</th>
-                {/* <th className="p-3 text-sm font-semibold tracking-wide text-left">Customer</th> */}
                 <th className="w-24 p-3 text-sm font-semibold tracking-wide text-left">Status</th>
                 <th className="w-24 p-3 text-sm font-semibold tracking-wide text-left">Check-in</th>
                 <th className="w-24 p-3 text-sm font-semibold tracking-wide text-left">Check-out</th>
@@ -117,8 +121,15 @@ function BookingData() {
             </div>
           ))}
         </div>
-      </div>
+      </div>:<div className='w-[80vw] flex justify-center h-[100vh] items-center ' >
+      <p className='mx-auto text-3xl text-gray-500 font-serif font-medium'>No bookings</p>
+      </div> }
+
     </div>
+    ):<div className='mx-auto'>
+      <Loading/>
+      </div>}
+      </>
   );
 }
 

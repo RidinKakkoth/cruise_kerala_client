@@ -354,6 +354,7 @@ useEffect(()=>{
             //   checked={formData.wifi}
             onChange={(e)=>{setWifi(e.target.checked)}}              
             className="mr-2"
+                          defaultChecked={true}
             />
             <label htmlFor="wifi">WiFi</label>
           </div>

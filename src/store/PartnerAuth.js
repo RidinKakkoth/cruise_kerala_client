@@ -12,9 +12,9 @@ const partnerAuth=createSlice({
             const newItem=action.payload
 
             state.partnerToken=newItem.token
-            console.log(newItem,"nwwwwwww");
         },
         partnerLogout(state,action){
+          
             state.partnerToken=""
         }
     }

@@ -154,6 +154,10 @@ function UserSignup() {
                       <p >already user?</p>
                      <Link style={{textDecoration:"none",color:"blue"}} to={'/signin'}>login</Link>
                     </div>
+                    <div  style={{display:"flex",justifyContent:"center",fontWeight:"500"}}>
+                      <p >be a partner</p>
+                     <Link style={{textDecoration:"none",color:"blue"}} to={'/partner/signUp'}> Sign up</Link>
+                    </div>
             </div>
             <OtpModal user={email} isOpen={otpModalOpen} onRequestClose={() => setOtpModalOpen(false)} handleVerifyOTP={handleVerifyOTP} />
           </div>

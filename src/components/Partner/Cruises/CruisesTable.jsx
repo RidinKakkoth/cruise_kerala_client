@@ -29,6 +29,7 @@ function CruisesTable() {
   const [cruiseData, setCruiseData] = useState([]);
   const [trigger, setTrigger] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [verified, setVerified] = useState(false);
 
 
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ function CruisesTable() {
 
     async function invoke(){
      const data=await getCruiseData()
+     data?.partner?.isApproved==="verified"?setVerified(true):setVerified(false)
      setLoading(false)
      if(data.cruiseData.length>0)
      setCruiseData(data?.cruiseData
@@ -68,17 +70,17 @@ function CruisesTable() {
 
   return (
     <div className=''>
-            <Button
+      {!loading ? (
+        <div className="tabview-demo">
+          { verified? <Button
               variant="contained"
               onClick={handleClick}
               style={{ marginTop: "20px",marginBottom:"20px" }}
               endIcon={<SailingIcon />}
             >
               Add Cruise
-            </Button>
-           { console.log(cruiseData,"czzzzzzzzzzz")}
-      {!loading ? (
-        <div className="tabview-demo">
+            </Button>: <h4 className='text-red-500 font-semibold italic mt-10'>Need to be verified to add your cruise</h4>
+            }
           <div className="">
             <ToastContainer autoClose={1000} />
             {cruiseData?.map((obj, index) => (

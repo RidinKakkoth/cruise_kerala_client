@@ -52,6 +52,6 @@ export const AdminSidebarData = [
   {
     title: 'Logout',
     icon: <LogoutIcon />,
-    link: '/admin/logout',
+    // link: '/admin/logout',
   },
 ];

@@ -28,7 +28,7 @@ function Dashboard() {
       const partnerData = await getPartnerData();
       setPartner(partnerData?.length);
       const cruiseDetail = await cruiseData();
-      setCruise(cruiseDetail.data.length);
+      setCruise(cruiseDetail?.data?.length);
     }
     invoke();
   }, []);

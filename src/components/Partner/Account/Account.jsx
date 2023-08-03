@@ -1,13 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Account.css";
-import { baseApi, partnerApi } from "../../../config/Api";
-import axios from "axios";
+
 
 //material-ui-items
-import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ModeIcon from "@mui/icons-material/Mode";
 import VerifiedIcon from "@mui/icons-material/Verified";
@@ -96,7 +93,7 @@ function Account() {
     const file = event.target.files[0];
     setSelectedFile(file);
   };
-  const handleProofSubmit = (e) => {
+  const handleProofSubmit =async (e) => {
     setproofButtonHide(true);
     e.preventDefault();
 
@@ -104,7 +101,7 @@ function Account() {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const data = updateProof(formData);
+      const data =await updateProof(formData);
       if (data) {
         navigate(0);
       }
@@ -361,9 +358,9 @@ function Account() {
                   </p>
 
                   <p className="bg-gray-200 h-10 w-[100%] rounded-xl text-black text-center flex justify-center items-center">
-                    <p className="ms-3 ">Status:{" "}</p>
+                    <p className="ms-3 ">Proof Status:{" "}</p>
                     {editedStatus === "verified" ? (
-                      <p className="flex" style={{ marginTop: "10px", color: "green" }}>
+                      <p className="flex " style={{ marginRight: "5px", color: "green" }}>
                         Verified
                       </p>
                     ) : editedStatus === "upload proof" ? (
@@ -374,10 +371,10 @@ function Account() {
                           <GppMaybeIcon
                             style={{ color: "red", marginLeft: "20px" }}
                           />
-                          <p className="flex" style={{ marginTop: "10px", color: "red" }}>
-                            Upload Proof to Verify
-                          </p>
-                          <div style={{ display: "flex" }}>
+                          {/* <p className="flex" style={{ marginTop: "10px", color: "red" }}>
+                            Upload Proof
+                          </p> */}
+                          <div className="flex ">
                             <input
                               className="file"
                               encType="multipart/form-data"

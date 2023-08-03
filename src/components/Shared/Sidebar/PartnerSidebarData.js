@@ -6,6 +6,9 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import DiscountIcon from '@mui/icons-material/LocalOffer';
 import LogoutIcon from '@mui/icons-material/Logout';
 
+
+
+
 export const PartnerSidebarData = [
   {
     title: 'Dashboard',
@@ -34,7 +37,8 @@ export const PartnerSidebarData = [
   },
   {
     title: 'Logout',
-    icon: <LogoutIcon />,
-    link: '/partner/logout',
+    icon: <LogoutIcon  />,
+    // link: '/partner/logout',
+    // onclick:Logout,
   },
 ];

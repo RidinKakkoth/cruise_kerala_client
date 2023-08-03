@@ -5,14 +5,38 @@ import './Sidebar.css';
 
 import { PartnerSidebarData } from './PartnerSidebarData';
 import { AdminSidebarData } from './AdminSidebarData';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { partnerLogout } from '../../../store/PartnerAuth';
+import { adminLogout } from '../../../store/AdminAuth';
 
 function Sidebar({ userType }) { // Include userType prop in function signature
 
   const [sidebarVisible, setSidebarVisible] = useState(true);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [, , removePartnerCookie] = useCookies(['partnerCookie']);
+  const [, , removeAdminCookie] = useCookies(['adminCookie']);
+  
+  
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
   };
+  const handlePartnerLogout = () => {
+    removePartnerCookie('partnerCookie');
+    localStorage.clear();
+    dispatch(partnerLogout());
+    navigate('/partner');
+  }
+  const handleAdminLogout = () => {
+    removeAdminCookie('adminCookie');
+    localStorage.clear();
+    dispatch(adminLogout());
+    navigate('/admin');
+  }
+  
+
 
   return (
     
@@ -31,16 +55,22 @@ function Sidebar({ userType }) { // Include userType prop in function signature
           {userType === 'partner' ? (
             PartnerSidebarData.map((value, key) => (
               <li
-                key={key}
-                className='sidebar-partner-list-row'
-                id={window.location.pathname === value.link ? "partner-row-active" : ""}
-                onClick={() => { window.location.pathname = value.link }}
-              >
-                <div id='sidebar-partner-icon'>{value.icon}</div>
-                {sidebarVisible && (
-                  <div id='sidebar-partner-title'>{value.title}</div>
-                )}
-              </li>
+              key={key}
+              className='sidebar-partner-list-row'
+              id={window.location.pathname === value.link ? "partner-row-active" : ""}
+              onClick={() => {
+                if (value.title === "Logout") {
+                  handlePartnerLogout();
+                } else {
+                  window.location.pathname = value.link;
+                }
+              }}
+            >
+              <div id='sidebar-partner-icon'>{value.icon}</div>
+              {sidebarVisible && (
+                <div id='sidebar-partner-title'>{value.title}</div>
+              )}
+            </li>
             ))
           ) : (
             AdminSidebarData.map((value, key) => (
@@ -48,7 +78,13 @@ function Sidebar({ userType }) { // Include userType prop in function signature
                 key={key}
                 className='sidebar-partner-list-row'
                 id={window.location.pathname === value.link ? "partner-row-active" : ""}
-                onClick={() => { window.location.pathname = value.link }}
+                onClick={() => {
+                  if (value.title === "Logout") {
+                    handleAdminLogout();
+                  } else {
+                    window.location.pathname = value.link;
+                  }
+                }}
               >
                 <div id='sidebar-partner-icon'>{value.icon}</div>
                 {sidebarVisible && (

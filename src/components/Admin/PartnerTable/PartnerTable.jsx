@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Table from 'react-bootstrap/Table';
 import Switch from '@mui/material/Switch';
-import { adminApi } from  '../../../config/Api';
 import 'bootstrap/dist/css/bootstrap.css';
 import './PartnerTable.css';
-import { IconButton } from '@mui/material';
-import PreviewIcon from '@mui/icons-material/Preview';
 import Loading from '../../Shared/Loading';
 import { blockPartner, getPartnerData } from '../../../config/AdminEndpoints';
 
@@ -61,46 +56,51 @@ function PartnerTable({ status }) {
 
   return (
     !loading ? (
-      <div className="table-wrapper">
-        <div className="table">
+      <div className="table-wrapper ">
+        <div className="table mt-5">
           <div className="search2">
-            <h2 className="heading">PARTNER DATA</h2>
+            <h4 className="me-auto text-black font-serif">Partner Data</h4>
             <input
-              className="search-box-partner"
+              className=" rounded border border-gray-500  h-9 px-2 "
               type="text"
               placeholder="Search here"
               onChange={handleChange}
               value={search}
             />
           </div>
-          <Table className="mt-3" bordered>
-            <thead style={{ color: 'black' }}>
+          <div className="overflow-auto rounded-lg shadow hidden md:block"> 
+          <table className="w-full " bordered>
+            <thead className="bg-gray-50 border-b-2 border-gray-200 ">
               <tr>
                 {/* <th>Sl.no</th> */}
-                <th>Name</th>
-                <th>Company Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>View</th>
-                <th>Blocked</th>
+                <th className="p-3 text-sm font-semibold tracking-wide ">Name</th>
+                <th className="p-3 text-sm font-semibold tracking-wide ">Company Name</th>
+                <th className="p-3 text-sm font-semibold tracking-wide ">Email</th>
+                <th className="p-3 text-sm font-semibold tracking-wide ">Phone</th>
+                <th className="w-32 p-3 text-sm font-semibold tracking-wide ">View</th>
+                <th className="w-32 p-3 text-sm font-semibold tracking-wide ">Blocked</th>
               </tr>
             </thead>
-            <tbody className="values" style={{ color: 'black' }}>
+            <tbody className="divide-y divide-gray-100">
               {filterData.map((obj, index) => {
                 if ((status && obj.isApproved === 'verified') || (!status && obj.isApproved === 'pending') ||(!status && obj.isApproved === 'upload proof')) {
                   return (
-                    <tr key={index}>
-                      {/* <td style={{ color: 'black' }}>{index + 1}</td> */}
-                      <td>{obj.name}</td>
-                      <td>{obj.companyName}</td>
-                      <td>{obj.email}</td>
-                      <td>{obj.phone}</td>
-                      <td>
-                        <IconButton onClick={() => viewClick(obj)} style={{ color: 'blue' }} aria-label="delete">
-                          <PreviewIcon />
-                        </IconButton>
+                    <tr key={index} className="bg-white">
+
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap" >{obj.name}</td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{obj.companyName}</td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{obj.email}</td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{obj.phone}</td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap  flex justify-center ">
+
+                          <p className='cursor-pointer flex ' onClick={() => viewClick(obj)}>
+                          <svg    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-green-400">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+</svg>
+                          </p>
+
                       </td>
-                      <td>
+                      <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                         <Switch onChange={() => { handleBlock(obj._id) }} checked={obj.isBlocked} color="warning" />
                       </td>
                     </tr>
@@ -109,7 +109,8 @@ function PartnerTable({ status }) {
                 return null;
               })}
             </tbody>
-          </Table>
+          </table>
+          </div>
         </div>
       </div>
     ) : (

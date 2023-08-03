@@ -9,9 +9,8 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
 import './PartnerProfile.css';
-import { adminApi, baseApi } from  '../../../config/Api';
+import {  baseApi } from  '../../../config/Api';
 import { Button } from '@mui/material';
-import axios from 'axios';
 import { partnerApproval } from '../../../config/AdminEndpoints';
 import Sidebar from '../../Shared/Sidebar/Sidebar';
 
@@ -58,7 +57,7 @@ const PartnerProfile = () => {
           )}
           <img
             className="profile-pic-partner"
-            src={image ? `${baseApi}files/${image}` : 'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png'}
+            src={image ? `${image}` : 'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png'}
             alt="profile pic"
             style={{ height: '150px', width: '150px', borderRadius: '50%', objectFit: 'cover' }}
           />

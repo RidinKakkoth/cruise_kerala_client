@@ -198,7 +198,12 @@ function CruiseData({ status }) {
               </Card>
             );
           }
-          return null //added
+          else{
+           return <div className='w-[100%] h-[100vh]  flex justify-center items-center'>
+                <h3 className='text-gray-500'> no new request</h3>
+            </div>
+          }
+          // return null //added
         })}
 
        </>):(

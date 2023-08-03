@@ -152,7 +152,7 @@ useEffect(() => {
         <div>
         <button className='bg-[#36D7b7] w-24 mb-3 rounded-lg text-white h-10 cursor-pointer' onClick={()=>{navigate(-1)}}>Dashboard</button>
 
-        <h3 className='mb-5'>Users Chats  </h3>
+        {/* <h3 className='mb-5'>Users Chats  </h3> */}
         </div>
 
 
@@ -177,14 +177,15 @@ useEffect(() => {
     onClick={() => clickUser(chat)}
     key={index}
   >
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
       <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-    {chat.userId.name}
+    </svg> */}
+    <img src={chat?.userId?.image?chat?.userId?.image:"https://img.freepik.com/free-icon/man_318-233556.jpg"} className='w-8 h-8 rounded-full' alt="" />
+    {chat?.userId?.name}
 
     {/* Only show the unread count if this chat is not the currentChat */}
-    {chat !== currentChat && unreadCounts[chat.userId._id] > 0 && (
-      <span className='text-white rounded-full bg-[#187a66] w-5 text-sm'>{unreadCounts[chat.userId._id]}</span>
+    {chat !== currentChat && unreadCounts[chat?.userId?._id] > 0 && (
+      <span className='text-white rounded-full bg-[#187a66] w-5 text-sm'>{unreadCounts[chat?.userId?._id]}</span>
     )}
   </div>
 ))}
@@ -195,7 +196,7 @@ useEffect(() => {
 
 
 {currentChat?            <div className="col-span-3 bg-gray-200 border rounded-3xl px-5 py-3">                
-               <div ref={messageContainerRef} className="message max-h-[300px] overflow-y-auto">
+               <div ref={messageContainerRef} className="message min-h-[300px] max-h-[300px] overflow-y-auto">
                
                 {adminMessage &&
                   adminMessage.map((message, index) =>
@@ -259,7 +260,7 @@ useEffect(() => {
                 </button>
               </div>):<SyncLoader color='#36D7b7'/>}
             </div>:
-            <div className='flex relative  '>
+            <div className='flex relative  w-[50vw]'>
 
               <img className='ms-3 rounded-2xl shadow' src="https://cdn.pixabay.com/animation/2022/11/16/11/48/11-48-15-802_512.gif" alt="" />
               <h4 className='left-12 bottom-5 text-gray-500  absolute'>Open chats to  view messages...</h4>

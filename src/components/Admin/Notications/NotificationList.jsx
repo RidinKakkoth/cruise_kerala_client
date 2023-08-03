@@ -67,7 +67,7 @@ function NotificationList() {
     
               {notif?.status === "warning" && (
                 <div  className="flex justify-between bg-white rounded-lg mb-5">
-                  <div className="sm:px-6 flex mt-4 sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-yellow-300 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
+                  <div className="sm:px-6 flex  sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-yellow-300 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width={40}
@@ -97,7 +97,7 @@ function NotificationList() {
     
               {notif?.status === "danger" && (
                 <div  className="flex justify-between bg-white rounded-lg mb-5">
-                  <div className="sm:px-6  flex mt-4 sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-red-500 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
+                  <div className="sm:px-6  flex  sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-red-500 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width={40}

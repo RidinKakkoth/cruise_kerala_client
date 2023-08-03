@@ -1,9 +1,7 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
-import axios from 'axios';
-import { baseApi } from  '../../../config/Api';
 import { Carousel } from 'react-responsive-carousel';
 import './Cruise.css';
 import { useNavigate } from 'react-router-dom';
@@ -96,9 +94,9 @@ function Cruise() {
             {cards && cards.length > 0 ? (
               cards.map((card, index) => (
                 <div onClick={() => handleClick(card)} key={index} className="each-card shadow">
-                  <Carousel showThumbs={false} showArrows={false}>
+                  <Carousel showThumbs={false} showArrows={false} >
                     {card.Images.map((image, index) => (
-                      <div key={index}>
+                      <div key={index} >
                         <img src={image} alt="Banner" className='img-cruise-card' />
                       </div>
                     ))}
@@ -134,7 +132,9 @@ function Cruise() {
                   <h4>No result found !!!</h4>
               </div>
             )}
-          </div>):(<Loading  /> )}
+          </div>):(<div className="mt-20 mb-32">
+            <Loading  />
+          </div> )}
 
 
         </div>

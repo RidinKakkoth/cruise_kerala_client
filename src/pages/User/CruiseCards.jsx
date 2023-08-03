@@ -6,10 +6,12 @@ import ChatBot from '../../../src/components/Shared/ChatBot';
 import { useSelector } from 'react-redux';
 function CruiseCards() {
   const user=useSelector(state=>state.User.userToken)
+ 
   return (
     <div>
            <Navbar />
-           {user&&<ChatBot/>}
+           {/* {user&&<ChatBot/>} */}
+           <ChatBot/>
       <Cruise/>
       <Footer/>
     </div>

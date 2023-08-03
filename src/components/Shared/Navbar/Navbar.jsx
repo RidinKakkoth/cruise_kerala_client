@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -23,11 +23,31 @@ const pages = [
 const settings = [ { name: 'Account', path: "/account" }, { name: 'Chat', path: "/chatbox" }];
 
 function Navbar() {
+
+
+  const[isUser,setIsUser]=useState(false)
   const data = useSelector((state) => state.User);
+  const userToken = useSelector((state) => state?.User?.userToken);
+
   const UserName = data.userName;
+
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [, , removeCookie] = useCookies(['userCookie']);
+  const[userCookie]=useCookies(['userCookie'])
+  
+  useEffect(()=>{
+    const invoke=()=>{
+    const cookieToken=  userCookie?.userCookie?.token
+      const isUserCookieExists = cookieToken=== userToken;// can check token equalas
+      if(isUserCookieExists)
+      setIsUser(true)
+      else
+      setIsUser(false)
+    }
+    invoke()
+  },[userCookie, userToken])
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -161,7 +181,7 @@ function Navbar() {
           </Box>
 
            {/* User settings or login button */}
-           {UserName? (
+           {isUser&&userToken? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

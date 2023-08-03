@@ -188,7 +188,7 @@ function Account() {
                       borderColor: "#00ff68",
                       borderWidth: "5px",
                     }}
-                    className="image "
+                    className="image ms-[100px] "
                     component="img"
                     src={profileImage}
                     // src={`${baseApi}files/${profileImage}`}
@@ -214,7 +214,7 @@ function Account() {
                       width: 150,
                       borderRadius: "50%",
                       marginLeft: 9,
-                      left:30,
+                      left:50,
                       marginTop: 1,
                       borderStyle: "double",
                       borderColor: "#00ff68",

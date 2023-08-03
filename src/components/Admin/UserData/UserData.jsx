@@ -59,7 +59,7 @@ function UserData() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data.map((data, index) => (
+              {data?.map((data, index) => (
                 <tr key={data._id} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     <p className="font-bold text-blue-500 ">{index + 1}</p>
