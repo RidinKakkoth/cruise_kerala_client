@@ -27,7 +27,7 @@ function OtherSettings() {
     async function  invoke(){
         const data=await getCategories()
         if(data){
-          setCategories(data.categories);
+          setCategories(data?.categories);
         }
     }
 

@@ -48,7 +48,7 @@ export default function Category() {
 
   return (
     <div>
-            <ToastContainer autoClose={3000} />
+            <ToastContainer autoClose={1000} />
       <button onClick={handleOpen}  className='rounded flex gap-2 bg-blue-300 text-white px-2 items-center h-9' style={{marginBottom:"20px"}} >
       <PlaylistAddCircleIcon />
       Add Category

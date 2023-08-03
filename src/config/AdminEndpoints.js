@@ -81,7 +81,7 @@ export async function  getCategories (){
         return data;
     }catch(error){
         
-        return {status:'failed',message:error.response.data.error}
+        return {status:'failed',message:error?.response?.data?.error}
     }
 }
 export async function  partnerApproval (status,id){
@@ -152,3 +152,13 @@ export async function  addCoupon (datas){
         return {status:false,message:error.response.data.error}
     }
 }
+export async function  deleteCoupon (id){
+    try{
+        const {data}=await adminAxiosInstance.patch(`delete-coupon?id=${id}`,{})
+        return data;
+    }catch(error){
+        
+        return {status:false,message:error.response.data.error}
+    }
+}
+

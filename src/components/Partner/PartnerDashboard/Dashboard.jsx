@@ -18,13 +18,13 @@ function Dashboard() {
   },[])
 
   const totalRevenue=()=>{
-   return  data.reduce((accumultaor,rate)=>{  
+   return  data?.reduce((accumultaor,rate)=>{  
       return accumultaor+=rate.total
     },0)
   }
   const totalCustomers=()=>{
   const userData=[]
- data.forEach((item)=>{
+ data?.forEach((item)=>{
     userData.push(item.userId._id)
   })
 
@@ -80,7 +80,7 @@ function Dashboard() {
               />
             </svg>
           </div>
-          <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">{data.length>0?data?.length:""}</div>
+          <div className="col-span-1 font-medium text-green-600 text-xl mx-auto">{data?.length>0?data?.length:""}</div>
         </div>
 
         <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center px-4">
