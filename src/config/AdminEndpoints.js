@@ -161,4 +161,13 @@ export async function  deleteCoupon (id){
         return {status:false,message:error.response.data.error}
     }
 }
+export async function  getPartnerCruiseData (id){
+    try{
+        const {data}=await adminAxiosInstance.get(`partner-cruise-data?id=${id}`)
+        console.log(data,"lllllllll");
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
 
