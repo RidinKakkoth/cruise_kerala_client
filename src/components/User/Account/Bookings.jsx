@@ -16,7 +16,9 @@ function Bookings() {
     axios.get(`${baseApi}bookings`, { withCredentials: true }).then((res) => {
         setLoading(false);
       setBookings(res.data.bookingData);
-    });
+    }).catch((error)=>{
+      console.log(error);
+    })
   }, [bookings]);
 
   const cancelBooking=(id)=>{  //check out================>
@@ -38,9 +40,9 @@ function Bookings() {
 {  !loading?    (bookings.length > 0 &&
         bookings.map((booking, index) => (
           <div  className="flex flex-wrap hover:bg-gray-300  mb-4 bg-gray-200 rounded-xl">
-            <div onClick={()=>{handleBooking(booking._id)}} className="w-52 cursor-pointer mx-auto  ">
+            <div onClick={()=>{handleBooking(booking._id)}} className="w-52 h-36 cursor-pointer mx-auto  ">
               <img
-                className="rounded-xl p-1 object-cover   "
+                className="rounded-xl p-1 object-cover w-52 h-36 mt-1 ms-1"
                 key={index}
                 src={booking.cruiseId.Images[0]}
                 alt="ddd"

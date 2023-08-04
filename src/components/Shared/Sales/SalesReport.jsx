@@ -63,7 +63,7 @@ function SalesReport({loading,data}) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data.map((booking) => (
+              {data?.map((booking) => (
                 <tr key={booking.bookingId} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     {new Date(booking.createdAt).toLocaleDateString("en-US", {
@@ -110,7 +110,7 @@ function SalesReport({loading,data}) {
         </div>):<Loading/>}
 
         <div className="grid w-60 grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          {data.map((booking) => (
+          {data?.map((booking) => (
             <div
               key={booking.bookingId}
               className="bg-white space-y-3 p-4 rounded-lg shadow"

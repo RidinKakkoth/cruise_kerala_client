@@ -34,7 +34,7 @@ function Dashboard() {
   }, []);
 
   const totalRevenue = () => {
-    return data.reduce((accumultaor, rate) => {
+    return data?.reduce((accumultaor, rate) => {
       return (accumultaor += rate.total);
     }, 0);
   };

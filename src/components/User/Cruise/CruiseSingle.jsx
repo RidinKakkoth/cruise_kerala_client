@@ -22,7 +22,7 @@ import Facilities from "./Facilities";
 import { Rating } from "@mui/material";
 import Loading from "../../Shared/Loading";
 import dateConvert from "../../../utils/DateFormat";
-import { bookedDatesData } from "../../../config/UserEndpoints";
+import { bookedDatesData, getCruiseOffer } from "../../../config/UserEndpoints";
 
 
 const DetailViewGallery = lazy(() => import("./DetailViewGallery"));
@@ -48,6 +48,19 @@ function CruiseSingle() {
   const [outDateError, setOutDateError] = useState(false);
   const [tax, setTax] = useState(0);
   const [fee, setFee] = useState(0);
+  const [offer, setOffer] = useState("");
+  const [percentage, setPercentage] = useState(0);
+  const [totalNoTax, setTotalNoTax] = useState(0);
+
+
+  useEffect(()=>{
+    async function invoke(){
+        const {offerData}=await getCruiseOffer(id)
+        setOffer(offerData)
+        setPercentage(offerData?.percentage) 
+    }
+    invoke()
+  },[loading])
 
 
 
@@ -85,20 +98,39 @@ const sixMonthCheckOutDate = new Date(today.getFullYear(), today.getMonth() + 6,
 const [maxCheckOutDate, setMaxCheckOutDate] = useState(null);
 const [bookedDates, setBookedDates] = useState([]);
 
-useEffect(()=>{
-    async function invoke(){
-      const data=await bookedDatesData(id)
-      if(data){
-        setBookedDates(data)
+// useEffect(()=>{
+//     async function invoke(){
+//       const data=await bookedDatesData(id)
+//       if(data){
+//         setBookedDates(data)
+//       }
+//     }
+//     invoke()
+// },[id])
+
+useEffect(() => {
+  async function invoke(){
+    try {
+      const data = await bookedDatesData(id)
+      console.log("Fetched bookedDates:", data);
+      if (Array.isArray(data)) {
+        setBookedDates(data);
+      } else {
+        console.error("bookedDatesData did not return an array:", data);
       }
+    } catch (error) {
+      console.error("Error fetching bookedDates:", error);
     }
-    invoke()
-},[id])
+  }
+  invoke()
+}, [id])
+
+
 
 const disabledDates = [];
 
 
-bookedDates.forEach((dates, index) => {
+bookedDates&&bookedDates?.forEach((dates, index) => {
   const startDate = startOfDay(parseISO(dates.checkIn));
   const endDate = startOfDay(parseISO(dates.checkOut));
 
@@ -138,6 +170,7 @@ bookedDates.forEach((dates, index) => {
     cruisePlace: data.boarding,
     baseRate: data.baseRate,
     extraGuest,
+    percentage
   };
 
   function calculateAverageRating(reviews) {
@@ -219,18 +252,36 @@ bookedDates.forEach((dates, index) => {
   useEffect(() => {
     const pricePerNight = data.baseRate;
     const extraRate = data.extraRate;
-  
+  console.log(pricePerNight,"ppp");
+  console.log(extraRate,"ex");
     if (numOfNights > 0 && extraGuest >= 0) {
-     const totalNoTax= pricePerNight * numOfNights + extraGuest * numOfNights * extraRate
-     setTax(totalNoTax/10)
-     setFee(totalNoTax/10)
-    const updatedTotal=totalNoTax+(totalNoTax/10)*2
-
-      setTotalAmount(updatedTotal
-        // pricePerNight * numOfNights + extraGuest * numOfNights * extraRate
-      );
+      let newtotal
+      if(percentage){
+         const total= pricePerNight * numOfNights + extraGuest * numOfNights * extraRate
+         setTotalNoTax(total-(total/percentage))
+         newtotal=total-(total/percentage)
+         console.log(newtotal,"t1");
+      }
+      else{
+        
+       const total= pricePerNight * numOfNights + extraGuest * numOfNights * extraRate
+        console.log(total,"t2");
+        newtotal=total
+      setTotalNoTax(total)
+    }  
+     setTax(newtotal/10)
+     setFee(newtotal/10)
+     console.log(newtotal,"tn");
+    const updatedTotal=newtotal+(newtotal/10)*2
+    console.log(updatedTotal,"uuppppppppppp");
+      // setOfferTotal(updatedTotal-(updatedTotal/(offer.percentage)))
+      // if(percentage){
+      //   setTotalAmount((updatedTotal)-(updatedTotal/percentage))
+      // }else{
+        setTotalAmount(updatedTotal );
+      // }
     }
-  }, [numOfNights, extraGuest, data.baseRate, data.extraRate]);
+  }, [numOfNights, extraGuest, data.baseRate, data.extraRate,offer,checkInDate,checkOutDate]);
   
 
 
@@ -291,8 +342,8 @@ bookedDates.forEach((dates, index) => {
           className="bg-white shadow p-4 rounded-2xl"
           style={{ borderRadius: "20px" }}
         >
-          <div id="head-price" className=" text-center">
-            Price: ₹{data.baseRate}/ per day
+          <div id="head-price" className=" justify-center flex">
+            Price: {offer?<p className="ms-2"> ₹{data?.baseRate- ((data?.baseRate)/percentage)}/ <span className="text-base">per day</span> <span class="line-through text-red-500" >₹{ data.baseRate}</span></p>:<p>₹{ data.baseRate}/ per day</p>}  
           </div>
 
           <div className="border rounded-2xl mt-4 mb-4">

@@ -8,13 +8,13 @@ import PartnerSignUp from '../pages/Partner/PartnerSignUp';
 import Cruises from '../pages/Partner/Cruises';
 import PartnerAccount from '../pages/Partner/PartnerAccount';
 import CruiseBookings from '../pages/Partner/CruiseBookings';
-import Offers from '../pages/Partner/Offers';
 // import AddCruises from '../components/Partner/Cruises/AddCruises';
 import AddCruiseForm from '../components/Partner/Cruises/AddCruiseForm';
 import EditCruiseForm from '../components/Partner/Cruises/EditCruiseForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { partnerAdd } from '../store/PartnerAuth';
 import NotFound from '../404';
+import OffersPage from '../pages/Partner/OffersPage';
 
 
 
@@ -55,7 +55,7 @@ function PartnerRoute() {
         {/* <Route path="/add-cruise" element={<AddCruises />} /> */}
         <Route path="/account" element={partnerToken?<PartnerAccount />:<Navigate to="/partner" />} />
         <Route path="/bookings" element={partnerToken?<CruiseBookings />:<Navigate to="/partner" />} />
-        <Route path="/offers" element={partnerToken?<Offers />:<Navigate to="/partner" />} />
+        <Route path="/offers" element={partnerToken?<OffersPage />:<Navigate to="/partner" />} />
         <Route path="*" element={<NotFound />} />
 
       </Routes>

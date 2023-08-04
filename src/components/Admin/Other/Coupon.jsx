@@ -30,8 +30,6 @@ const data=await deleteCoupon(id)
 if(data.status){
   setTrigger(!trigger)
 }
-
-
 }
 
 

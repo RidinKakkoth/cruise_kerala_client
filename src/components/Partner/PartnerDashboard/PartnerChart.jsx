@@ -56,7 +56,7 @@ const PartnerChart = ({ data }) => {
     const cruiseBookings = {};
   
     // Group bookings by cruise name and count the number of bookings for each cruise
-    data.forEach((booking) => {
+    data?.forEach((booking) => {
       const cruiseName = booking.cruiseId.name;
       if (cruiseBookings[cruiseName]) {
         cruiseBookings[cruiseName]++;
@@ -66,7 +66,7 @@ const PartnerChart = ({ data }) => {
     });
   
     // Convert the aggregated booking data to an array of objects with category and value properties
-    return Object.keys(cruiseBookings).map((cruiseName) => ({
+    return Object?.keys(cruiseBookings)?.map((cruiseName) => ({
       category: cruiseName,
       value: cruiseBookings[cruiseName],
     }));

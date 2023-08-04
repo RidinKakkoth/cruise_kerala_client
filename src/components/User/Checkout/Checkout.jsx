@@ -18,7 +18,7 @@ function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state ? location.state.data : null;
-  const{totalAmount,tax,fee,guest,cruiseId}=data
+  const{totalAmount,tax,fee,guest,cruiseId,percentage}=data
   const checkInDate=new Date(data.checkInDate)
 
   const discountAmntLocal = localStorage?.getItem('discount');
@@ -52,10 +52,10 @@ function Checkout() {
 
     const data=await userSignin(email,password)
         const result=data?.userLogin
-        if(data.status==="failed"){
-         toast.error(data.message,{position: "top-center"})
+        if(data?.status==="failed"){
+         toast.error(data?.message,{position: "top-center"})
         }
-          else if(result.status){
+          else if(result?.status){
              dispatch(userAdd({token:result.token,userName:result.name}))
              navigate(0)
              }
@@ -185,7 +185,8 @@ const handleApplyCoupon =async (status,offer) => {
               <div className="grid  grid-cols-2 w-[100%]">
                 <div className="ms-4">
                   <p className="font-medium text-lg mb-3 ">
-                    {data.baseRate} ₹ x {data.numOfNights} nights
+                    {/* {data.baseRate} ₹ x {data.numOfNights} nights */}
+                    {(data.totalAmount-tax*2)/data.numOfNights} ₹ x {data.numOfNights} nights
                   </p>
                   <p className="font-medium text-lg mb-3">
                     {" "}
@@ -195,7 +196,7 @@ const handleApplyCoupon =async (status,offer) => {
                   <p className="font-medium text-lg mb-3">Cruise Fee </p>
                   <hr />
                   <p className="font-medium text-lg mb-3">Sub-Total </p>
-                  <p className="font-medium text-lg mb-3">Discount </p>
+                  {percentage===0&&<p className="font-medium text-lg mb-3">Discount </p>}
                   <p className="font-medium text-lg mt-4">Total(INR)</p>
 
                 </div>
@@ -203,7 +204,8 @@ const handleApplyCoupon =async (status,offer) => {
 
                 <div className="mx-auto">
                   <p className="font-normal text-lg mx-auto mb-3">
-                    {data.baseRate * data.numOfNights}.00 ₹
+                  {(data.totalAmount-tax*2)}.00 ₹
+                    {/* {data.baseRate * data.numOfNights}.00 ₹ */}
                   </p>
                   <p className="font-normal text-lg mx-auto mb-3">
                     {data.extraGuest * 1000 * data.numOfNights}.00 ₹
@@ -214,14 +216,14 @@ const handleApplyCoupon =async (status,offer) => {
                   <p className="font-normal text-lg mx-auto mb-3 mt-3">
                     {data.totalAmount}.00 ₹{" "}
                   </p>
-                  <p className="font-normal text-lg mx-auto mb-3 text-green-400">{discountAmnt}.00 ₹</p>
+                 { percentage===0&& <p className="font-normal text-lg mx-auto mb-3 text-green-400">{discountAmnt}.00 ₹</p>}
                   <p className="font-normal text-lg mx-auto mb-4 mt-3">
                     {data.totalAmount-discountAmnt}.00 ₹{" "}
                   </p>
                 </div>
 
                 <div>
-     {isSignIn&& <button className="underline ms-4 font-medium" onClick={handleToggleCouponBox}>
+     {isSignIn&&percentage===0&& <button className="underline ms-4 font-medium" onClick={handleToggleCouponBox}>
         {showCouponBox ? '' : 'Enter a coupon'}
       </button>
 }

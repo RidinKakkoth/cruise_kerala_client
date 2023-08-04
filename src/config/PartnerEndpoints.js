@@ -62,7 +62,7 @@ export async function  partnerSignUp (email,password,phone,name,company){
 
 export async function addCruise(formData) {
     try {
-      const { data } = await partnerAxiosInstance.post(
+      const {data}  = await partnerAxiosInstance.post(
         "add-cruise",
         formData,
         {
@@ -185,3 +185,40 @@ export async function partnerEmailCheck(email) {
       return { status: "failed", message: "Network error" };
     }
   }
+
+
+  export async function  getOfferData (){
+    try{
+        const {data}=await partnerAxiosInstance.get('get-offer-data')
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  blockOffer (id){
+    try{
+        const {data}=await partnerAxiosInstance.patch(`blockoffer?id=${id}`,{})
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  addOffer (datas){
+    try{
+        const {data}=await partnerAxiosInstance.post(`add-offer`,datas)
+        return data;
+    }catch(error){
+        
+        return {status:false,message:error.response.data.error}
+    }
+}
+export async function  deleteOffer (id){
+    try{
+        const {data}=await partnerAxiosInstance.delete(`delete-offer?id=${id}`,{})
+        return data;
+    }catch(error){
+        
+        return {status:false,message:error.response.data.error}
+    }
+}
+

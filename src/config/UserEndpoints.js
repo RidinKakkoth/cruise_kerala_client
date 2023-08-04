@@ -100,5 +100,12 @@ export async function applyCoupon(coupon) {
   }
   
 
-
+  export async function  getCruiseOffer (id){
+    try{
+        const {data}=await userAxiosInstance.get(`get-cruise-offer?id=${id}`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
 

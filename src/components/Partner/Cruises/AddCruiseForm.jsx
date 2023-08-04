@@ -207,8 +207,9 @@ useEffect(()=>{
               Pincode
             </label>
             <input
-              type="text"
+              type="number"
               name="pincode"
+
             //   value={formData.pincode}
             onChange={(e)=>{setPin(e.target.value)}}
                           className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"

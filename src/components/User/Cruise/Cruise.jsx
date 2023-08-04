@@ -37,9 +37,9 @@ function Cruise() {
   };
 
   const filterCards = (query) => {
-    const filteredData = originalCards.filter((card) => {
-      const nameMatches = card.name.toLowerCase().includes(query.toLowerCase());
-      const districtMatches = card.district.toLowerCase().includes(query.toLowerCase());
+    const filteredData = originalCards?.filter((card) => {
+      const nameMatches = card?.name.toLowerCase().includes(query.toLowerCase());
+      const districtMatches = card?.district.toLowerCase().includes(query.toLowerCase());
       return nameMatches || districtMatches;
     });
     setCards(filteredData);
@@ -94,13 +94,17 @@ function Cruise() {
             {cards && cards.length > 0 ? (
               cards.map((card, index) => (
                 <div onClick={() => handleClick(card)} key={index} className="each-card shadow">
-                  <Carousel showThumbs={false} showArrows={false} >
-                    {card.Images.map((image, index) => (
-                      <div key={index} >
-                        <img src={image} alt="Banner" className='img-cruise-card' />
-                      </div>
-                    ))}
-                  </Carousel>
+
+<Carousel showThumbs={false} showArrows={false}>
+  {card?.Images.map((image, index) => (
+    <div key={index} className="relative">
+      <img src={image} alt="Banner" className='img-cruise-card' />
+
+    </div>
+  ))}
+</Carousel>
+
+
                   <div className='font-sans' style={{ display: "flex", justifyContent: "space-between" }}>
                     <div>
                       <h5>{card.name}</h5>
