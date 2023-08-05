@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment-timezone';
-import { chatApi, messageApi } from  '../../../config/Api';
+import { chatApi, messageApi, socketApi } from  '../../../config/Api';
 import InputEmoji from "react-input-emoji";
 import SyncLoader from 'react-spinners/SyncLoader'
 import { io } from "socket.io-client";
@@ -67,7 +67,7 @@ function Chatbox() {
 
 //initialise socket
 useEffect(() => {
-  socket.current = io("http://localhost:8080");
+  socket.current = io(socketApi);
 
   socket.current.on('message', (message) => {
     setAdminMessage((prevMessages) => [...(prevMessages?.length ? prevMessages : []), message]);

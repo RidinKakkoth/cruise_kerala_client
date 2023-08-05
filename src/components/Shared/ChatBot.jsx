@@ -12,9 +12,7 @@ function ChatBot() {
   useEffect(() => {
     const invoke = () => {
       const cookieToken = userCookie?.userCookie?.token;
-      console.log(userToken, "uuuuuttttt");
       const isUserCookieExists = cookieToken === userToken;
-      console.log(isUserCookieExists, "hhhhhhhhhhh");
       if (isUserCookieExists) {
         setIsUser(true);
       } else {
