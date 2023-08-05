@@ -18,7 +18,7 @@ import { useCookies } from 'react-cookie';
 
 const pages = [
   { name: 'Cruises', path: '/cruises' },
-  { name: 'About', path: '/about' }
+  // { name: 'About', path: '/about' }
 ];
 const settings = [ { name: 'Account', path: "/account" }, { name: 'Chat', path: "/chatbox" }];
 
@@ -103,9 +103,10 @@ function Navbar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              
             }}
           >
-            Cruise
+            Cruise 
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -137,7 +138,7 @@ function Navbar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
+              {pages?.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center" style={{textDecoration:"none"}} component={Link} to={page.path}>
                     {page.name}
@@ -166,7 +167,7 @@ function Navbar() {
             Cruise
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {pages?.map((page) => (
               <Button
                 key={page.name}
                 style={{ fontFamily: "'Bree Serif', serif" }}
@@ -204,7 +205,7 @@ function Navbar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-{settings.map((setting) => (
+{settings?.map((setting) => (
   <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
     <Typography textAlign="center" style={{textDecoration:"none"}} component={Link} to={setting.path}>
       {setting.name}

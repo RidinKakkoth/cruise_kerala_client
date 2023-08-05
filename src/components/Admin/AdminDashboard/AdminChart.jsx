@@ -57,7 +57,7 @@ const AdminChart = ({ data }) => {
     const cruiseBookings = {};
   
     // Group bookings by cruise name and count the number of bookings for each cruise
-    data.forEach((booking) => {
+    data?.forEach((booking) => {
       const cruiseName = booking.cruiseId.name;
       if (cruiseBookings[cruiseName]) {
         cruiseBookings[cruiseName]++;

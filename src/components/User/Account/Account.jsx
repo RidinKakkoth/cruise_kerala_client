@@ -175,7 +175,7 @@ function Account() {
           <div className="flex-col text-center justify-center mt-5   md:w-[30%] w-[100%]">
             <div className="flex " >
               {open ? (
-                <div className="image-container ml-16 sm:ml-4 flex ">
+                <div className="image-container ml-16 right-16 sm:right-0 sm:ml-4 flex ">
                   <CardMedia 
                     sx={{
                       height: 150,

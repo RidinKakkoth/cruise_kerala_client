@@ -43,7 +43,7 @@ const AddCruiseForm = () => {
     const handleSelectImage=(event)=>{
         const selectedFiles=event.target.files;
         const selectedFilesArray=Array.from(selectedFiles)
-        const imagesArray=selectedFilesArray.map((file)=>{
+        const imagesArray=selectedFilesArray?.map((file)=>{
             return URL.createObjectURL(file)
         })
         setSelectedImages((previousImages)=>previousImages.concat(imagesArray))
@@ -386,7 +386,7 @@ useEffect(()=>{
             />
           </div>                <div className='images '>
                         {selectedImages&&
-                        selectedImages.map((image,index)=>{
+                        selectedImages?.map((image,index)=>{
                             return(
                                 <div key={image} className='image '>
                                     <img style={{padding:0,margin:0}} src={image} className='w-52' height="200" alt="uploads" />

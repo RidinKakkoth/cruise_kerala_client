@@ -52,7 +52,7 @@ function BookingData() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data.map((booking) => (
+              {data?.map((booking) => (
                 <tr key={booking.bookingId} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     <p className="font-bold text-gray-700 ">
@@ -102,7 +102,7 @@ function BookingData() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          {data.map((booking) => (
+          {data?.map((booking) => (
             <div key={booking.bookingId} className="bg-white space-y-3 p-4 rounded-lg shadow">
                 <p className='mb-2'>{booking.bookingId}</p>  
               <div className="flex items-center space-x-2 text-sm">

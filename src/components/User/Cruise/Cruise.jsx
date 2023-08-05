@@ -92,7 +92,7 @@ function Cruise() {
 
          {!loading?( <div className="cruise-cards container">
             {cards && cards.length > 0 ? (
-              cards.map((card, index) => (
+              cards?.map((card, index) => (
                 <div onClick={() => handleClick(card)} key={index} className="each-card shadow">
 
 <Carousel showThumbs={false} showArrows={false}>
@@ -131,9 +131,9 @@ function Cruise() {
                 </div>
               ))
             ) : (
-              <div className="mt-16 mb-16 sm:ms-0 flex justify-center ">
+              <div className="w-[80vw] h-[60vh] flex justify-center items-center">
         
-                  <h4>No result found !!!</h4>
+                  <h4 className="">No result found !!!</h4>
               </div>
             )}
           </div>):(<div className="mt-20 mb-32">

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './CruiseData.css';
-// import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -14,8 +13,6 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Loading from '../../Shared/Loading'
-import { baseApi } from  '../../../config/Api';
-
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';

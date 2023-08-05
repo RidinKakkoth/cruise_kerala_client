@@ -53,7 +53,7 @@ function Sidebar({ userType }) { // Include userType prop in function signature
           )}
 
           {userType === 'partner' ? (
-            PartnerSidebarData.map((value, key) => (
+            PartnerSidebarData?.map((value, key) => (
               <li
               key={key}
               className='sidebar-partner-list-row'
@@ -73,7 +73,7 @@ function Sidebar({ userType }) { // Include userType prop in function signature
             </li>
             ))
           ) : (
-            AdminSidebarData.map((value, key) => (
+            AdminSidebarData?.map((value, key) => (
               <li
                 key={key}
                 className='sidebar-partner-list-row'

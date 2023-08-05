@@ -199,7 +199,7 @@ useEffect(() => {
                <div ref={messageContainerRef} className="message min-h-[300px] max-h-[300px] overflow-y-auto">
                
                 {adminMessage &&
-                  adminMessage.map((message, index) =>
+                  adminMessage?.map((message, index) =>
                     message.senderId === currentChat.adminId ? (
 
 

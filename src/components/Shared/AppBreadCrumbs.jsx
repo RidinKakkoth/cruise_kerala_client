@@ -8,7 +8,7 @@ function AppBreadCrumbs() {
   let crumbLink=""
 
   const crumbPath=location.pathname.split("/").filter((path)=>path!=="")
-                                            .map((crumb)=>{
+                                            ?.map((crumb)=>{
                                                 crumbLink+=`/${crumb}`
                                                 return <Link to={crumbLink} key={crumb}>
                                                     {crumb}

@@ -54,7 +54,7 @@ useEffect(()=>{
 
       </span> */}
 
-      {offer&&<img src="https://res.cloudinary.com/ddymh3cnk/image/upload/v1691156409/Pngtree_super_and_special_offer_3688401_xlz0ea.png" className="w-36 h-36 absolute" alt="" />}
+      {offer&&<><img src="https://res.cloudinary.com/ddymh3cnk/image/upload/v1691210782/Pngtree_special_offer_tag_blank_with_7003191_wilu4s.png" className="w-32 h-32 absolute " alt="" /> <p className="absolute text-white font-sans italic font-semibold top-8  left-10 text-base">{offer.percentage} % off</p> <p className="absolute  text-white font-sans italic font-semibold top-16 left-6 text-base">{offer.offerName} offer</p></>}
               {data.Images?.length > 0 && (
                 <img
                   className="aspect-square object-cover rounded-l-3xl w-full h-full"
@@ -85,7 +85,7 @@ useEffect(()=>{
         ) : (
             <Carousel className="w-[75%]  self-center mx-auto" autoPlay  interval={3000} showThumbs={false}  showArrows={true}>
 {
-    data.Images.map((img,index)=>{
+    data?.Images?.map((img,index)=>{
        return <div style={{ position: "relative"}}>
 
 

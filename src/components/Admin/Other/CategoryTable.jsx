@@ -37,7 +37,7 @@ export default function CategoryTable({ categories }) {
           </TableRow>
         </TableHead>
         <TableBody className='rounded'>
-          {obj.map((row, index) => (
+          {obj?.map((row, index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

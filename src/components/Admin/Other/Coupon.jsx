@@ -71,7 +71,7 @@ if(data.status){
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {couponData.map((coupon) => (
+              {couponData?.map((coupon) => (
                 <tr key={coupon?._id} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     <p className=" ">

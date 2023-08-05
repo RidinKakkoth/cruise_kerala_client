@@ -22,7 +22,7 @@ function Login() {
 
 const data=await adminSignin(email,password)
       const result=data?.adminLogin
-      if(data.status==="failed"){
+      if(data?.status==="failed"){
        toast.error(data.message,{position: "top-center"})
       }
         else if(result.status){

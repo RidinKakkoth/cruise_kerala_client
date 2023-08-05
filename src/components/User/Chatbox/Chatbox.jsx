@@ -150,7 +150,7 @@ return()=>{
             {!messageLoading?
              ( <div ref={messageContainerRef} className="message max-h-[300px] overflow-y-auto">
                 {userMessage &&
-                  userMessage.map((message, index) =>
+                  userMessage?.map((message, index) =>
                     message.senderId === currentChat.userId ? (
                      <>
 

@@ -23,7 +23,7 @@ function BookingData() {
   useEffect(()=>{
     async function invoke(){
       const data=await getBookings()      
-       setData(data.bookingData);
+       setData(data?.bookingData);
         setLoading(false);
     }
     invoke()
@@ -66,7 +66,7 @@ function BookingData() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data.map((booking) => (
+              {data?.map((booking) => (
                 <tr key={booking.bookingId} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     <p className="font-bold text-blue-500 ">
@@ -134,7 +134,7 @@ function BookingData() {
         </div>):<Loading/>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          {data.map((booking) => (
+          {data?.map((booking) => (
             <div
               key={booking.bookingId}
               className="bg-white space-y-3 p-4 rounded-lg shadow"

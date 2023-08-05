@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { adminApi } from  '../../../config/Api';
-import axios from "axios";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Loading from "../../Shared/Loading";
@@ -105,7 +103,7 @@ function UserData() {
         </div>):<Loading/>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          {data.map((data, index) => (
+          {data?.map((data, index) => (
             <div
               key={data._id}
               className="bg-white space-y-3 p-4 rounded-lg shadow"

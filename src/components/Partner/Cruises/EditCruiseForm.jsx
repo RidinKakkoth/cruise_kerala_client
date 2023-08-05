@@ -46,22 +46,10 @@ const EditCruiseForm = () => {
 
     const[selectedImages,setSelectedImages]=useState([])
 
-    // const handleSelectImage=(event)=>{
-    //   console.log(selectedImages,"hiii");
-    //     const selectedFiles=event.target.files;
-    //     const selectedFilesArray=Array.from(selectedFiles)
-    //     const imagesArray=selectedFilesArray.map((file)=>{
-    //         return URL.createObjectURL(file)
-    //     })
-    //     setSelectedImages((previousImages)=>previousImages.concat(imagesArray))
-    //     setImages(selectedFiles)
-    //     console.log(selectedFiles,"sel");
-    //     console.log(images,"iiiiiiii");
-    // }
     const handleSelectImage = (event) => {
       const selectedFiles = event.target.files;
       const selectedFilesArray = Array.from(selectedFiles);
-      const imagesArray = selectedFilesArray.map((file) => {
+      const imagesArray = selectedFilesArray?.map((file) => {
         return URL.createObjectURL(file);
       });
       setSelectedImages((previousImages) => [...previousImages, ...imagesArray]);
@@ -438,20 +426,9 @@ return (
              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>                <div className='images flex gap-2'>
-                      {/* {selectedImages&&
-                      selectedImages.map((image,index)=>{
-                          return(
-                              <div key={image} className='image '>
-                                  <img style={{padding:0,margin:0}} src={image} className='w-52' height="200" alt="uploads" />
-                                  <DeleteForeverIcon className='del-btn' style={{color:"red",cursor:"pointer"}} onClick={()=>{setSelectedImages(selectedImages.filter((e)=>e!==image)) 
-                                    console.log(selectedImages,"88888888")   }     } /> 
-                                  <p id='img-indx'>{index+1}</p>
-                              </div>
-                          )
-                      })
-                      } */}
+
 {selectedImages &&
-  selectedImages.map((image, index) => {
+  selectedImages?.map((image, index) => {
     return (
       <div key={image} className='image'>
         <img style={{ padding: 0, margin: 0 }} src={image} className='w-52' height='200' alt='uploads' />

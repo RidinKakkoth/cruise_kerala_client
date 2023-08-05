@@ -38,7 +38,7 @@ function Bookings() {
 
 
 {  !loading?    (bookings.length > 0 &&
-        bookings.map((booking, index) => (
+        bookings?.map((booking, index) => (
           <div  className="flex flex-wrap hover:bg-gray-300  mb-4 bg-gray-200 rounded-xl">
             <div onClick={()=>{handleBooking(booking._id)}} className="w-52 h-36 cursor-pointer mx-auto  ">
               <img

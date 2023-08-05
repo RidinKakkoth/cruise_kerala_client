@@ -18,7 +18,7 @@ const PartnerChart = ({ data }) => {
     });
 
     // Convert the aggregated sales data to an array of objects with month names
-    return Object.keys(monthlySales).map(key => ({
+    return Object.keys(monthlySales)?.map(key => ({
       month: new Date(key + '-01').toLocaleString('default', { month: 'long' }),
       total: monthlySales[key],
     }));
@@ -34,7 +34,7 @@ const PartnerChart = ({ data }) => {
         id: 'monthly-bar',
       },
       xaxis: {
-        categories: monthlySalesData.map(item => item.month),
+        categories: monthlySalesData?.map(item => item.month),
       },
       plotOptions: {
         bar: {
@@ -45,7 +45,7 @@ const PartnerChart = ({ data }) => {
     series: [
       {
         name: 'Revenue',
-        data:  monthlySalesData.map(item => item.total),
+        data:  monthlySalesData?.map(item => item.total),
       },
     ],
     colors: colorPalette,
@@ -80,7 +80,7 @@ const PartnerChart = ({ data }) => {
     chart: {
       id: 'donut-chart',
     },
-    labels: donutChartData.map(item => item.category),
+    labels: donutChartData?.map(item => item.category),
     responsive: [
       {
         breakpoint: 480,
@@ -97,7 +97,7 @@ const PartnerChart = ({ data }) => {
     colors: colorPalette,
   };
   
-  const donutChartSeries = donutChartData.map(item => item.value);
+  const donutChartSeries = donutChartData?.map(item => item.value);
   
 
 

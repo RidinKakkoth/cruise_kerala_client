@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {  orders, userSignin, verifyPayment } from "../../../config/UserEndpoints";
 import CouponBox from './CouponModal';
+import CouponShow from "./CouponShow";
 
 function Checkout() {
   const [email,setEmail]=useState("")
@@ -32,6 +33,21 @@ function Checkout() {
   
   const user = useSelector((state) => state.User);
   const isSignIn = user.userToken;
+
+//================================================================================
+
+const [showCouponModal, setShowCouponModal] = useState(false);
+
+const openCouponShowModal = () => {
+  console.log("ssssssssssssssssssssss");
+  setShowCouponModal(true);
+};
+
+const closeCouponShowModal = () => {
+  setShowCouponModal(false);
+};
+
+//================================================================================
 
 
   useEffect(() => {
@@ -160,20 +176,25 @@ const handleApplyCoupon =async (status,offer) => {
 
           <h5>Guests : </h5>
           <p className="font-normal">{data.guest} </p>
-        </div>
 
+
+
+
+
+        </div>
+  
         <div>
-          <div className="flex-col  items-center border rounded-4    bg-white w-[72%] ">
+          <div className="flex-col  items-center border rounded-4    bg-white sm:w-[72%] ">
             <div className="grid grid-cols-[2fr_3fr]">
               <div>
                 <img
-                  className="mt-3 border ms-3 h-28 w-28 object-cover rounded-xl"
+                  className="mt-3 border ms-2 h-28 w-28 object-cover rounded-xl"
                   src={data.cruiseImg[0]}
                   alt="thumbnail"
                 />
               </div>
               <div className="ms-1 mt-3 font-medium">
-                <p className="text-lg">{data.cruiseName}</p>
+                <p className="text-lg  sm:ms-0">{data.cruiseName}</p>
                 <p className="text-gray-500">{data.cruisePlace}</p>
               </div>
             </div>
@@ -186,7 +207,7 @@ const handleApplyCoupon =async (status,offer) => {
                 <div className="ms-4">
                   <p className="font-medium text-lg mb-3 ">
                     {/* {data.baseRate} ₹ x {data.numOfNights} nights */}
-                    {(data.totalAmount-tax*2)/data.numOfNights} ₹ x {data.numOfNights} nights
+                    {(data.totalAmount-tax*2)/data.numOfNights} ₹ x {data.numOfNights} day
                   </p>
                   <p className="font-medium text-lg mb-3">
                     {" "}
@@ -196,8 +217,8 @@ const handleApplyCoupon =async (status,offer) => {
                   <p className="font-medium text-lg mb-3">Cruise Fee </p>
                   <hr />
                   <p className="font-medium text-lg mb-3">Sub-Total </p>
-                  {percentage===0&&<p className="font-medium text-lg mb-3">Discount </p>}
-                  <p className="font-medium text-lg mt-4">Total(INR)</p>
+                  {(percentage===0||"undefined")&&<p className="font-medium text-lg mb-3">Discount </p>}
+                  <p className="font-medium text-lg mt-3">Total(INR)</p>
 
                 </div>
 
@@ -216,17 +237,19 @@ const handleApplyCoupon =async (status,offer) => {
                   <p className="font-normal text-lg mx-auto mb-3 mt-3">
                     {data.totalAmount}.00 ₹{" "}
                   </p>
-                 { percentage===0&& <p className="font-normal text-lg mx-auto mb-3 text-green-400">{discountAmnt}.00 ₹</p>}
+                 { (percentage===0||"undefined")&& <p className="font-normal text-lg mx-auto mb-3 text-green-400">{discountAmnt}.00 ₹</p>}
                   <p className="font-normal text-lg mx-auto mb-4 mt-3">
                     {data.totalAmount-discountAmnt}.00 ₹{" "}
                   </p>
                 </div>
 
                 <div>
-     {isSignIn&&percentage===0&& <button className="underline ms-4 font-medium" onClick={handleToggleCouponBox}>
-        {showCouponBox ? '' : 'Enter a coupon'}
-      </button>
-}
+               
+
+{showCouponModal && <CouponShow isOpen={showCouponModal} onClose={closeCouponShowModal} />}
+
+
+   
       {showCouponBox && (
         <CouponBox
           onApply={handleApplyCoupon}
@@ -236,6 +259,21 @@ const handleApplyCoupon =async (status,offer) => {
     </div>
 
               </div>
+              {
+    
+    isSignIn&&(percentage===0||"undefined" )&& 
+    <div className="flex justify-around">
+     <button className="underline ms-4 font-medium" onClick={handleToggleCouponBox}>
+       {showCouponBox ? '' : 'Enter a coupon'}
+     </button>
+     <p  className=" text-indigo-700 font-semibold cursor-pointer px-4 flex gap-2" onClick={openCouponShowModal} > <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185zM9.75 9h.008v.008H9.75V9zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 4.5h.008v.008h-.008V13.5zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+</svg>
+
+                    Coupons
+               </p>
+     </div>
+}
 <hr />              
               {
     isSignIn?               (

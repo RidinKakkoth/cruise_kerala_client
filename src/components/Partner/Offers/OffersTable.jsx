@@ -69,7 +69,7 @@ function OffersTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {offers.map((offer,index) => (
+                {offers?.map((offer,index) => (
                   <tr key={index} className="bg-white">
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       <p className=" ">

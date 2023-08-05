@@ -63,45 +63,45 @@ function SalesReport({loading,data}) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data.map((booking) => (
+              {data?.map((booking) => (
                 <tr key={booking.bookingId} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {new Date(booking.createdAt).toLocaleDateString("en-US", {
+                    {new Date(booking?.createdAt).toLocaleDateString("en-US", {
                       day: "2-digit",
                       month: "2-digit",
                       year: "numeric",
                     })}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {booking.userId.email}
+                    {booking?.userId.email}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {booking.cruiseId.name}
+                    {booking?.cruiseId.name}
                   </td>
 
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     {" "}
-                    {new Date(booking.checkIn).toLocaleDateString("en-US", {
+                    {new Date(booking?.checkIn).toLocaleDateString("en-US", {
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
                     })}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {new Date(booking.checkOut).toLocaleDateString("en-US", {
+                    {new Date(booking?.checkOut).toLocaleDateString("en-US", {
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
                     })}
                   </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    ₹ {booking.fee}
+                    ₹ {booking?.fee}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    ₹ {booking.tax}
+                    ₹ {booking?.tax}
                     </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    ₹ {booking.total}
+                    ₹ {booking?.total}
                   </td>
                 </tr>
               ))}
@@ -110,7 +110,7 @@ function SalesReport({loading,data}) {
         </div>):<Loading/>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          {data.map((booking) => (
+          {data?.map((booking) => (
             <div
               key={booking.bookingId}
               className="bg-white space-y-3 p-4 rounded-lg shadow"

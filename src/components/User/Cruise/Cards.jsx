@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { baseApi } from  '../../../config/Api';
 import Typewriter from 'typewriter-effect';
 
 const Cards = ({ data }) => {

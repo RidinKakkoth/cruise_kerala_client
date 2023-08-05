@@ -108,4 +108,12 @@ export async function applyCoupon(coupon) {
         return {status:'failed',message:'Network error'}
     }
 }
+  export async function  getCouponData(){
+    try{
+        const {data}=await userAxiosInstance.get(`get-coupon`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
 
