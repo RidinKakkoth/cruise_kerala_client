@@ -222,3 +222,11 @@ export async function  deleteOffer (id){
     }
 }
 
+export async function  cancelBooking (id){
+  try{
+      const {data}=await partnerAxiosInstance.patch(`cancel-booking?id=${id}`,{})
+      return data;
+  }catch(error){
+      return {status:'failed',message:'Network error'}
+  }
+}
