@@ -27,7 +27,7 @@ function AdminRoute() {
   useEffect(() => {
     async function fetchAdminToken() {
       if (cookies.adminCookie) {
-        dispatch(adminAdd({ token: cookies.adminCookie?.token }));
+        dispatch(adminAdd({ token: cookies.adminCookie }));
       }
       setIsLoading(false); 
     }

@@ -12,6 +12,7 @@ export default function DetailViewGaller({ data }) {
 useEffect(()=>{
   async function invoke(){
       const {offerData}=await getCruiseOffer(data._id)
+      
       setOffer(offerData)
   }
   invoke()

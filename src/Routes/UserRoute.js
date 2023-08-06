@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import UserHome from '../pages/User/UserHome';
 import CruiseCards from '../pages/User/CruiseCards';
@@ -18,16 +18,26 @@ import NotFound from '../404';
 
 function UserRoute() {
 
-const[cookies]=useCookies(['userCookie'])
-const dispatch=useDispatch()
-
-useEffect(()=>{
-  if(cookies.userCookie){
-    dispatch(userAdd({userName:cookies.userCookie?.userName,token:cookies.userCookie?.token}))
+  const[cookies]=useCookies(['userCookie'])
+  const dispatch=useDispatch()
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(()=>{
+    async function fetchUserToken() {
+    
+    if(cookies.userCookie){
+      dispatch(userAdd({userName:cookies.userCookie?.userName,token:cookies.userCookie}))//changed
+    }
+    setIsLoading(false); 
   }
-},[cookies,dispatch])
+  fetchUserToken();
+  },[cookies,dispatch])
+  
+  const userToken = useSelector((state) => state?.User?.userToken);
 
-const userToken = useSelector((state) => state?.User?.userToken);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>

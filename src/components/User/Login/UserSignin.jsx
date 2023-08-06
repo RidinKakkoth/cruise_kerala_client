@@ -7,12 +7,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { userSignin } from '../../../config/UserEndpoints';
 import EmailModal from '../../Shared/EmailModal/EmailModal';
-
+import {useCookies} from 'react-cookie';
 
 
 function UserSignin() {
 const dispatch=useDispatch()
 const navigate=useNavigate()
+
+const [cookies, setCookie] = useCookies(['']);
 
 const [email,setEmail]=useState("")
 const[password,setPassword]=useState("")
@@ -23,20 +25,25 @@ const handleForgot=()=>{
 }
 
 
-const handleSubmit=async(e)=>{
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  e.preventDefault()
+  const data = await userSignin(email, password);
+  const result = data?.userLogin;
+  if (data.status === "failed") {
+    toast.error(data.message, { position: "top-center" });
+  } else if (result.status) {
 
-const data=await userSignin(email,password)
-    const result=data?.userLogin
-    if(data.status==="failed"){
-     toast.error(data.message,{position: "top-center"})
-    }
-      else if(result.status){
-         dispatch(userAdd({token:result.token,userName:result.name}))
-         navigate('/')
-         }
-}
+    const ageInMinutes = 60; 
+
+    const currentDate = new Date();
+    const expirationDate = new Date(currentDate.getTime() + ageInMinutes * 60 * 1000);
+    setCookie("userCookie", result.token, { path: '/', expires: expirationDate });
+    dispatch(userAdd({ token: result.token, userName: result.name }));
+    
+    navigate('/');
+  }
+};
 
 
   return (

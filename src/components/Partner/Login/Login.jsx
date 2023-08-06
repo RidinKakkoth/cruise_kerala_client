@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { partnerSignin } from '../../../config/PartnerEndpoints';
 import EmailModal from '../../Shared/EmailModal/EmailModal'
-
+import {useCookies} from 'react-cookie';
 
 
 function PartnerLogin() {
@@ -22,6 +22,7 @@ const handleForgot=()=>{
   setEmailModalOpen(true)
 }
 
+const [cookies, setCookie] = useCookies(['']);
 const handleSubmit = async (e) => {
     
   e.preventDefault()
@@ -32,6 +33,12 @@ const data=await partnerSignin(email,password)
      toast.error(data.message,{position: "top-center"})
     }
       else if(result.status){
+        const ageInMinutes = 60; 
+
+        const currentDate = new Date();
+        const expirationDate = new Date(currentDate.getTime() + ageInMinutes * 60 * 1000);
+        setCookie("partnerCookie", result.token, { path: '/', expires: expirationDate });
+
          dispatch(partnerAdd({token:result.token}))
          navigate('/partner/dashboard')
          }

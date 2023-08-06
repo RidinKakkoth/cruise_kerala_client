@@ -29,6 +29,10 @@ function Navbar() {
   const data = useSelector((state) => state.User);
   const userToken = useSelector((state) => state?.User?.userToken);
 
+  console.log(data,"data");
+
+  console.log(userToken,"UT FROM STORE xxxxxxxxxxxxx");
+
   const UserName = data.userName;
 
 
@@ -37,17 +41,23 @@ function Navbar() {
   const [, , removeCookie] = useCookies(['userCookie']);
   const[userCookie]=useCookies(['userCookie'])
   
-  useEffect(()=>{
-    const invoke=()=>{
-    const cookieToken=  userCookie?.userCookie?.token
-      const isUserCookieExists = cookieToken=== userToken;// can check token equalas
-      if(isUserCookieExists)
-      setIsUser(true)
-      else
-      setIsUser(false)
-    }
-    invoke()
-  },[userCookie, userToken])
+  // useEffect(()=>{
+  //   const invoke=()=>{
+  //   const cookieToken=  userCookie?.userCookie
+  //   console.log(userCookie,"USE EFFECT cccokie token");
+  //     const isUserCookieExists = cookieToken=== userToken;// can check token equalas
+  //     if(isUserCookieExists)
+  //     setIsUser(true)
+  //     else
+  //     setIsUser(false)
+  //   }
+  //   invoke()
+  // },[userCookie, userToken])
+  useEffect(() => {
+    const cookieToken = userCookie?.userCookie;
+    setIsUser(cookieToken === userToken);
+  }, [userCookie.userCookie, userToken]);
+  
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -180,13 +190,17 @@ function Navbar() {
               </Button>
             ))}
           </Box>
+           { console.log(isUser,"iiiiiisssssssss",userToken,"uuuuuuutttttttttt")}
 
            {/* User settings or login button */}
            {isUser&&userToken? (
-            <Box sx={{ flexGrow: 0 }}>
+
+
+             
+             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="Remy Sharp" src="https://www.pngmart.com/files/22/User-Avatar-Profile-PNG-Isolated-Transparent.png" />
                 </IconButton>
               </Tooltip>
               <Menu

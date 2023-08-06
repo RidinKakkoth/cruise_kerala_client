@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom'
 import { adminAdd } from "../../../store/AdminAuth";
 import React, { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
+import {useCookies} from 'react-cookie';
 import 'react-toastify/dist/ReactToastify.css';
 import { adminSignin } from "../../../config/AdminEndpoints";
 
@@ -15,7 +16,7 @@ function Login() {
   const dispatch=useDispatch()
   const navigate=useNavigate()
 
-
+  const [cookies, setCookie] = useCookies(['']);
   const handleSubmit = async (e) => {
     
     e.preventDefault()
@@ -26,6 +27,12 @@ const data=await adminSignin(email,password)
        toast.error(data.message,{position: "top-center"})
       }
         else if(result.status){
+          const ageInMinutes = 60; 
+
+          const currentDate = new Date();
+          const expirationDate = new Date(currentDate.getTime() + ageInMinutes * 60 * 1000);  
+          setCookie("adminCookie", result.token, { path: '/', expires: expirationDate });
+
              dispatch(adminAdd({token:result.token}))
               navigate('/admin/dashboard')
            }

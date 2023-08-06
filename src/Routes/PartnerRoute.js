@@ -27,7 +27,7 @@ function PartnerRoute() {
   useEffect(() => {
     async function fetchPartnerToken() {
       if (cookies.partnerCookie) {
-        dispatch(partnerAdd({ token: cookies.partnerCookie?.token }));
+        dispatch(partnerAdd({ token: cookies.partnerCookie }));
       }
       setIsLoading(false); 
     }
