@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Account.css";
+import { ToastContainer, toast } from "react-toastify";
 
 
 //material-ui-items
@@ -76,8 +77,13 @@ function Account() {
     };
 
     const data = await updateProfileData(updatedProfileData);
-    if (data) {
+    if (data.success) {
+      toast.success("Updated successfully", { position: "top-center" });
+
       setEditing(false);
+    }else{
+      toast.error("Updation failed", { position: "top-center" });
+
     }
   };
 
@@ -113,19 +119,7 @@ function Account() {
       } catch (error) {
         console.log(error);
       }
-      // axios.post(`${partnerApi}proof-upload`,formData,{
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      //   withCredentials: true,
-      // }).then((response)=>{
 
-      //   navigate(0)
-      //   console.log("success");
-
-      // }).catch((error)=>{
-      //     console.log(error);
-      // })
     }
   };
 
@@ -165,6 +159,8 @@ function Account() {
 
   return (
     <>
+          <ToastContainer autoClose={3000} />
+
       {partnerData ? (
         <div
           className="mbsc-col-12 mbsc-col-lg-6 "

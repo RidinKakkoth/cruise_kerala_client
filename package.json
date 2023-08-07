@@ -18,6 +18,7 @@
     "apexcharts": "^3.41.0",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
+    "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",
     "moment-timezone": "^0.5.43",
     "primeicons": "^6.0.1",

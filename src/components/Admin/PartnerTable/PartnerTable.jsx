@@ -34,8 +34,8 @@ function PartnerTable({ status }) {
       const itemFields = [item.name, item.email, item.companyName, item.phone.toString()];
       const lowercasedItemFields = itemFields?.map((field) => field.toLowerCase());
 
-      return searchValues.some((value) =>
-        lowercasedItemFields.some((field) => field.includes(value))
+      return searchValues?.some((value) =>
+        lowercasedItemFields?.some((field) => field.includes(value))
       );
     });
 
@@ -83,7 +83,7 @@ function PartnerTable({ status }) {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filterData?.map((obj, index) => {
-                if ((status && obj.isApproved === 'verified') || (!status && obj.isApproved === 'pending') ||(!status && obj.isApproved === 'upload proof')) {
+                if ((status && obj?.isApproved === 'verified') || (!status && obj?.isApproved === 'pending') ||(!status && obj?.isApproved === 'upload proof')) {
                   return (
                     <tr key={index} className="bg-white">
 

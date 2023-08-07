@@ -17,12 +17,12 @@ import { baseApi } from  '../../../config/Api';
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-import axios from "axios";
+
 import Facilities from "./Facilities";
 import { Rating } from "@mui/material";
 import Loading from "../../Shared/Loading";
 import dateConvert from "../../../utils/DateFormat";
-import { bookedDatesData, getCruiseOffer } from "../../../config/UserEndpoints";
+import { bookedDatesData, getCruiseOffer, singleView } from "../../../config/UserEndpoints";
 
 
 const DetailViewGallery = lazy(() => import("./DetailViewGallery"));
@@ -36,12 +36,22 @@ function CruiseSingle() {
   useEffect(() => {
     if (!id) {return;}
 
-    axios.get(`${baseApi}single-view/${id}`).then((res) => {
-      setLoading(false)
-      setData(res.data.cruiseData);
+   async function invoke(){
+      const data=await singleView(id)
+      if(data.status==="failed"){
+        console.log("error");
+      }
+      else{
+             setLoading(false)
+      setData(data.cruiseData);
+      }
+   }
+   invoke()
 
-    });
-  }, [id]);
+    }, [id]);
+
+
+
   const [data, setData] = useState([]);
   const [extraGuest, setExtraGuest] = useState(0);
   const [inDateError, setInDateError] = useState(false);

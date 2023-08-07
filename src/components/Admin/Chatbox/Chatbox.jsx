@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import moment from 'moment-timezone';
-import { chatApi, messageApi, socketApi } from  '../../../config/Api';
-import InputEmoji from "react-input-emoji";
+import {  socketApi } from  '../../../config/Api';
+import InputEmoji, { async } from "react-input-emoji";
 import SyncLoader from 'react-spinners/SyncLoader'
 import { io } from "socket.io-client";
 import { useNavigate } from 'react-router-dom';
+import { getAdminChat } from '../../../config/AdminEndpoints';
+import { getMessage, sendNewMessage } from '../../../config/MessageEndpoint';
 
 
 function Chatbox() {
@@ -26,34 +27,47 @@ function Chatbox() {
   useEffect(() => {
     setChatLoading(true);
     setChatError(null);
-    axios
-      .get(`${chatApi}adminChat`, { withCredentials: true })
-      .then((res) => {
-        setAdminChats(res.data);
+    async function invoke(){
+        const data= await getAdminChat()
+        if(data.status==="failed"){
+          setChatError("failed loading message");
+        }
+        else{
+          setAdminChats(data);
         setChatLoading(false);
-        // Set the initial chat to the first chat in the adminChats array
-
-      })
-      .catch((err) => {
-        setChatError(err);
-      });
+        }
+    }
+    invoke()
   }, []);
+
 
   useEffect(() => {
     setMessageLoading(true);
     setMessageError(null);
     if (currentChat) {
-      axios
-        .get(`${messageApi}${currentChat._id}`, { withCredentials: true })
-        .then((res) => {
-          setAdminMessage(res.data);
-          setMessageLoading(false);
-        })
-        .catch((err) => {
-          setMessageError(err);
-        });
+
+      
+      async function invoke(){
+        setMessageLoading(true);
+        setMessageError(null);
+  
+        if(currentChat){
+          const data=await getMessage(currentChat._id)
+          if(data.status==="failed"){
+            setMessageError("error getting messages");
+          }
+          else{
+            console.log(data,"message data x");
+            setAdminMessage(data);
+            setMessageLoading(false);
+          }
+        }
+  
+      }
+      invoke()
     }
   }, [currentChat]);
+
 
   const messageContainerRef = useRef(null);
 
@@ -94,45 +108,40 @@ useEffect(() => {
 
 
 
-  //no need because admin never starts chat
-  const open = () => {
-    axios
-      .post(`${chatApi}`, {}, { withCredentials: true })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-  };
+  // //no need because admin never starts chat
+  // const open = () => {
+  //   axios
+  //     .post(`${chatApi}`, {}, { withCredentials: true })
+  //     .then((res) => console.log(res.data))
+  //     .catch((err) => console.log(err));
+  // };
 
-  const sendMessage = () => {
+  const sendMessage =async () => {
     if (newMessage === '') {
       console.log('Type something before sending.');
       return;
     }
+    const senderId= currentChat.adminId
+    const chatId= currentChat._id
+    const text= newMessage
+    const data= await sendNewMessage(senderId,chatId,  text)
 
-    axios
-      .post(
-        `${messageApi}`,
-        {
-          senderId: currentChat.adminId,
-          chatId: currentChat._id,
-          text: newMessage,
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        console.log('Message sent successfully.');
-        setNewMessage('');
-        // setAdminMessage((prevMessages) => [...prevMessages, res.data]);
-
-        //emit
-        socket.current.emit('message', {
-          senderId: currentChat.adminId,
-          chatId: currentChat._id,
-          text: newMessage,
-        });
-      })
-      .catch((err) => {
-        console.log('Failed to send message.', err);
-      });
+    
+    if(data.staus==="failed"){
+      console.log('Failed to send message.');
+}
+else{
+ console.log('Message sent successfully.');
+     setNewMessage('');
+     // setUserMessage((prevMessages) => [...prevMessages, res.data]);
+    
+     //emit message
+     socket.current.emit('message',{
+       senderId:currentChat.adminId,
+       chatId:currentChat._id,
+       text:newMessage
+     })
+}
   };
 
   const clickUser = (chat) => {

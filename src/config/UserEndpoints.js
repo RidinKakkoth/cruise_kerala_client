@@ -131,6 +131,7 @@ export async function  userSignUp (email,password,phone,name,company){
 }
 export async function  userSignin (email,password){
     try{
+
         const {data}=await userAxiosInstance.post(`userSignin`,{email,password})
         return data;
     }catch(error){
@@ -239,6 +240,82 @@ export async function applyCoupon(coupon) {
 export async function  cancelBooking (id){
     try{
         const {data}=await userAxiosInstance.patch(`cancel-booking?id=${id}`,{})
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+
+export async function  getUserData (){
+    try{
+        const {data}=await userAxiosInstance.get(`getUserData`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  sendReview (obj){
+    try{
+        const {data}=await userAxiosInstance.post(`review`,obj)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  getBookings (){
+    try{
+        const {data}=await userAxiosInstance.get(`bookings`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+
+export async function updateProfilePic(formData) {
+    try {
+      const { data } = await userAxiosInstance.post(
+        "user-pic",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      return { status: "failed", message: "Network error" };
+    }
+  }
+
+  export async function  updateProfileData (updatedProfileData){
+    try{
+        const {data}=await userAxiosInstance.patch(`update-profile`,updatedProfileData)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  singleView (id){
+    try{
+        const {data}=await userAxiosInstance.get(`single-view/${id}`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+
+export async function  getUserChat (){
+    try{
+        const {data}=await userAxiosInstance.get(`userChat`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}
+export async function  createChat (){
+    try{
+        const {data}=await userAxiosInstance.post(`createChat`)
         return data;
     }catch(error){
         return {status:'failed',message:'Network error'}

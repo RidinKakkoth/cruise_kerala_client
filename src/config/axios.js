@@ -4,43 +4,42 @@ import { partnerApi } from './Api';
 import { baseApi } from './Api';
 import { chatApi } from './Api';
 import { messageApi } from './Api';
+import { getTokenFromCookie } from '../utils/CookieUtility'; // Adjust the import path
 
 const TIMEOUT_DURATION = 10000; // Set timeout to 10 seconds (5000 milliseconds)
 
-const userAxiosInstance = axios.create({
-    baseURL: baseApi,
-    withCredentials: true,
-    timeout: TIMEOUT_DURATION, 
-});
+const createAxiosInstanceWithInterceptor = (baseURL, cookieName) => {
+    console.log(baseURL);
+    const instance = axios.create({
+        baseURL: baseURL,
+        // withCredentials: true,
+        timeout: TIMEOUT_DURATION,
+    });
 
-const adminAxiosInstance = axios.create({
-    baseURL: adminApi,
-    withCredentials: true,
-    timeout: TIMEOUT_DURATION, 
-});
+    instance.interceptors.request.use(config => {
+        const token = getTokenFromCookie(cookieName);
+        console.log(token, "-------", cookieName); // Retrieve the token from the cookie
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`; // Set "Authorization" header with "Bearer" prefix
+        }
+        return config;
+    }, error => {
+        return Promise.reject(error);
+    });
 
-const partnerAxiosInstance = axios.create({
-    baseURL: partnerApi,
-    withCredentials: true,
-    timeout: TIMEOUT_DURATION, 
-});
+    return instance;
+};
 
-const chatAxiosInstance = axios.create({
-    baseURL: chatApi,
-    withCredentials: true,
-    timeout: TIMEOUT_DURATION, 
-});
-
-const messageAxiosInstance = axios.create({
-    baseURL: messageApi,
-    withCredentials: true,
-    timeout: TIMEOUT_DURATION, 
-});
+const userAxiosInstance = createAxiosInstanceWithInterceptor(baseApi, 'userCookie');
+const adminAxiosInstance = createAxiosInstanceWithInterceptor(adminApi, 'adminCookie');
+const partnerAxiosInstance = createAxiosInstanceWithInterceptor(partnerApi, 'partnerCookie');
+const messageAxiosInstance = createAxiosInstanceWithInterceptor(messageApi);
+// const chatAxiosInstance = createAxiosInstanceWithInterceptor(chatApi);
 
 export {
     adminAxiosInstance,
     userAxiosInstance,
     partnerAxiosInstance,
     messageAxiosInstance,
-    chatAxiosInstance,
+    // chatAxiosInstance,
 };

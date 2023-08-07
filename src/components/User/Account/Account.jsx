@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
-import { baseApi } from  '../../../config/Api';
 import Bookings from "./Bookings";
 import { ToastContainer, toast } from "react-toastify";
 import { CardMedia } from "@mui/material";
 import './Account.css'
+import { getUserData, updateProfileData, updateProfilePic } from "../../../config/UserEndpoints";
 
 function Account() {
   const [userName, setUserName] = useState("");
@@ -25,49 +24,51 @@ function Account() {
 
 
   useEffect(() => {
-    axios
-      .get(`${baseApi}getUserData`, { withCredentials: true })
-      .then((res) => {
-        const userData = res.data.userData;
-        const { name, email, phone, image } = userData;
-        setUserName(name);
-        setEmail(email);
-        setPhone(phone);
-        setprofileImage(image);
-
-        if (image) {
-          setOpen(true);
+    async function invoke(){
+      const data= await getUserData()
+   
+      if(data)
+         {
+          const userData = data.userData;
+          const { name, email, phone, image } = userData;
+          setUserName(name);
+          setEmail(email);
+          setPhone(phone);
+          setprofileImage(image);
+  
+          if (image) {
+            setOpen(true);
+          }
         }
-      })
-      .catch((error) => console.log(error));
+    }
+    invoke()
   }, [trigger]);
 
   function handleEditClick() {
     setEditMode(true);
   }
 
-  function handleCancelClick() {
+function  handleCancelClick() {
     setTrigger(!trigger);
     setEditMode(false);
   }
-  function handleSaveClick() {
+  async   function handleSaveClick() {
     const updatedProfileData = {
       userName,
       email,
       phone,
     };
+    const data = await updateProfileData(updatedProfileData);
+    console.log(data);
+    if (data.success) {
+      toast.success("Updated successfully", { position: "top-center" });
+      setEditMode(false);
+    }
+    else{
+      toast.error("Updation failed", { position: "top-center" });
 
-    axios
-      .post(`${baseApi}update-profile`, updatedProfileData, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success("Updated successfully", { position: "top-center" });
-        setEditMode(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    }
+
   }
   const handleImageChange = (e) => {
     setButtonHide(false);
@@ -93,20 +94,12 @@ function Account() {
     
     formData.append('image', profileImage);
 
-    axios
-      .post(`${baseApi}user-pic`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      })
-      .then((response) => {
-        setprofileImage(response.data.url);
-        setOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const data = await updateProfilePic(formData);
+    if (data) {
+      setprofileImage(data.url);
+      setOpen(true);
+    }
+
   };
   const cancelPicUpload = () => {
     setTrigger(!trigger);

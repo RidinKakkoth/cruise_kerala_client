@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import moment from 'moment-timezone';
-import { chatApi, messageApi, socketApi } from  '../../../config/Api';
-import InputEmoji from 'react-input-emoji';
+import { socketApi } from  '../../../config/Api';
+import InputEmoji, { async } from 'react-input-emoji';
 import SyncLoader from 'react-spinners/SyncLoader'
 import { useSelector } from 'react-redux';
 import {io} from "socket.io-client"
+import { createChat, getUserChat } from '../../../config/UserEndpoints';
+import { getMessage, sendNewMessage } from '../../../config/MessageEndpoint';
 
 
 function Chatbox() {
@@ -17,7 +18,6 @@ function Chatbox() {
   const [messageLoading, setMessageLoading] = useState(false);
   const [messageError, setMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
-  // const [socket, setSocket] = useState(null);
   
   //initialise socket
 
@@ -39,44 +39,60 @@ return()=>{
 },[currentChat,setUserMessage])
 
 
-
-
   useEffect(() => {
     setChatLoading(true);
     setChatError(null);
-    axios
-      .get(`${chatApi}userChat`, { withCredentials: true })
-      .then((res) => {
-        setUSerChats(res.data);
 
+    async function invoke(){
+      const data=await getUserChat()
+      if(data.status==="failed"){
+        console.log("error");
+        setChatError("error");
+      }
+      else{
+        console.log(data,"chat data");
+        setUSerChats(data);
         setChatLoading(false);
-        // Set the initial chat to the first chat in the userChats array
-        if (res.data.length > 0) {
-          setCurrentChat(res.data[0]);
+        if (data.length > 0) {
+          setCurrentChat(data[0]);
         }
-      })
-      .catch((err) => {
-        setChatError(err);
-      });
+      }
+    }
+    invoke()
   }, []);
 
+
+
+
   useEffect(() => {
-    setMessageLoading(true);
-    setMessageError(null);
-    if (currentChat) {
-      axios
-        .get(`${messageApi}${currentChat._id}`, { withCredentials: true })
-        .then((res) => {
-          setUserMessage(res.data);
+
+
+    async function invoke(){
+      setMessageLoading(true);
+      setMessageError(null);
+
+      if(currentChat){
+        const data=await getMessage(currentChat._id)
+        if(data.status==="failed"){
+          setMessageError("error getting messages");
+        }
+        else{
+          console.log(data,"message data x");
+          setUserMessage(data);
           setMessageLoading(false);
-        })
-        .catch((err) => {
-          setMessageError(err);
-        });
+        }
+      }
+
     }
+    invoke()
+
   }, [currentChat]);
 
   const messageContainerRef = useRef(null);
+
+
+
+
 
   useEffect(() => {
     if (messageContainerRef.current) {
@@ -85,46 +101,47 @@ return()=>{
     }
   }, [userMessage]);
 
-  const open = () => {
-    axios
-      .post(`${chatApi}`, {}, { withCredentials: true })
-      .then((res) =>//check if error comes
-       setUSerChats(res.data))
-      .catch((err) => console.log(err));
-  };
+  const open =async () => {
 
-  const sendMessage = () => {
+    const data = await createChat()
+    console.log(data,"create chat");
+    if(data.status==="failed"){
+      console.log("error");
+    }
+    else{
+      setUSerChats(data)
+    }
+
+
+  };
+ 
+
+  const sendMessage = async() => {
     if (newMessage === '') {
       console.log('Type something before sending.');
       return;
     }
+    const senderId= currentChat.userId
+    const chatId= currentChat._id
+    const text= newMessage
+     
+      const data= await sendNewMessage(senderId,chatId,  text)
 
-    axios
-      .post(
-        `${messageApi}`,
-        {
-          senderId: currentChat.userId,
-          chatId: currentChat._id,
-          text: newMessage,
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
+      if(data.staus==="failed"){
+             console.log('Failed to send message.');
+      }
+      else{
         console.log('Message sent successfully.');
-        setNewMessage('');
-        // setUserMessage((prevMessages) => [...prevMessages, res.data]);
-       
-        //emit message
-        socket.current.emit('message',{
-          senderId:currentChat.userId,
-          chatId:currentChat._id,
-          text:newMessage
-        })
-      })
-      .catch((err) => {
-        console.log('Failed to send message.', err);
-      });
-
+            setNewMessage('');
+            // setUserMessage((prevMessages) => [...prevMessages, res.data]);
+           
+            //emit message
+            socket.current.emit('message',{
+              senderId:currentChat.userId,
+              chatId:currentChat._id,
+              text:newMessage
+            })
+      }
   };
 
   

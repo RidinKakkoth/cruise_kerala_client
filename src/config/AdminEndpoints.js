@@ -170,3 +170,11 @@ export async function  getPartnerCruiseData (id){
     }
 }
 
+export async function  getAdminChat (){
+    try{
+        const {data}=await adminAxiosInstance.get(`adminChat`)
+        return data;
+    }catch(error){
+        return {status:'failed',message:'Network error'}
+    }
+}

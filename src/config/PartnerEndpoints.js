@@ -20,7 +20,7 @@ export async function  getPartnerProfileData (){
 }
 export async function  updateProfileData (updatedProfileData){
     try{
-        const {data}=await partnerAxiosInstance.patch(`update-profile`,{updatedProfileData})
+        const {data}=await partnerAxiosInstance.patch(`update-profile`,updatedProfileData)
         return data;
     }catch(error){
         return {status:'failed',message:'Network error'}

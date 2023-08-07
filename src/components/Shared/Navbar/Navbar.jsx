@@ -29,10 +29,6 @@ function Navbar() {
   const data = useSelector((state) => state.User);
   const userToken = useSelector((state) => state?.User?.userToken);
 
-  console.log(data,"data");
-
-  console.log(userToken,"UT FROM STORE xxxxxxxxxxxxx");
-
   const UserName = data.userName;
 
 
@@ -190,7 +186,6 @@ function Navbar() {
               </Button>
             ))}
           </Box>
-           { console.log(isUser,"iiiiiisssssssss",userToken,"uuuuuuutttttttttt")}
 
            {/* User settings or login button */}
            {isUser&&userToken? (

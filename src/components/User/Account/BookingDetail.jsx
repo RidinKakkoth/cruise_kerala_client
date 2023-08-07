@@ -1,12 +1,11 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { baseApi } from  '../../../config/Api';
 import DetailViewGallery from "../Cruise/DetailViewGallery";
 import dateConvertor from "../../../utils/DateFormat";
 import Rating from "@mui/material/Rating";
 import { Box, Modal, TextField, Typography } from "@mui/material";
 import Loading from "../../Shared/Loading";
+import { getBookings, sendReview } from "../../../config/UserEndpoints";
 
 function BookingDetail() {
   const [data, setData] = useState(null);
@@ -46,7 +45,14 @@ function BookingDetail() {
     if (isFormValid) {
       let obj={star,feedback,cruiseId:data._id}
       handleClose();
-      axios.post(`${baseApi}review`,obj,{withCredentials:true}).then((res)=>{setTrigger(!trigger)}).catch((err)=>console.log(err))
+      async function invoke(){
+          const data=await sendReview(obj)
+          if(data.status==="failed")
+          console.log(data)
+        else 
+        setTrigger(!trigger)
+      } 
+      invoke()
     }
   };
   const handleFeedbackChange = (e) => {
@@ -61,16 +67,23 @@ function BookingDetail() {
   };
 
   useEffect(() => {
-    if (id) {
-      axios.get(`${baseApi}bookings`, { withCredentials: true }).then((res) => {
-        const found = res.data.bookingData.find(({ _id }) => _id === id); //destructure _id from res and checking
-        if (found) {
-          setLoading(false);
-          setBooking(found);
-          setData(found.cruiseId);
-          
-        }
-      });
+
+
+    if(id){
+      async function invoke(){
+          const data= await getBookings()
+          if(data.status==="failed"){
+            console.log("error");
+          }
+          const found = data.bookingData.find(({ _id }) => _id === id); //destructure _id from res and checking
+          if (found) {
+                  setLoading(false);
+                  setBooking(found);
+                  setData(found.cruiseId);
+                  
+                }
+      }
+      invoke()
     }
   }, [id,trigger]);
 
