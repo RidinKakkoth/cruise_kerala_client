@@ -36,33 +36,35 @@ function Cruise() {
     handleClose(); // Close the filter modal after applying the filter
   };
 
-  const filterCards = (query) => {
-    const filteredData = originalCards?.filter((card) => {
-      const nameMatches = card?.name.toLowerCase().includes(query.toLowerCase());
-      const districtMatches = card?.district.toLowerCase().includes(query.toLowerCase());
-      return nameMatches || districtMatches;
-    });
-    setCards(filteredData);
-  };
-
+  
   useEffect(() => {
-        async function invoke(){
-            const data=await cruiseData()
-            if(data){
-                setCards(data.data);
-                setLoading(false)
-                setoriginalCards(data.data);
-                setCategory(data.categoryData);
-                localStorage.clear();
-            }
+    async function invoke(){
+      const data=await cruiseData()
+      if(data){
+        setCards(data.data);
+        setLoading(false)
+        setoriginalCards(data.data);
+        setCategory(data.categoryData);
+        localStorage.clear();
+
+        const filterCards = (query) => {
+          const filteredData = originalCards?.filter((card) => {
+            const nameMatches = card?.name.toLowerCase().includes(query.toLowerCase());
+            const districtMatches = card?.district.toLowerCase().includes(query.toLowerCase());
+            return nameMatches || districtMatches;
+          });
+          setCards(filteredData);
+        };
+        filterCards(searchQuery);
+       }
         }
         invoke()
-  }, []);
+  }, [searchQuery]);
 
 
-  useEffect(() => {
-    filterCards(searchQuery);
-  }, [searchQuery,filterCards]);
+  // useEffect(() => {
+  //   filterCards(searchQuery);
+  // }, [searchQuery,filterCards]);
 
   const handleClick = (obj) => {
     navigate('/cruises/' + obj._id);
