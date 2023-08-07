@@ -59,7 +59,7 @@ function Cruise() {
        }
         }
         invoke()
-  }, [searchQuery]);
+  }, [searchQuery,originalCards]);
 
 
   // useEffect(() => {
