@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import UserHome from '../pages/User/UserHome';
 import CruiseCards from '../pages/User/CruiseCards';
 import CruiseSingleView from '../pages/User/CruiseSingleView';

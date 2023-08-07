@@ -88,7 +88,7 @@ const CruiseDetailModal = ({ cruiseId, onClose }) => {
               <img
                 key={index}
                 src={image}
-                alt={`Image ${index + 1}`}
+                alt="img"
                 className="w-28 h-28 object-cover rounded"
               />
             ))}

@@ -8,12 +8,11 @@ import BedroomParentIcon from "@mui/icons-material/BedroomParent";
 
 import  DatePicker  from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
-import { parseISO, startOfDay, isSameDay } from 'date-fns';
+import { parseISO, startOfDay } from 'date-fns';
 
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Stepper } from "@mobiscroll/react";
 
-import { baseApi } from  '../../../config/Api';
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
@@ -70,7 +69,7 @@ function CruiseSingle() {
         setPercentage(offerData?.percentage) 
     }
     invoke()
-  },[loading])
+  },[loading,id])
 
 
 
@@ -291,7 +290,7 @@ bookedDates&&bookedDates?.forEach((dates, index) => {
         setTotalAmount(updatedTotal );
       // }
     }
-  }, [numOfNights, extraGuest, data.baseRate, data.extraRate,offer,checkInDate,checkOutDate]);
+  }, [numOfNights, extraGuest, data.baseRate, data.extraRate,offer,checkInDate,checkOutDate,percentage]);
   
 
 

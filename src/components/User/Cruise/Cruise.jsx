@@ -62,7 +62,7 @@ function Cruise() {
 
   useEffect(() => {
     filterCards(searchQuery);
-  }, [searchQuery]);
+  }, [searchQuery,filterCards]);
 
   const handleClick = (obj) => {
     navigate('/cruises/' + obj._id);

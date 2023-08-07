@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment-timezone';
 import {  socketApi } from  '../../../config/Api';
-import InputEmoji, { async } from "react-input-emoji";
+import InputEmoji from "react-input-emoji";
 import SyncLoader from 'react-spinners/SyncLoader'
 import { io } from "socket.io-client";
 import { useNavigate } from 'react-router-dom';
