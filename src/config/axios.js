@@ -2,7 +2,6 @@ import axios from 'axios';
 import { adminApi } from './Api';
 import { partnerApi } from './Api';
 import { baseApi } from './Api';
-import { chatApi } from './Api';
 import { messageApi } from './Api';
 import { getTokenFromCookie } from '../utils/CookieUtility'; // Adjust the import path
 
