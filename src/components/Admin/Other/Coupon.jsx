@@ -34,7 +34,7 @@ if(data.status){
 
 
   return (
-      <div className=" h-screen me-3   bg-gray-100">
+      <div className=" mb-10 me-3   bg-gray-100">
 
 
 {!loading?   (<div className="overflow-auto rounded-lg shadow hidden md:block">

@@ -4,7 +4,7 @@ import { Carousel } from 'react-responsive-carousel';
 import './Home.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Footer from '../../Shared/Footer/Footer';
-import Cards from '../Cruise/Cards';
+import Cards from './Cards';
 import ChatBot from '../../Shared/ChatBot';
 import { useSelector } from 'react-redux';
 import { cruiseData } from '../../../config/UserEndpoints';
@@ -18,7 +18,7 @@ function Home() {
     async function invoke(){
       const data=await cruiseData()
       if(data){
-       const firstThreeElements = data?.data?.slice(0, 3);
+       const firstThreeElements = data?.data?.slice(0, 4);
         setCards(firstThreeElements);
       }
     }

@@ -5,6 +5,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import SailingIcon from '@mui/icons-material/Sailing';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import SettingsIcon from '@mui/icons-material/Settings';
 import DirectionsBoatIcon from '@mui/icons-material/DirectionsBoat';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -46,7 +47,7 @@ export const AdminSidebarData = [
   },
   {
     title: 'Other Settings',
-    icon: <HowToRegIcon />,
+    icon: <SettingsIcon />,
     link: '/admin/other',
   },
   {

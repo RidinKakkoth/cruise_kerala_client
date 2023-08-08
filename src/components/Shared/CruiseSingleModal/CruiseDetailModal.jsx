@@ -16,7 +16,7 @@ const CruiseDetailModal = ({ cruiseId, onClose }) => {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div  onClick={onClose} className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-50 ">
       <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full max-w-2xl">
       <div className='flex justify-end'>
       <button

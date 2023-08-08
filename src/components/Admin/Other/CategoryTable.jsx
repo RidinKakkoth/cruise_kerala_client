@@ -33,7 +33,7 @@ export default function CategoryTable({ categories }) {
           <TableRow>
             <TableCell className='px-5'  style={{fontWeight:"600"}}>Category Name</TableCell>
             <TableCell style={{fontWeight:"600"}} align="center">Status</TableCell>
-            <TableCell   style={{fontWeight:"600"}} align="center">Edit</TableCell>
+            {/* <TableCell   style={{fontWeight:"600"}} align="center">Edit</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody className='rounded'>
@@ -52,7 +52,7 @@ export default function CategoryTable({ categories }) {
                   ) : (
                     <ToggleOffIcon checked={row.isListed} style={{ fontSize: '2rem' }} />
                   )}</TableCell>
-              <TableCell align="center"><EditNoteIcon className='cursor-pointer' onClick={()=>handleEdit(row._id)} style={{color:"blue"}} /></TableCell>
+              {/* <TableCell align="center"><EditNoteIcon className='cursor-pointer' onClick={()=>handleEdit(row._id)} style={{color:"blue"}} /></TableCell> */}
             </TableRow>
           ))}
         </TableBody>

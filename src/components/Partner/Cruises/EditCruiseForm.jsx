@@ -39,7 +39,18 @@ const EditCruiseForm = () => {
     const[categoryData,setCategoryData]=useState([])
     const[uploading,setUploading]=useState(false)
     const [cruiseData, setCruiseData] = useState(null);
+    const [imagesToDelete, setImagesToDelete] = useState([]);
 
+
+    const handleImageDelete = (index) => {
+      setSelectedImages((previousImages) => previousImages.filter((_, i) => i !== index));
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    };
+    const ImageDeleted = (img) => {
+      setImagesToDelete((prevImagesToDelete) => [...prevImagesToDelete, img]);
+    };
+    
+    
 
     
     const navigate=useNavigate()
@@ -62,7 +73,7 @@ const EditCruiseForm = () => {
 
             event.preventDefault()
 
-           const cruiseData={name,category,description,boarding,town,district,pin,rooms,baseRate,extraRate,maxGuest,AC,food,TV,pets,partyHall,fishing,games,wifi}
+           const cruiseData={name,category,description,boarding,town,district,pin,rooms,baseRate,extraRate,maxGuest,AC,food,TV,pets,partyHall,fishing,games,wifi,imagesToDelete}
            const validationError =AddCruiseFormValidation(cruiseData)
 
              if (validationError !== '') {
@@ -76,21 +87,16 @@ const EditCruiseForm = () => {
              formData.append(key, value);
            });
          
-           // Append images to the formData=============>+++++++++
-          //  for (const image of images) {
-          //    formData.append('images', image);
+          // Append images to the formData=============>+++++++++
+           for (const image of images) {
+             formData.append('images', image);
          
-          //   }
-            // formData.append('cruiseId', cruiseData._id);
+            }
 
-         
-           // Append the license file to the formData===================>++++++++++++++++++++
-          //  formData.append('license', license);
          
            setUploading(true)
 
             const data=await updateCruise(formData,id)
-            console.log(data,"*******************");
             if(data?.status){
                 setUploading(false)
                 Swal.fire({
@@ -99,7 +105,7 @@ const EditCruiseForm = () => {
                             timer: 2000, 
                             showConfirmButton: false
                           }).then(() => {
-                            navigate(-1); // Navigate to cruise table
+                            navigate('/partner/cruises'); // Navigate to cruise table
                           });
                      }
             else{
@@ -126,10 +132,12 @@ useEffect(()=>{
 useEffect(() => {
   async function invoke(){
     const {data}=await getSingleCruiseData(id)
-    console.log(data,"xxxxxxxxxxxxxxxxxx");
-    setCruiseData(data)
-   const{name,description,boarding,town,district,pin,rooms,baseRate,extraRate,maxGuest}=data
-    setName(name) 
+    if(!data)console.log("error");
+    else{
+
+      setCruiseData(data)
+      const{name,description,boarding,town,district,pin,rooms,baseRate,extraRate,maxGuest}=data
+      setName(name) 
     setDescription(description)
     setBoarding(boarding)
     setTown(town)
@@ -149,8 +157,8 @@ useEffect(() => {
     setGames(data.Facilities[0].games)
     setWifi(data.Facilities[0].wifi)
     setSelectedImages(data.Images)
-    console.log(data.Facilities[0].partyHall,"[[[[[[[[[[[[[[");
-
+  }
+    
   }
   invoke()
  }, [id]);
@@ -190,7 +198,7 @@ return (
             name="category"
           defaultValue={category}
           onChange={(event) => setCategory(event.target.value)}              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
-            // required
+        
           >
             <option  defaultValue={cruiseData?.category?._id} value="">{cruiseData?.category.name}</option>
             {categoryData?.map((value,index)=>{
@@ -402,17 +410,7 @@ return (
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-        {/* <div className="mb-4">
-          <label htmlFor="licenseFile" className="block text-sm font-medium text-gray-700">
-            License File
-          </label>
-          <input
-            type="file"
-            name="license"
-            onChange={(e)=>{setLicense(e.target.files[0])}}
-                          className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div> */}
+
         <div className="mb-4 w-[50%]">
           <label htmlFor="imageFile" className="block text-sm font-medium text-gray-700">
             Image File
@@ -427,7 +425,7 @@ return (
           />
         </div>                <div className='images flex gap-2'>
 
-{selectedImages &&
+{/* {selectedImages &&
   selectedImages?.map((image, index) => {
     return (
       <div key={image} className='image'>
@@ -443,7 +441,23 @@ return (
         <p id='img-indx'>{index + 1}</p>
       </div>
     );
-  })}
+  })} */}
+{selectedImages &&
+  selectedImages?.map((image, index) => (
+    <div key={image} className='image'>
+      <img style={{ padding: 0, margin: 0 }} src={image} className='w-52' height='200' alt='uploads' />
+      <DeleteForeverIcon
+  className='del-btn'
+  style={{ color: 'red', cursor: 'pointer' }}
+  onClick={() => {
+    handleImageDelete(index);
+    ImageDeleted(image);
+  }}
+/>
+
+      <p id='img-indx'>{index + 1}</p>
+    </div>
+  ))}
 
 
               </div>
@@ -458,7 +472,7 @@ return (
           Save
         </button>
         <button
-          
+          onClick={()=>{navigate(-1)}}
           className="px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-white hover:bg-red-600 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
         >
           Cancel

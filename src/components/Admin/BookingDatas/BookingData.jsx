@@ -10,6 +10,29 @@ function BookingData() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCruiseId, setSelectedCruiseId] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Number of items per page
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const emailRegex = /\S+@\S+\.\S+/; 
+  
+  const filteredData = data?.filter((booking) => {
+    const cruiseNameMatch = booking.cruiseId.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const userEmailMatch = emailRegex.test(booking.userId.email) && booking.userId.email.toLowerCase().includes(searchQuery.toLowerCase());
+    return cruiseNameMatch || userEmailMatch;
+  });
+  
+  
+
+
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+const handlePageChange = (pageNumber) => {
+  setCurrentPage(pageNumber);
+}
+
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -29,10 +52,22 @@ function BookingData() {
     invoke()
   },[])
 
+
+
   return (
     <div>
-      <div className="p-5 h-screen ms-4 md:w-[80vw] bg-gray-100">
+      <div className="p-2 h-screen mt-2 ms-4 md:w-[78vw] bg-gray-100">
+
+        <div className="mb-4 flex justify-between mt-2">
         <h1 className="text-xl mb-2">Bookings</h1>
+          <input
+            className=" py-2 border rounded-2xl px-2 w-96 "
+            type="text"
+            placeholder="Search by email..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
 {!loading?   (<div className="overflow-auto rounded-lg shadow hidden md:block">
           <table className="w-full">
@@ -66,8 +101,9 @@ function BookingData() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data?.map((booking) => (
+              {currentData?.map((booking) => (
                 <tr key={booking.bookingId} className="bg-white">
+                  
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     <p className="font-bold text-blue-500 ">
                       {booking.bookingId}
@@ -93,8 +129,8 @@ function BookingData() {
                       className={`p-1.5 text-xs font-medium uppercase tracking-wider ${
                         booking.status === "Booked"
                           ? "text-green-800 bg-green-200"
-                          : booking.status === "Shipped"
-                          ? "text-yellow-800 bg-yellow-200"
+                          : booking.status === "Cancelled"
+                          ? "text-red-800 bg-yellow-200"
                           : "text-gray-800 bg-gray-200"
                       } rounded-lg bg-opacity-50`}
                     >
@@ -133,8 +169,24 @@ function BookingData() {
           )}
         </div>):<Loading/>}
 
+        <div className="flex justify-center mt-4">
+          {filteredData.length > itemsPerPage && (
+            <nav>
+              <ul className="pagination">
+                {Array.from({ length: Math.ceil(filteredData.length / itemsPerPage) }).map((_, index) => (
+                  <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                    <button className="page-link" onClick={() => handlePageChange(index + 1)}>
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          {data?.map((booking) => (
+          {currentData?.map((booking) => (
             <div
               key={booking.bookingId}
               className="bg-white space-y-3 p-4 rounded-lg shadow"

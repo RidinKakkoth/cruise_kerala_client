@@ -107,15 +107,7 @@ const sixMonthCheckOutDate = new Date(today.getFullYear(), today.getMonth() + 6,
 const [maxCheckOutDate, setMaxCheckOutDate] = useState(null);
 const [bookedDates, setBookedDates] = useState([]);
 
-// useEffect(()=>{
-//     async function invoke(){
-//       const data=await bookedDatesData(id)
-//       if(data){
-//         setBookedDates(data)
-//       }
-//     }
-//     invoke()
-// },[id])
+
 
 useEffect(() => {
   async function invoke(){

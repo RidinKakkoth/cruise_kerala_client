@@ -80,6 +80,9 @@ const AddCruiseForm = () => {
            setUploading(true)
 
             const data=await addCruise(formData)
+
+            console.log(data,"xxxxxxxx");
+
             if(data?.status){
                 setUploading(false)
                 Swal.fire({

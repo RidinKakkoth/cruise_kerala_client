@@ -5,7 +5,7 @@ import { baseApi } from './Api';
 import { messageApi } from './Api';
 import { getTokenFromCookie } from '../utils/CookieUtility'; // Adjust the import path
 
-const TIMEOUT_DURATION = 10000; // Set timeout to 10 seconds (5000 milliseconds)
+const TIMEOUT_DURATION = 110000; 
 
 const createAxiosInstanceWithInterceptor = (baseURL, cookieName) => {
     console.log(baseURL);
@@ -33,12 +33,10 @@ const userAxiosInstance = createAxiosInstanceWithInterceptor(baseApi, 'userCooki
 const adminAxiosInstance = createAxiosInstanceWithInterceptor(adminApi, 'adminCookie');
 const partnerAxiosInstance = createAxiosInstanceWithInterceptor(partnerApi, 'partnerCookie');
 const messageAxiosInstance = createAxiosInstanceWithInterceptor(messageApi);
-// const chatAxiosInstance = createAxiosInstanceWithInterceptor(chatApi);
 
 export {
     adminAxiosInstance,
     userAxiosInstance,
     partnerAxiosInstance,
     messageAxiosInstance,
-    // chatAxiosInstance,
 };

@@ -37,18 +37,7 @@ function OtherSettings() {
   return (
     <div>
       <div className='' style={{ marginTop: '20px', marginLeft: '50px' }}>
-        <div className='flex justify-between w-[75%]'>
-          <div>
-            <h5 style={{ marginBottom: '20px' }}>Categories</h5>
-          </div>
-          <div className='w-[75%] flex justify-end'>
-            <Category /> {/* add category */}
-          </div>
-        </div>
-  
-        <div className='w-[75%]'>
-          <CategoryTable categories={categories} />
-        </div>
+
         <div className='mt-4'>
 
           <div className='flex justify-between mb-3  me-3'>
@@ -73,7 +62,22 @@ Add coupon</button>
           </div>
         </div>
       )}
+
       </div>
+          <div className='ms-4'>
+          <div className='flex justify-between w-[75%]'>
+          <div className='ms-4'>
+            <h5 style={{ marginBottom: '20px' }}>Categories</h5>
+          </div>
+          <div className='w-[75%] flex justify-end'>
+            <Category /> {/* add category */}
+          </div>
+        </div>
+  
+        <div className='ml-5 w-[75%]'>
+          <CategoryTable categories={categories} />
+        </div>
+          </div>
     </div>
   );
   

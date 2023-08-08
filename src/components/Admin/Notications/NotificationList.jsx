@@ -25,13 +25,13 @@ function NotificationList() {
     
     return (
         <>
-          <div className="flex flex-col overflow-x-auto h-full px-8 mt-5">
-          <h2  className='mb-12 mt-4'>Notification</h2>
+          <div className="flex flex-col  px-8 mt-5">
+          <h2  className='mb-12 mt-4'>Notifications</h2>
             <ToastContainer />
           {notifications?.map((notif,index) => (
             <>
              {notif?.status === "success" && (
-                <div key={index}  className="flex shadow justify-between bg-white rounded-lg mb-5 ">
+                <div key={index}  className="flex  justify-between bg-white rounded-lg mb-3 ">
                   <div className="sm:px-6  flex   sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-green-400 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@ function NotificationList() {
                )} 
     
               {notif?.status === "warning" && (
-                <div  className="flex justify-between bg-white rounded-lg mb-5">
+                <div  className="flex justify-between bg-white rounded-lg mb-3">
                   <div className="sm:px-6 flex  sm:mt-0 ml-4 sm:ml-0 items-center justify-center bg-yellow-300 sm:rounded-tl sm:rounded-bl w-12 h-12 sm:h-auto sm:w-auto text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

@@ -14,6 +14,8 @@ function Dashboard() {
   const [cruise, setCruise] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  
+
   useEffect(() => {
     async function invoke() {
       const { bookingData } = await getBookings();
@@ -131,8 +133,8 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center group hover:scale-105 transform transition-transform  px-4">
-          <div className="col-span-2 text-base  font-bold border-b-2 py-3">
+        <div onClick={()=>{navigate('/admin/cruises')}} className="bg-white text-center  shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center cursor-pointer group hover:scale-105 transform transition-transform  px-4">
+          <div  className="col-span-2 text-base  font-bold border-b-2 py-3">
             CRUISES
           </div>
           <div className="col-span-1 mx-auto  px-12 ">
@@ -143,7 +145,7 @@ function Dashboard() {
             {cruise}
           </div>
         </div>
-        <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center group hover:scale-105 transform transition-transform  px-4">
+        <div onClick={()=>{navigate('/admin/partners')}} className="bg-white text-center  shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center cursor-pointer group hover:scale-105 transform transition-transform  px-4">
           <div className="col-span-2 text-base  font-bold border-b-2 py-3">
             PARTNERS
           </div>
@@ -169,7 +171,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center group hover:scale-105 transform transition-transform px-4">
+        <div onClick={()=>{navigate('/admin/bookings')}} className="bg-white text-center  shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center cursor-pointer group hover:scale-105 transform transition-transform px-4">
           <div className="col-span-2 text-base  font-bold border-b-2 py-3">
             TOTAL BOOKINGS
           </div>

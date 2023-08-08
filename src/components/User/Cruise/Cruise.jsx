@@ -18,6 +18,9 @@ function Cruise() {
   const [searchQuery, setSearchQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [itemsToShow, setItemsToShow] = useState(8);
+  const itemsToLoad = 8; // Number of items to load each time the button is clicked
+
   const navigate = useNavigate();
 
   const handleClose = () => {
@@ -36,35 +39,33 @@ function Cruise() {
     handleClose(); // Close the filter modal after applying the filter
   };
 
-  
-  useEffect(() => {
-    async function invoke(){
-      const data=await cruiseData()
-      if(data){
-        setCards(data.data);
-        setLoading(false)
-        setoriginalCards(data.data);
-        setCategory(data.categoryData);
-        localStorage.clear();
+  const filterCards = (query) => {
+    const filteredData = originalCards?.filter((card) => {
+      const nameMatches = card?.name.toLowerCase().includes(query.toLowerCase());
+      const districtMatches = card?.district.toLowerCase().includes(query.toLowerCase());
+      return nameMatches || districtMatches;
+    });
+    setCards(filteredData);
+  };
 
-        const filterCards = (query) => {
-          const filteredData = originalCards?.filter((card) => {
-            const nameMatches = card?.name.toLowerCase().includes(query.toLowerCase());
-            const districtMatches = card?.district.toLowerCase().includes(query.toLowerCase());
-            return nameMatches || districtMatches;
-          });
-          setCards(filteredData);
-        };
-        filterCards(searchQuery);
-       }
+  useEffect(() => {
+        async function invoke(){
+            const data=await cruiseData()
+            if(data){
+                setCards(data.data);
+                setLoading(false)
+                setoriginalCards(data.data);
+                setCategory(data.categoryData);
+                localStorage.clear();
+            }
         }
         invoke()
-  }, [searchQuery,originalCards]);
+  }, []);
 
 
-  // useEffect(() => {
-  //   filterCards(searchQuery);
-  // }, [searchQuery,filterCards]);
+  useEffect(() => {
+    filterCards(searchQuery);
+  }, [searchQuery]);
 
   const handleClick = (obj) => {
     navigate('/cruises/' + obj._id);
@@ -77,7 +78,7 @@ function Cruise() {
   }
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box   sx={{ display: 'flex',flexDirection:"column" }}>
       <CssBaseline />
       <div className='-z-50 '></div>
       <Box component="main" sx={{ flexGrow: 1, p:3 }}>
@@ -94,7 +95,7 @@ function Cruise() {
 
          {!loading?( <div className="cruise-cards container">
             {cards && cards.length > 0 ? (
-              cards?.map((card, index) => (
+               cards.slice(0, itemsToShow).map((card, index) => (
                 <div onClick={() => handleClick(card)} key={index} className="each-card shadow">
 
 <Carousel showThumbs={false} showArrows={false}>
@@ -179,6 +180,21 @@ function Cruise() {
           </Box>
         </Fade>
       </Modal>
+      {cards && cards.length > itemsToShow && (
+  <div className="flex mb-4 justify-center ">
+    <button
+      className="bg-[#0e1034] flex gap-2  text-white px-4 py-2 rounded-3xl"
+      onClick={() => setItemsToShow(itemsToShow + itemsToLoad)}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 mt-1 h-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+</svg>
+
+      Load More
+    </button>
+  </div>
+)}
+
     </Box>
   );
 }

@@ -44,8 +44,8 @@ function PartnerRoute() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<PartnerLogin />} />
-        <Route path="/signUp" element={<PartnerSignUp />} />
+        <Route path="/" element={partnerToken?<PartnerDashboard />:<PartnerLogin />} />
+        <Route path="/signUp" element={partnerToken?<PartnerDashboard />:<PartnerSignUp />} />
 
         <Route path="/dashboard" element={partnerToken?<PartnerDashboard />:<Navigate to="/partner" />} />
 

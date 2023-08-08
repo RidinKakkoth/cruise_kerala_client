@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Loading from "../../Shared/Loading";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 
@@ -6,13 +6,26 @@ import  downloadPdf  from "../../Shared/Sales/PdfCreator";
 
 
 function SalesReport({loading,data}) {
+  const [currentPage, setCurrentPage] = useState(1);
+
+const itemsPerPage = 8; 
+const totalPages = Math.ceil(data?.length / itemsPerPage);
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = startIndex + itemsPerPage;
+const currentItems = data?.slice(startIndex, endIndex);
+
     const tableRef = useRef(null);
  
   return (
     <div>
       <div className="p-5 h-screen md:w-[100%] bg-gray-100">
-     <div className="flex justify-end">
-     <button className="rounded flex shadow gap-2 text-white me-3 bg-red-400 px-2 py-1 mb-3" onClick={() => downloadPdf(data)}><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" className="w-6 h-6">
+     <div className="flex justify-between">
+      <div>
+
+<h1 className="text-xl mb-3">Sales Report</h1>
+      </div>
+<div className="flex">
+<button className="rounded flex shadow gap-2 text-white me-3 bg-red-400 px-2 py-1 mb-3" onClick={() => downloadPdf(data)}><svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" className="w-6 h-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
 </svg>
  Download PDF </button>
@@ -28,8 +41,8 @@ function SalesReport({loading,data}) {
  Export excel </button>
 
                 </DownloadTableExcel>
+</div>
      </div>
-        <h1 className="text-xl mb-3">Sales Report</h1>
 
 {!loading?   (<div className="overflow-auto rounded-lg shadow hidden md:block">
           <table ref={tableRef} className="w-full">
@@ -63,7 +76,7 @@ function SalesReport({loading,data}) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data?.map((booking) => (
+              {currentItems?.map((booking) => (
                 <tr key={booking.bookingId} className="bg-white">
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                     {new Date(booking?.createdAt).toLocaleDateString("en-US", {
@@ -107,10 +120,23 @@ function SalesReport({loading,data}) {
               ))}
             </tbody>
           </table>
+          <div className="flex justify-center my-3">
+  {Array.from({ length: totalPages }, (_, index) => (
+    <button
+      key={index}
+      className={`mx-3 px-3 py-2 rounded-md ${
+        index + 1 === currentPage ? 'bg-[#0f0c2d] text-white' : 'bg-gray-300'
+      }`}
+      onClick={() => setCurrentPage(index + 1)}
+    >
+      {index + 1}
+    </button>
+  ))}
+</div>
         </div>):<Loading/>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          {data?.map((booking) => (
+          {currentItems?.map((booking) => (
             <div
               key={booking.bookingId}
               className="bg-white space-y-3 p-4 rounded-lg shadow"
