@@ -164,31 +164,33 @@ function  handleCancelClick() {
         </Link>
       </nav>
       {subpage === "profile" && (
-        <div className="flex justify-center">
-          <div className="flex-col text-center justify-center mt-5   md:w-[30%] w-[100%]">
+        <div className="flex-col justify-center">
+          <div className="flex-col text-center mx-auto justify-center mt-5 w-96   ">
             <div className="flex " >
               {open ? (
-                <div className="image-container ml-16 right-16 sm:right-0 sm:ml-4 flex ">
+                <div className="image-container justify-center left-[110px] mx-auto w-[100%] ml-16 right-16 sm:right-0 sm:ml-4 flex ">
                   <CardMedia 
                     sx={{
                       height: 150,
                       width: 150,
-                      left:92,
+                     display:"flex",
+                     justifyContent:"center",
                       borderRadius: "50%",
+                     
                       marginTop: 1,
 
                       borderStyle: "double",
                       borderColor: "#00ff68",
                       borderWidth: "5px",
                     }}
-                    className="image ms-[100px] "
+                    className="image flex justify-center "
                     component="img"
                     src={profileImage}
                     // src={`${baseApi}files/${profileImage}`}
                     title="choose image"
                   />
                   <div
-                    className="hover-overlay-user" onClick={handleImageClick}
+                    className="hover-overlay-user " onClick={handleImageClick}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.opacity = 1;
                     }}
@@ -200,14 +202,14 @@ function  handleCancelClick() {
                   </div>
                 </div>
               ) : (
-                <div className="image-container">
+                <div className="image-container left-[110px]  justify-center w-[100%] ml-16 right-16 sm:right-0 sm:ml-4 flex">
                   <CardMedia
                     sx={{
                       height: 150,
                       width: 150,
                       borderRadius: "50%",
-                      marginLeft: 9,
-                      left:50,
+                      // marginLeft: 9,
+                      // left:50,
                       marginTop: 1,
                       borderStyle: "double",
                       borderColor: "#00ff68",

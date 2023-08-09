@@ -79,6 +79,9 @@ const [checkInDate, setCheckInDate] = useState(() => {
   return storedDateObj;
 });
 
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+
 const [checkOutDate, setCheckOutDate] = useState(() => {
   const storedDateString = localStorage.getItem('checkOutDate');
   const storedDateObj = storedDateString ? new Date(JSON.parse(storedDateString)) : null
@@ -359,6 +362,7 @@ bookedDates&&bookedDates?.forEach((dates, index) => {
   onChange={handleCheckInDateChange}
   dateFormat="dd/MM/yyyy"
   minDate={new Date()}
+  
   excludeDates={disabledDates}
 />
 {inDateError&& <span className="text-red-600">Choose checkin date</span>}

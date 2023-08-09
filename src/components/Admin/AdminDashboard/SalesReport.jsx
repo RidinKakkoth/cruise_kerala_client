@@ -86,10 +86,10 @@ const currentItems = data?.slice(startIndex, endIndex);
                     })}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {booking?.userId.email}
+                    {booking?.userId?.email}
                   </td>
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {booking?.cruiseId.name}
+                    {booking?.cruiseId?.name}
                   </td>
 
                   <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
@@ -162,11 +162,11 @@ const currentItems = data?.slice(startIndex, endIndex);
               <div className="text-sm text-gray-700">
                 <div>
                   <span className="font-medium">User: </span>{" "}
-                  {booking.userId.name}
+                  {booking.userId?.name}
                 </div>
                 <div className="mt-3">
                   <span className="font-medium">Cruise: </span>
-                  {booking.cruiseId.name}
+                  {booking.cruiseId?.name}
                 </div>
               </div>
               <div className="text-sm text-gray-700">

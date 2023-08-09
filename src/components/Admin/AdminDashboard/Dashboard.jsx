@@ -107,7 +107,7 @@ function Dashboard() {
         </button>
       </div>
 
-      <div className="grid bg-gray-200 py-3 grid-cols-1 md:grid-cols-4 gap-10 rounded-md container mt-2 mb-5 w-full">
+      <div className="grid bg-gray-200 py-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 rounded-md container mt-2 mb-5 w-full">
         <div className="bg-white text-center shadow-2xl justify-around rounded-lg h-40 grid grid-cols-2 items-center  px-4 group group hover:scale-105 transform transition-transform">
           <div className="col-span-2 text-base  font-bold border-b-2 py-3">
             REVENUE

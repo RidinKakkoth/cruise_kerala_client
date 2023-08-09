@@ -3,7 +3,7 @@ import Loading from '../../Shared/Loading';
 import { blockOffer, deleteOffer, getOfferData } from '../../../config/PartnerEndpoints';
 
 function OffersTable() {
-    const[loading,setLoading]=useState(false)
+    const[loading,setLoading]=useState(true)
     const[trigger,setTrigger]=useState(true)
     const[offers,setOffers]=useState([])
 
@@ -120,7 +120,7 @@ function OffersTable() {
                 ))}
               </tbody>
             </table>
-          </div>):<Loading/>}
+          </div>):(<div className='w-full h-full'><Loading/></div>)}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
             {offers?.map((offer) => (
               <div

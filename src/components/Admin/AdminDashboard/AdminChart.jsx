@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 const colorPalette = ['#FF4560', '#008FFB', '#FEB019', '#00E396', '#775DD0', '#F86624', '#D7263D', '#1D755E', '#B3DDF2', '#6B798C'];
@@ -47,9 +48,10 @@ const AdminChart = ({ data }) => {
       {
         name: 'Revenue',
         data:  monthlySalesData.map(item => item.total),
+        colors: colorPalette
       },
+ 
     ],
-    colors: colorPalette,
   };
 
   //========================================================================================================
@@ -58,7 +60,7 @@ const AdminChart = ({ data }) => {
   
     // Group bookings by cruise name and count the number of bookings for each cruise
     data?.forEach((booking) => {
-      const cruiseName = booking.cruiseId.name;
+      const cruiseName = booking?.cruiseId?.name;
       if (cruiseBookings[cruiseName]) {
         cruiseBookings[cruiseName]++;
       } else {
@@ -103,7 +105,7 @@ const AdminChart = ({ data }) => {
 
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 ms-3 gap-10'>
+    <div className='grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 ms-3 gap-10'>
       {/* Monthly Sales Chart */}
       <div className='rounded-lg bg-white mb-3 group h shadow-2xl ps-4 w-[90%]'>
         <h4 className='mb-5 pt-5'>Monthly Revenue Chart</h4>

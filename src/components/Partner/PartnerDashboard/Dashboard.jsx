@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PartnerChart from "./PartnerChart";
 import { getBookings } from "../../../config/PartnerEndpoints";
-import SalesReport from "../../Shared/Sales/SalesReport"
+import SalesReport from "./SalesReport"
 import Loading from "../../Shared/Loading";
 
 function Dashboard() {
@@ -36,7 +36,7 @@ function Dashboard() {
   return (
     <div className="flex flex-col w-screen container">
      {!loading? <>
-      <div className="grid bg-gray-100 py-3 grid-cols-1 md:grid-cols-3 gap-10 rounded-md container mt-5 mb-5 w-full">
+      <div className="grid bg-gray-100 py-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 rounded-md container mt-5 mb-5 w-full">
         <div className="bg-white text-center shadow-2xl  rounded-lg h-40 grid grid-cols-2 items-center  px-4">
           <div className="col-span-2 text-base text-[#011742] font-bold border-b-2 py-3">
             REVENUE

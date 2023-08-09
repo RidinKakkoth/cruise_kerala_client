@@ -12,8 +12,8 @@ const Cards = ({ data }) => {
   }
 
   return (
-    <div className='w-full py-[4rem] px-4'>
-        <div className='flex justify-around mb-5 italic text-3xl underline font-bold text-[#011742]'>
+    <div className='w-full  px-4'>
+        <div className='flex justify-around mb-2 mt-2 italic text-3xl underline font-bold text-[#011742]'>
         <Typewriter
   options={{
     strings: ["Explore Our Cruises"],
@@ -30,16 +30,21 @@ const Cards = ({ data }) => {
       key={index} onClick={() => { navigate('/cruises/' + detail._id) }}
       className='w-full shadow-2xl flex flex-col cursor-pointer p-4 my-4 rounded-lg hover:scale-105 duration-300 transform-gpu transition-transform text-center'
     >
-      <div className='relative'>
+      <div className='relative '>
         <img
-          className='rounded-xl mx-auto w-full max-h-32 bg-white object-cover'
+          className='rounded-xl mx-auto w-full max-h-32  bg-white object-cover'
           src={detail.Images?.[0]}
           alt='/'
         />
       </div>
       <h2 className='text-xl font-bold text-center py-2'>{detail.name}</h2>
-      {/* Your Rating component here */}
-      <p className='text-center text-lg font-bold'>
+      <Rating
+                      className="mx-auto mb-2"
+                      readOnly
+                      value={calculateAverageRating(detail.review)}
+                      size="small"
+                      name="simple-controlled"
+                    />      <p className='text-center text-lg font-bold'>
         ₹ {detail.baseRate} <span className='text-sm font-normal'>per night</span>
       </p>
       <div className='text-center font-medium'>

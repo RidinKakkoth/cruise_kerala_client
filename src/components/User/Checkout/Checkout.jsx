@@ -9,11 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import {  orders, userSignin, verifyPayment } from "../../../config/UserEndpoints";
 import CouponBox from './CouponModal';
 import CouponShow from "./CouponShow";
+import {useCookies} from 'react-cookie';
 
 function Checkout() {
   const [email,setEmail]=useState("")
   const[password,setPassword]=useState("")
   const[discount,setDiscount]=useState(0)
+  const [cookies, setCookie] = useCookies(['']);
 
 
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ function Checkout() {
 const [showCouponModal, setShowCouponModal] = useState(false);
 
 const openCouponShowModal = () => {
-  console.log("ssssssssssssssssssssss");
+
   setShowCouponModal(true);
 };
 
@@ -72,6 +74,11 @@ const closeCouponShowModal = () => {
          toast.error(data?.message,{position: "top-center"})
         }
           else if(result?.status){
+            const ageInMinutes = 60; 
+
+            const currentDate = new Date();
+            const expirationDate = new Date(currentDate.getTime() + ageInMinutes * 60 * 1000);
+            setCookie("userCookie", result.token, { path: '/', expires: expirationDate });
              dispatch(userAdd({token:result.token,userName:result.name}))
              navigate(0)
              }

@@ -26,6 +26,17 @@ const createAxiosInstanceWithInterceptor = (baseURL, cookieName) => {
         return Promise.reject(error);
     });
 
+    instance.interceptors.response.use(
+        response => response,
+        error => {
+            if (error.response && error.response.status === 500) {
+                // Navigate to the 500 error page
+                window.location.href = '/500'; 
+            }
+            return Promise.reject(error);
+        }
+    );
+
     return instance;
 };
 

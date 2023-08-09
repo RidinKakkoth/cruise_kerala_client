@@ -57,7 +57,7 @@ const PartnerChart = ({ data }) => {
   
     // Group bookings by cruise name and count the number of bookings for each cruise
     data?.forEach((booking) => {
-      const cruiseName = booking.cruiseId.name;
+      const cruiseName = booking.cruiseId?.name;
       if (cruiseBookings[cruiseName]) {
         cruiseBookings[cruiseName]++;
       } else {

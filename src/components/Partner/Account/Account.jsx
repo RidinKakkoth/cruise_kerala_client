@@ -77,6 +77,7 @@ function Account() {
     };
 
     const data = await updateProfileData(updatedProfileData);
+    console.log(data,"xxxxxxxxxx");
     if (data.success) {
       toast.success("Updated successfully", { position: "top-center" });
 

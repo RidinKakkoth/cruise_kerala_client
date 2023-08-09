@@ -38,7 +38,7 @@ function Sidebar({ userType }) { // Include userType prop in function signature
   
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 1024 ) {
         setSidebarVisible(false);
       } else {
         setSidebarVisible(true);
