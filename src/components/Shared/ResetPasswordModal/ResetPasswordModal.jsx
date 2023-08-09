@@ -27,7 +27,7 @@ const ResetPasswordModal = ({role,user, isOpen, onRequestClose, handleVerifyOTP 
       else if(role==="partner")
       data = await resetPasswordPartner(user,password);
 
-      console.log(data,"pppppppppoooooooooooooooo");
+
 
       if(data.status){
             toast.success("success",{position:"top-center"})
