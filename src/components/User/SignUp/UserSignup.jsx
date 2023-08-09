@@ -48,7 +48,14 @@ function UserSignup() {
      }
    
     };
-
+    const handleResendOTP = async () => {
+      const data = await sendOTP(email); // Call sendOTP function
+      if (data.status) {
+        toast.success('OTP Resent', { position: 'top-center' });
+      } else if (data.status === false) {
+        toast.error(data.message, { position: 'top-center' });
+      }
+    }
 
   
     const handleVerifyOTP = async (otp) => {
@@ -159,7 +166,7 @@ function UserSignup() {
                      <Link style={{textDecoration:"none",color:"blue"}} to={'/partner/signUp'}> Sign up</Link>
                     </div>
             </div>
-            <OtpModal user={email} isOpen={otpModalOpen} onRequestClose={() => setOtpModalOpen(false)} handleVerifyOTP={handleVerifyOTP} />
+            <OtpModal user={email} handleResendOTP={handleResendOTP} isOpen={otpModalOpen} onRequestClose={() => setOtpModalOpen(false)} handleVerifyOTP={handleVerifyOTP} />
           </div>
       
 

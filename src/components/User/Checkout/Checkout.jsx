@@ -161,9 +161,9 @@ const handleApplyCoupon =async (status,offer) => {
 };
 
 
-
+const isSmallScreen = window.innerWidth < 640;
   return (
-    <div className="container mt-28 mb-5 bg-[#f0f0f0]">
+    <div className={`mt-28 mb-5 bg-[#f0f0f0] ${!isSmallScreen ? 'container mx-auto' : ''}`}>
               <ToastContainer autoClose={1000} />
       <div className="flex items-center mb-5 pt-3">
         <ArrowBackIosIcon
@@ -172,7 +172,7 @@ const handleApplyCoupon =async (status,offer) => {
         />
         <h2>Request to book</h2>
       </div>
-      <div className="grid grid-cols-1 ms-5  md:grid-cols-1 lg:grid-cols-2 gap-20  ">
+      <div className="grid  grid-cols-1 ms-5  md:grid-cols-1 lg:grid-cols-2 gap-20  ">
         <div>
           <h3 className="mb-2">Your trip</h3>
           <hr />
@@ -201,8 +201,8 @@ const handleApplyCoupon =async (status,offer) => {
                 />
               </div>
               <div className="ms-1 mt-3 font-medium">
-                <p className="text-lg  sm:ms-0">{data.cruiseName}</p>
-                <p className="text-gray-500">{data.cruisePlace}</p>
+                <p className="text-lg ms-3  sm:ms-0">{data.cruiseName}</p>
+                <p className="text-gray-500 ms-3  sm:ms-0">{data.cruisePlace}</p>
               </div>
             </div>
 
@@ -212,40 +212,40 @@ const handleApplyCoupon =async (status,offer) => {
             <div className=" ">
               <div className="grid  grid-cols-2 w-[100%]">
                 <div className="ms-4">
-                  <p className="font-medium text-lg mb-3 ">
+                  <p className="font-medium text-base sm:text-lg mb-3 ">
                     {/* {data.baseRate} ₹ x {data.numOfNights} nights */}
                     {(data.totalAmount-tax*2)/data.numOfNights} ₹ x {data.numOfNights} day
                   </p>
-                  <p className="font-medium text-lg mb-3">
+                  <p className="font-medium text-base sm:text-lg mb-3">
                     {" "}
                     extra guest ({data.extraGuest}){" "}
                   </p>
-                  <p className="font-medium text-lg mb-3">Taxes </p>
-                  <p className="font-medium text-lg mb-3">Cruise Fee </p>
+                  <p className="font-medium text-base sm:text-lg mb-3">Taxes </p>
+                  <p className="font-medium text-base sm:text-lg mb-3">Cruise Fee </p>
                   <hr />
-                  <p className="font-medium text-lg mb-3">Sub-Total </p>
-                  {(percentage===0||"undefined")&&<p className="font-medium text-lg mb-3">Discount </p>}
-                  <p className="font-medium text-lg mt-3">Total(INR)</p>
+                  <p className="font-medium text-base sm:text-lg mb-3">Sub-Total </p>
+                  {(percentage===0||"undefined")&&<p className="font-medium text-base sm:text-lg mb-3">Discount </p>}
+                  <p className="font-medium text-base sm:text-lg mt-3">Total(INR)</p>
 
                 </div>
 
 
                 <div className="mx-auto">
-                  <p className="font-normal text-lg mx-auto mb-3">
+                  <p className="font-normal text-base sm:text-lg mx-auto mb-3">
                   {(data.totalAmount-tax*2)}.00 ₹
                     {/* {data.baseRate * data.numOfNights}.00 ₹ */}
                   </p>
-                  <p className="font-normal text-lg mx-auto mb-3">
+                  <p className="font-normal text-base sm:text-lg mx-auto mb-3">
                     {data.extraGuest * 1000 * data.numOfNights}.00 ₹
                   </p>
-                  <p className="font-normal text-lg mx-auto mb-3">{tax}.00 ₹</p>
-                  <p className="font-normal text-lg mx-auto mb-3">{fee}.00 ₹</p>
+                  <p className="font-normal text-base sm:text-lg mx-auto mb-3">{tax}.00 ₹</p>
+                  <p className="font-normal text-base sm:text-lg mx-auto mb-3">{fee}.00 ₹</p>
                   <hr />
-                  <p className="font-normal text-lg mx-auto mb-3 mt-3">
+                  <p className="font-normal text-base sm:text-lg mx-auto mb-3 mt-3">
                     {data.totalAmount}.00 ₹{" "}
                   </p>
-                 { (percentage===0||"undefined")&& <p className="font-normal text-lg mx-auto mb-3 text-green-400">{discountAmnt}.00 ₹</p>}
-                  <p className="font-normal text-lg mx-auto mb-4 mt-3">
+                 { (percentage===0||"undefined")&& <p className="font-normal text-base sm:text-lg mx-auto mb-3 text-green-400">{discountAmnt}.00 ₹</p>}
+                  <p className="font-normal text-base sm:text-lg mx-auto mb-4 mt-3">
                     {data.totalAmount-discountAmnt}.00 ₹{" "}
                   </p>
                 </div>
@@ -300,7 +300,7 @@ const handleApplyCoupon =async (status,offer) => {
 {
     isSignIn?"":(
         <div className="grid grid-cols-4 mt-4">
-        <div className="col-span-4 ms-5 sm:col-span-2 md:col-span-2 lg:col-span-1 w-full sm:w-[150%] border rounded-4 bg-white mb-5">
+        <div className="col-span-4  sm:col-span-2 md:col-span-2 lg:col-span-1 w-full sm:w-[150%] border rounded-4 bg-white mb-5">
           <h2 className="ms-4 mt-4">Log in to book</h2>
           <div className="ms-2 me-2">
             <input

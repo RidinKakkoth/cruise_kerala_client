@@ -49,11 +49,11 @@ const handleSubmit = async (e) => {
   return (
     <div>
       <ToastContainer autoClose={3000} />
-      <div className="user-login-body">
+      <div className="user-login-body ">
         <div className="user-card">
         <img
         className='mx-auto mt-2'
-            src="https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png" // Replace with the URL or path to your image
+            src="https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png" 
             alt=""
             style={{ width: '80px', height: '80px', marginRight: '8px' }}
           />

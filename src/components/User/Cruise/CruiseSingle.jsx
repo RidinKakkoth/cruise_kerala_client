@@ -75,7 +75,7 @@ function CruiseSingle() {
 
 const [checkInDate, setCheckInDate] = useState(() => {
   const storedDateString = localStorage.getItem('checkInDate');
-  const storedDateObj = storedDateString ? new Date(JSON.parse(storedDateString)) : null
+  const storedDateObj = storedDateString ? new Date(JSON.parse(storedDateString)) : new Date()
   return storedDateObj;
 });
 
@@ -314,11 +314,12 @@ bookedDates&&bookedDates?.forEach((dates, index) => {
       <hr />
       <div className="chck-grid-single mb-2 sm:mb-5" style={{ gap: 100 }}>
         <div className="chck-grid-single__details">
-          <div style={{ marginTop: "10px", marginBottom: "20px" }}>
-            <h5 style={{ marginTop: "10px" }}>About</h5>
+          <div className=" w-56 sm:w-auto" style={{ marginTop: "10px", marginBottom: "20px" }}>
+            <h5 className="" style={{ marginTop: "10px" }} >About</h5>
             {data.description}
           </div>
-          <h5 style={{ marginTop: "50px", marginBottom: "20px" }}>Details</h5>
+         <div className="w-80">
+         <h5 style={{ marginTop: "50px", marginBottom: "20px" }}>Details</h5>
           <p className="chck-grid-single__label">
             <BedroomParentIcon className="chck-grid-single__icon" />
             Number of Rooms :
@@ -339,18 +340,67 @@ bookedDates&&bookedDates?.forEach((dates, index) => {
             Check-Out time:{" "}
             <span className="chck-grid-single__value">12 PM</span>
           </p>
-          <p className="mt-5 ms-5">* Base rate is applicable only for 2 guest per room</p>
-          <p className="mt-2 ms-5">* For extra guest ₹ 1000 per head payable</p>
+         </div>
+        <div className="w-80">
+        <p className="mt-5 ms-2 ">* Base rate is only for 2 guest per room</p>
+          <p className="mt-2 ms-2">* For extra guest ₹ 1000 per head payable</p>
         </div>
+        </div>
+
         <div
-          className="bg-white shadow p-4 rounded-2xl"
+          className="bg-white shadow p-4 rounded-2xl "
           style={{ borderRadius: "20px" }}
         >
           <div id="head-price" className=" justify-center flex">
             Price: {offer?<p className="ms-2"> ₹{data?.baseRate- ((data?.baseRate)/percentage)}/ <span className="text-base">per day</span> <span class="line-through text-red-500" >₹{ data.baseRate}</span></p>:<p>₹{ data.baseRate}/ per day</p>}  
           </div>
+          <div className="border rounded-2xl mt-4 mb-4 flex flex-col md:flex-row  ">
+  <div className="py-3 px-4">
+    <label>Check in:</label>
+    <DatePicker
+      className={`rounded border custom-border-thick font-semibold mt-3 h-8`}
+      selected={checkInDate}
+      onChange={handleCheckInDateChange}
+      dateFormat="dd/MM/yyyy"
+      minDate={new Date()}
+      excludeDates={disabledDates}
+    />
+    {inDateError && <span className="text-red-600">Choose checkin date</span>}
+  </div>
+  <div
+    className="py-3 px-4"
+    style={{ borderLeft: "2px solid #dee2e6" }}
+  >
+    <label>Check out:</label>
+    <DatePicker
+      className="rounded border font-semibold mt-3 h-8"
+      selected={checkOutDate}
+      onChange={handleCheckOutDateChange}
+      dateFormat="dd/MM/yyyy"
+      minDate={checkInDate ? new Date(checkInDate.getTime() + 86400000) : null}
+      maxDate={maxCheckOutDate ? maxCheckOutDate : sixMonthCheckOutDate}
+      excludeDates={disabledDates}
+      disabled={!checkInDate}
+    />
+    {outDateError && <span className="text-red-600">Choose checkout date</span>}
+  </div>
+</div>
+  <div
+    className="py-3 px-4 rounded-2xl mb-4"
+    style={{ border: "2px solid #dee2e6" }}
+  >
+    <Stepper
+      label="Guest"
+      description="Extra guests"
+      min={1}
+      onChange={handleGuest}
+      value={guest}
+      defaultValue={1}
+      max={data.maxGuest}
+    />
+  </div>
 
-          <div className="border rounded-2xl mt-4 mb-4">
+          {/* <div className="border rounded-2xl mt-4 mb-4 ">
             <div style={{ display: "flex" }}>
               <div className="py-3 px-4">
                 <label>Check in:</label>
@@ -408,7 +458,7 @@ bookedDates&&bookedDates?.forEach((dates, index) => {
                 max={data.maxGuest}
               />
             </div>
-          </div>
+          </div> */}
           <div>
             <p className="mb-3">
               <span style={{ fontWeight: "600" }}>Number of Nights : </span>
