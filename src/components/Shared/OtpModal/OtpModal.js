@@ -38,19 +38,30 @@ const OtpModal = ({ user, isOpen, onRequestClose, handleVerifyOTP, handleResendO
 
   useEffect(() => {
     let interval;
-    if (timer > 0 && isOpen) {
+  
+    if (isOpen) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prevTimer) => {
+          if (prevTimer > 0) {
+            return prevTimer - 1;
+          } else {
+            setShowResendButton(true); // Show the "Resend OTP" button when timer finishes
+            clearInterval(interval);
+            return prevTimer;
+          }
+        });
       }, 1000);
     } else {
       clearInterval(interval);
-      setShowResendButton(true); // Show the "Resend OTP" button when timer finishes
+      setTimer(30); // Reset timer when the modal is closed
+      setShowResendButton(false);
     }
-
+  
     return () => {
       clearInterval(interval);
     };
-  }, [timer, isOpen]);
+  }, [isOpen]);
+  
 
   const resetTimer = () => {
     setTimer(30);
