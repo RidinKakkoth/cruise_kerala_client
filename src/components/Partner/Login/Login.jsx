@@ -46,61 +46,59 @@ const data=await partnerSignin(email,password)
 
 
   return (
-    <div>
-      <ToastContainer autoClose={3000} />
-      <div className="partner-login-body">
-        <div className="partner-card">
-        <img
-        className='mx-auto mt-2'
-            src="https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png" // Replace with the URL or path to your image
-            alt=""
-            style={{ width: '80px', height: '80px', marginRight: '8px' }}
-          />
-          <h3 className='text-center italic font-serif text-white'>Cruise</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label className="partner-label">Email</label>
-              <input
-              required
-                type="email"
-                onChange={(e) => {
+   
+<section  class="border-red-500 magicpattern-partner  min-h-screen  flex items-center justify-center">
+<ToastContainer autoClose={3000} />
+  <div class="bg-gray-200  p-5 flex rounded-2xl  shadow-lg max-w-3xl">
+    <div class="md:w-1/2 px-4">
+      <h2 class="text-2xl font-bold text-[#235d2d]">Login</h2>
+      <p class="text-sm mt-4 text-[#235d2d]">If you have an account, please login</p>
+      <form class="mt-6" onSubmit={handleSubmit}  >
+        <div>
+          <label class="block text-gray-700">Email Address</label>
+          <input type="email"                 onChange={(e) => {
                   setEmail(e.target.value);
-                }}
-                className="form-control"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="partner-label">Password</label>
-              <input
-                required
-                type='password'
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                name="password"
-                className="form-control"
-              />
-            </div>
-
-            <div className="partner-btn-div">
-            <button type="submit" className="adminlogin-btn rounded-3xl shadow hover:bg-[#e48291]">
-                Sign in
-              </button>
-            </div>
-          </form>
-          <div className='flex justify-center mb-2'>
-                  <p className='cursor-pointer' onClick={handleForgot}>forgot password</p>
-                </div>
-          <div  style={{display:"flex",justifyContent:"center",fontWeight:"500"}}>
-                      <p >become a partner?</p>
-                     <Link style={{textDecoration:"none",color:"blue"}} to={'/partner/signUp'}>Sign Up</Link>
-                    </div>
+                }} name="" id="" placeholder="Enter Email Address" class="w-full px-4 py-3 rounded-lg bg-white mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required />
         </div>
-        <EmailModal role={"partner"} isOpen={emailModalOpen} onRequestClose={() => setEmailModalOpen(false)} handleForgot={handleForgot}  />
 
+        <div class="mt-4">
+          <label class="block text-gray-700">Password</label>
+          <input type="password"                 onChange={(e) => {
+                  setPassword(e.target.value);
+                }} name="" id="" placeholder="Enter Password" minlength="6" class="w-full px-4 py-3 rounded-lg bg-white mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" required />
+        </div>
+
+        <div class="text-right mt-2">
+          <p onClick={handleForgot} class="text-sm font-semibold  text-gray-700 hover:text-[#2b7137] cursor-pointer focus:text-blue-700">Forgot Password?</p>
+        </div>
+
+        <button type="submit" class="w-full block bg-[#235d2d] hover:bg-[#2b7137] focus:bg-blue-400 text-white font-semibold rounded-lg
+              px-4 py-3 mt-6">Log In</button>
+      </form>
+
+      <div class="mt-7 grid grid-cols-3 items-center text-gray-500">
+        <hr class="border-gray-500" />
+        <p class="text-center text-sm">OR</p>
+        <hr class="border-gray-500" />
+      </div>
+
+      
+
+      <div class="text-sm flex justify-between items-center mt-3">
+        <p>Not a partner?</p>
+        <button onClick={()=>{navigate('/partner/signUp')}} class="py-2 px-5 ml-3 bg-[#235d2d] text-white border rounded-xl hover:scale-110 duration-300 border-green-800  ">Register</button>
       </div>
     </div>
+
+    <div class="w-1/2 md:block hidden my-auto ">
+      <img src="https://res.cloudinary.com/ddymh3cnk/image/upload/v1691746664/CruiseData/partnership-01-512_jnlp4a.png" class="rounded-2xl" alt="page img" />
+    </div>
+
+  </div>
+  <EmailModal role={"partner"} isOpen={emailModalOpen} onRequestClose={() => setEmailModalOpen(false)} handleForgot={handleForgot}  />
+
+</section>
+
   )
 }
 

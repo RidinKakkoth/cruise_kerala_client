@@ -39,52 +39,44 @@ const data=await adminSignin(email,password)
   }
 
   return (
-    <div>
-      <ToastContainer autoClose={3000} />
-      <div className="admin-login-body">
-        <div className="admin-card">
-        <img
-        className='mx-auto mt-2'
-            src="https://www.pngall.com/wp-content/uploads/8/Rudder-PNG-Picture.png" // Replace with the URL or path to your image
-            alt=""
-            style={{ width: '80px', height: '80px', marginRight: '8px' }}
-          />
-          <h3 className='text-center italic font-serif text-white'>Cruise</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label className="admin-label">Email</label>
-              <input
-                type="email"
-                required
-                onChange={(e) => {
+    
+<section  class="border-red-500 magicpattern-a  min-h-screen  flex items-center justify-center">
+<ToastContainer autoClose={3000} />
+  <div class="bg-gray-200  p-5 flex rounded-2xl  shadow-lg max-w-3xl">
+    <div class="md:w-1/2 px-4">
+      <h2 class="text-2xl font-bold text-[#306e8b]">Login</h2>
+      <form class="mt-6" onSubmit={handleSubmit}  >
+        <div>
+          <label class="block text-gray-700">Email Address</label>
+          <input type="email"                 onChange={(e) => {
                   setEmail(e.target.value);
-                }}
-                className="form-control"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="admin-label">Password</label>
-              <input
-                type="password"
-                required
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                name="password"
-                className="form-control"
-              />
-            </div>
-
-            <div className="admin-btn-div">
-              <button type="submit" className="adminlogin-btn rounded-3xl shadow">
-                Sign in
-              </button>
-            </div>
-          </form>
+                }} name="" id="" placeholder="Enter Email Address" class="w-full px-4 py-3 rounded-lg bg-white mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required />
         </div>
-      </div>
+
+        <div class="mt-4">
+          <label class="block text-gray-700">Password</label>
+          <input type="password"                 onChange={(e) => {
+                  setPassword(e.target.value);
+                }} name="" id="" placeholder="Enter Password" minlength="6" class="w-full px-4 py-3 rounded-lg bg-white mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" required />
+        </div>
+
+        <button type="submit" class="w-full block bg-[#306e8b] hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg
+              px-4 py-3 mt-6">Log In</button>
+      </form>
+
+
+
+
     </div>
+
+    <div class="w-1/2 md:block hidden ">
+      <img src="https://res.cloudinary.com/ddymh3cnk/image/upload/v1691673832/CruiseData/favicon_nxjooo.png" class="rounded-2xl" alt="page img" />
+    </div>
+
+  </div>
+
+</section>
+
   );
 }
 
