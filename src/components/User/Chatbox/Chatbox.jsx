@@ -121,6 +121,7 @@ return()=>{
       console.log('Type something before sending.');
       return;
     }
+    
     const senderId= currentChat.userId
     const chatId= currentChat._id
     const text= newMessage

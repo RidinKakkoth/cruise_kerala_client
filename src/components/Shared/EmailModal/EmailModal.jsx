@@ -14,30 +14,82 @@ const EmailModal = ({role, isOpen, onRequestClose,  }) => {
   const [otpModalOpen,setOtpModalOpen] = useState(false);
   const [passModalOpen,setPassModalOpen] = useState(false);
   const[neweRole,setNewRole]=useState("")
-const handleSend = async (e) => {
-  setNewRole(role)
-  e.preventDefault();
-  try {
-    let data;
-    if(role==="user")
-     data = await userEmailCheck(usermail)
-     else if(role==="partner")
-     data = await partnerEmailCheck(usermail)
-      if(data.status){
-        console.log(data.status);
+  const [errorMessage, setErrorMessage] = useState('');
 
-        const newData= await sendOTP(usermail)
-        setOtpModalOpen(true)
-        onRequestClose()
-      }
-    } catch (error) {
-      console.error("Error while sending email authentication:", error);
+
+  const isValidEmail = (email) => {
+    return /^\S+@\S+\.\S+$/.test(email);
+};
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+
+    if (!usermail.trim()) {
+        setErrorMessage('Email is required');
+    } else if (!isValidEmail(usermail)) {
+        setErrorMessage('Invalid email format');
+    } else {
+        setNewRole(role);
+
+        try {
+            let data;
+            if (role === "user") {
+                data = await userEmailCheck(usermail);
+            } else if (role === "partner") {
+                data = await partnerEmailCheck(usermail);
+            }
+
+            if (data.status) {
+                const newData = await sendOTP(usermail);
+                setOtpModalOpen(true);
+                onRequestClose();
+            }
+        } catch (error) {
+            console.error("Error while sending email authentication:", error);
+        }
     }
-  };
+};
+
+
+  // const handleSend = async (e) => {
+//   if (!usermail.trim()) {
+//      setErrorMessage ('Email is required');
+//     } else if (!/^\S+@\S+\.\S+$/.test(usermail)) {
+//      setErrorMessage ('Invalid email format');
+//     }
+// else{
+//   setNewRole(role)
+//   e.preventDefault();
+//   try {
+//     let data;
+//     if(role==="user")
+//      data = await userEmailCheck(usermail)
+//      else if(role==="partner")
+//      data = await partnerEmailCheck(usermail)
+//       if(data.status){
+//         console.log(data.status);
+
+//         const newData= await sendOTP(usermail)
+//         setOtpModalOpen(true)
+//         onRequestClose()
+//       }
+//     } catch (error) {
+//       console.error("Error while sending email authentication:", error);
+//     }
+// }
+//   };
   
-  const handleChange=(value)=>{
-    setUsermail(value)
-}
+//   const handleChange=(value)=>{
+
+//     setUsermail(value)
+// }
+const handleChange = (value) => {
+  setUsermail(value);
+  setErrorMessage('');
+};
+
+
+
 const handleVerifyOTP = async (otp) => {
     try {
  
@@ -100,7 +152,12 @@ const handleVerifyOTP = async (otp) => {
             />
         
         </div>
+        {errorMessage && <p className="text-red-500 flex gap-2 text-center"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+</svg>
+{errorMessage}</p>}
         <button className=" bg-blue-500 text-white rounded px-2 h-10 w-24 mt-4 mx-auto " onClick={handleSend}>Submit</button>
+        
       </form>
     </Modal>
     

@@ -16,6 +16,8 @@ function Account() {
   const [trigger, setTrigger] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [preview, setPreview] = useState(
     "https://cdn-icons-png.flaticon.com/512/147/147142.png"
   );
@@ -70,17 +72,28 @@ function  handleCancelClick() {
     }
 
   }
+  const isValidFileType = (file) => {
+    const allowedFileTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/bmp', 'image/webp'];
+    return allowedFileTypes?.includes(file?.type);
+};
+
   const handleImageChange = (e) => {
-    setButtonHide(false);
-
     const file = e.target.files[0];
+    
+    if (isValidFileType(file)) {
+      setButtonHide(false);
+        const imgUrl = URL?.createObjectURL(file);
 
-    const imgUrl = URL.createObjectURL(file);
-
-    setprofileImage(file);
-    setPreview(imgUrl);
-    setOpen(false);
+        setprofileImage(file);
+        setPreview(imgUrl);
+        setOpen(false);
+        setErrorMessage(''); // Clear any previous error messages
+    } else {
+        setErrorMessage('Please select a valid image file (PNG, JPEG, GIF, BMP, WebP).');
+    }
   };
+
+
   const inputRef = useRef();
   const handleImageClick = () => {
     inputRef.current.click();
@@ -244,6 +257,7 @@ function  handleCancelClick() {
                 style={{ width: "100px", display: "none" }}
               />
             </div>
+            {errorMessage && <p className="text-red-500 text-center text-sm">{errorMessage}</p>}
 
             {buttonHide ? (
               ""

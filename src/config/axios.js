@@ -3,21 +3,20 @@ import { adminApi } from './Api';
 import { partnerApi } from './Api';
 import { baseApi } from './Api';
 import { messageApi } from './Api';
-import { getTokenFromCookie } from '../utils/CookieUtility'; // Adjust the import path
+import { getTokenFromCookie } from '../utils/CookieUtility'; 
 
 const TIMEOUT_DURATION = 110000; 
 
 const createAxiosInstanceWithInterceptor = (baseURL, cookieName) => {
-    console.log(baseURL);
+
     const instance = axios.create({
         baseURL: baseURL,
-        // withCredentials: true,
         timeout: TIMEOUT_DURATION,
     });
 
     instance.interceptors.request.use(config => {
         const token = getTokenFromCookie(cookieName);
-        console.log(token, "-------", cookieName); // Retrieve the token from the cookie
+        // console.log(token, "-------", cookieName); // Retrieve the token from the cookie
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`; // Set "Authorization" header with "Bearer" prefix
         }

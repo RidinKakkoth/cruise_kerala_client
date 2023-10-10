@@ -34,21 +34,36 @@ const AddCruiseForm = () => {
     const[license,setLicense]=useState(null)
     const[categoryData,setCategoryData]=useState([])
     const[uploading,setUploading]=useState(false)
+    const [errorMessage, setErrorMessage] = useState('');
 
     
     const navigate=useNavigate()
 
     const[selectedImages,setSelectedImages]=useState([])
 
+    const isValidFileType = (file) => {
+      const allowedFileTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/bmp', 'image/webp'];
+      return allowedFileTypes.includes(file.type);
+  };
+
     const handleSelectImage=(event)=>{
-        const selectedFiles=event.target.files;
-        const selectedFilesArray=Array.from(selectedFiles)
+        // const selectedFiles=event.target.files;
+        const selectedFiles = Array.from(event.target.files);
+        const validFiles = selectedFiles.filter((file) => isValidFileType(file));
+        if (validFiles.length !== selectedFiles.length) {
+          setErrorMessage('Please select valid image files (PNG, JPEG, GIF, BMP, WebP).');
+      } else {
+          setErrorMessage('');
+      }
+        const selectedFilesArray=Array.from(validFiles)
+
         const imagesArray=selectedFilesArray?.map((file)=>{
             return URL.createObjectURL(file)
         })
         setSelectedImages((previousImages)=>previousImages.concat(imagesArray))
         setImages(selectedFiles)
     }
+
 
     const handleAddCruise = async(event) => {
 
@@ -387,7 +402,11 @@ useEffect(()=>{
               onChange={handleSelectImage}             
                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
             />
-          </div>                <div className='images '>
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+      
+          </div>              
+          
+            <div className='images '>
                         {selectedImages&&
                         selectedImages?.map((image,index)=>{
                             return(

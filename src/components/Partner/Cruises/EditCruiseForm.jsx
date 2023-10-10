@@ -40,6 +40,8 @@ const EditCruiseForm = () => {
     const[uploading,setUploading]=useState(false)
     const [cruiseData, setCruiseData] = useState(null);
     const [imagesToDelete, setImagesToDelete] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
+
 
 
     const handleImageDelete = (index) => {
@@ -57,9 +59,28 @@ const EditCruiseForm = () => {
 
     const[selectedImages,setSelectedImages]=useState([])
 
+    const isValidFileType = (file) => {
+      const allowedFileTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/bmp', 'image/webp'];
+      return allowedFileTypes.includes(file.type);
+  };
+
     const handleSelectImage = (event) => {
-      const selectedFiles = event.target.files;
-      const selectedFilesArray = Array.from(selectedFiles);
+      // const selectedFiles = event.target.files;
+      // const selectedFilesArray = Array.from(selectedFiles);
+
+
+      const selectedFiles = Array.from(event.target.files);
+      const validFiles = selectedFiles.filter((file) => isValidFileType(file));
+      if (validFiles.length !== selectedFiles.length) {
+        setErrorMessage('Please select valid image files (PNG, JPEG, GIF, BMP, WebP).');
+    } else {
+        setErrorMessage('');
+    }
+      const selectedFilesArray=Array.from(validFiles)
+
+
+
+
       const imagesArray = selectedFilesArray?.map((file) => {
         return URL.createObjectURL(file);
       });
@@ -423,7 +444,10 @@ return (
             onChange={handleSelectImage}             
              className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-indigo-500 focus:border-indigo-500"
           />
-        </div>                <div className='images flex gap-2'>
+
+                           {errorMessage && <p className="text-red-500 text-center text-sm">{errorMessage}</p>}
+        </div>            
+            <div className='images flex gap-2'>
 
 {/* {selectedImages &&
   selectedImages?.map((image, index) => {

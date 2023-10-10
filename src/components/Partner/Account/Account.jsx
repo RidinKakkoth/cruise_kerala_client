@@ -57,6 +57,7 @@ function Account() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [buttonHide, setButtonHide] = useState(true);
   const [proofbuttonHide, setproofButtonHide] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [open, setOpen] = useState(false);
 
@@ -123,18 +124,41 @@ function Account() {
 
     }
   };
+  const isValidFileType = (file) => {
+    const allowedFileTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/bmp', 'image/webp'];
+    return allowedFileTypes?.includes(file?.type);
+};
+
+  // const handleImageChange = (e) => {
+  //   setButtonHide(false);
+
+  //   const file = e.target.files[0];
+
+  //   const imgUrl = URL.createObjectURL(file);
+
+  //   setprofileImage(file);
+  //   setPreview(imgUrl);
+  //   setOpen(false);
+  // };
+
 
   const handleImageChange = (e) => {
-    setButtonHide(false);
-
+    
     const file = e.target.files[0];
+    
+    if (isValidFileType(file)) {
+      setButtonHide(false);
+        const imgUrl = URL?.createObjectURL(file);
 
-    const imgUrl = URL.createObjectURL(file);
+        setprofileImage(file);
+        setPreview(imgUrl);
+        setOpen(false);
+        setErrorMessage(''); // Clear any previous error messages
+    } else {
+        setErrorMessage('Please select a valid image file (PNG, JPEG, GIF, BMP, WebP).');
+    }
+};
 
-    setprofileImage(file);
-    setPreview(imgUrl);
-    setOpen(false);
-  };
 
   const handleImageClick = () => {
     inputRef.current.click();
@@ -261,7 +285,9 @@ function Account() {
                   alt="dp"
                   style={{ width: "100px", display: "none" }}
                 />
+          
               </div>
+                 {errorMessage && <p className="text-red-500 text-center text-sm">{errorMessage}</p>}
               {buttonHide ? (
                 ""
               ) : (

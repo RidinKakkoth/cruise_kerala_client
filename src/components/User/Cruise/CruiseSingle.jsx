@@ -291,7 +291,7 @@ bookedDates&&bookedDates?.forEach((dates, index) => {
 
 
   return (
-    <div className="single-view-main container">
+    <div className="single-view-main  container">
 
 {!loading?(    
   <> 

@@ -11,8 +11,10 @@ function ChatBot() {
 
   useEffect(() => {
     const invoke = () => {
-      const cookieToken = userCookie?.userCookie?.token;
-      const isUserCookieExists = cookieToken === userToken;
+      const cookieToken = userCookie?.userCookie;
+      // const cookieToken = userCookie?.userCookie?.token;
+
+      const isUserCookieExists = cookieToken === userToken;//change made on 10-10
       if (isUserCookieExists) {
         setIsUser(true);
       } else {
@@ -26,6 +28,7 @@ function ChatBot() {
 
   return (
     <>
+
       {isUser && (
         <div className='fixed bottom-0 right-0 mb-4 mr-4 z-50'>
           <img

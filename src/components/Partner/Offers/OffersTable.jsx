@@ -73,7 +73,7 @@ function OffersTable() {
                   <tr key={index} className="bg-white">
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       <p className=" ">
-                        {offer?.cruiseId.name}
+                        {offer?.cruiseId?.name}
                       </p>
                     </td>
                     <td className="p-3 text-sm font-bold text-gray-700 whitespace-nowrap">

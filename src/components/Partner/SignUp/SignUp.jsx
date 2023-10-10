@@ -31,6 +31,7 @@ function SignUp() {
     const handleSubmit=async(e)=>{
     
     e.preventDefault()
+  
 
     const errors = validateForm({ name,company, email, phone, password }); // Pass form values to the validation function
 

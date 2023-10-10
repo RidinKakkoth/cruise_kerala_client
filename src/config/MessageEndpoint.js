@@ -11,7 +11,8 @@ export async function  getMessage (id){
 }
 export async function  sendNewMessage (senderId,chatId,text){
     try{
-        const {data}=await messageAxiosInstance.post({senderId,chatId,text})
+        
+        const {data}=await messageAxiosInstance.post("send",{senderId,chatId,text})//===========================send added
         return data;
     }catch(error){
         return {status:'failed',message:'Network error'}
